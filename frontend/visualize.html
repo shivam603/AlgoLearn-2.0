@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizer Hub — AlgoLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-dark text-white">
+    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">AlgoLearn</a>
+            <div>
+                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+        <div class="text-center mb-5">
+            <p class="text-info text-uppercase fw-semibold mb-3 letter-spacing">Algorithm Visualizer Hub</p>
+            <h1 class="display-5 fw-bold mb-3">Choose the type of algorithm you want to explore</h1>
+            <p class="lead text-secondary mx-auto" style="max-width: 760px;">Select a page for sorting or search
+                algorithms, then provide the inputs the algorithm needs.</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <a href="visualize-sorting.html" class="card-link">
+                    <div class="card h-100 border-secondary bg-secondary bg-opacity-10 p-4">
+                        <h3 class="h5 text-white">Sorting Visualizer</h3>
+                        <p class="text-secondary">Visualize sorting algorithms with an array input, size slider, and
+                            live animation.</p>
+                        <p class="text-secondary mb-0"><strong>Works with:</strong> Bubble, Selection, Insertion, Quick,
+                            Merge, Heap</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="visualize-search.html" class="card-link">
+                    <div class="card h-100 border-secondary bg-secondary bg-opacity-10 p-4">
+                        <h3 class="h5 text-white">Search Visualizer</h3>
+                        <p class="text-secondary">Visualize search algorithms by entering an array and a target value to
+                            search for.</p>
+                        <p class="text-secondary mb-0"><strong>Works with:</strong> Linear Search, Binary Search</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <a href="visualize-graph.html" class="card-link">
+                    <div class="card h-100 border-secondary bg-secondary bg-opacity-10 p-4">
+                        <h3 class="h5 text-white">Graph Visualizer</h3>
+                        <p class="text-secondary">Explore BFS and DFS traversals on user-defined or random graphs.</p>
+                        <p class="text-secondary mb-0"><strong>Works with:</strong> Breadth-First Search, Depth-First
+                            Search</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark border-top border-secondary py-4">
+        <div class="container text-center text-secondary small">AlgoLearn — select the right page for your algorithm
+            type.</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
