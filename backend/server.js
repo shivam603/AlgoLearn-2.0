@@ -1,6 +1,14 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
-require('dotenv').config();
+
+// Safely load dotenv if present (in development or environments with dotenv installed)
+try {
+    const dotenv = require('dotenv');
+    dotenv.config({ path: path.join(__dirname, '../.env') });
+    dotenv.config();
+} catch (e) {
+    // In production environments (like Render), environment variables are injected directly into process.env
+}
+
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
