@@ -1,0 +1,29 @@
+{
+  "name": "algolearn",
+  "version": "1.0.0",
+  "description": "Interactive Data Structures & Algorithms Visualizer Platform by Team ANT-X",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "cd backend && npm install",
+    "install-all": "npm install && cd backend && npm install"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongodb": "^6.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "algorithm",
+    "visualizer",
+    "data-structures",
+    "sorting",
+    "pathfinding",
+    "dsa"
+  ],
+  "author": "Team ANT-X (Shivam, Siddharth, Amrit)",
+  "license": "MIT"
+}
