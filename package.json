@@ -1,6 +1,7 @@
 {
   "name": "algolearn",
   "version": "1.0.0",
+  "homepage": "https://algolearn-q73y.onrender.com/",
   "description": "Interactive Data Structures & Algorithms Visualizer Platform by Team ANT-X",
   "main": "backend/server.js",
   "scripts": {

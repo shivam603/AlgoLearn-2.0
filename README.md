@@ -1,5 +1,11 @@
 # ⚡ AlgoLearn — Interactive Algorithm Learning & Visualizer Platform
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-algolearn--q73y.onrender.com-00C7B7?style=for-the-badge&logo=render&logoColor=white)](https://algolearn-q73y.onrender.com/)
+[![GitHub stars](https://img.shields.io/github/stars/shivam603/AlgoLearn?style=for-the-badge&color=gold)](https://github.com/shivam603/AlgoLearn)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+> 🌐 **Experience the Live App Now**: **[https://algolearn-q73y.onrender.com/](https://algolearn-q73y.onrender.com/)**
+
 A comprehensive, modern full-stack web application designed for mastering Data Structures and Algorithms through multi-sensory interactive visualizations, audio synthesis, AI voice narration, step-by-step dry-run animations, Big-O complexity analysis, and competitive duel benchmarking.
 
 ---
