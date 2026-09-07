@@ -6,72 +6,294 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizer Hub — AlgoLearn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div>
-                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main class="container py-5">
         <div class="text-center mb-5">
-            <p class="text-info text-uppercase fw-semibold mb-3 letter-spacing">Algorithm Visualizer Hub</p>
-            <h1 class="display-5 fw-bold mb-3">Choose the type of algorithm you want to explore</h1>
-            <p class="lead text-secondary mx-auto" style="max-width: 760px;">Select a page for sorting or search
-                algorithms, then provide the inputs the algorithm needs.</p>
+            <span class="badge-sky">
+                <i class="bi bi-bar-chart-fill"></i> Interactive Engines
+            </span>
+            <h1 class="display-6 fw-bold mt-2">Algorithm Visualizer Hub</h1>
+            <p class="lead text-muted-custom mx-auto" style="max-width: 720px;">
+                Choose an interactive engine below to experiment with custom inputs, step-by-step animations, and real-time execution speeds.
+            </p>
+        </div>        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            <!-- 1. Sorting Visualizer -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon">
+                        <i class="bi bi-bar-chart-steps"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Sorting Visualizer</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Visualize bar swaps, continuous line graphs, scatter plots, and sound synthesis with live step tracking and multi-language code sync.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">Bubble</span>
+                        <span class="badge-tag me-1 mb-1">Quick</span>
+                        <span class="badge-tag me-1 mb-1">Merge</span>
+                        <span class="badge-tag me-1 mb-1">Heap</span>
+                        <span class="badge-tag me-1 mb-1">Insertion</span>
+                        <span class="badge-tag mb-1">Selection</span>
+                    </div>
+                    <a href="visualize-sorting.html" class="btn btn-sky w-100">
+                        Launch Sorting Engine <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 2. Algorithm Duel & Multi-Race Arena -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column" style="border-color: rgba(245, 158, 11, 0.4);">
+                    <div class="card-feature-icon" style="background:#fef3c7; color:#b45309;">
+                        <i class="bi bi-fire"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Algorithm Duel Arena</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Pit 2 to 4 sorting algorithms against each other simultaneously on identical arrays with live leaderboard metrics and efficiency scores.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">Multi-Racer Grid</span>
+                        <span class="badge-tag me-1 mb-1">Live Leaderboard</span>
+                        <span class="badge-tag mb-1">Benchmark Stats</span>
+                    </div>
+                    <a href="duel.html" class="btn btn-warning w-100 fw-bold">
+                        Launch Duel Arena <i class="bi bi-fire"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3. Tree Visualizer (BST & AVL) -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon">
+                        <i class="bi bi-diagram-3-fill"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">BST & AVL Tree Visualizer</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Interact with dynamic vector SVG binary search trees. Insert, delete, search nodes, and watch AVL auto-balancing rotations (LL, RR, LR, RL).
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">BST</span>
+                        <span class="badge-tag me-1 mb-1">AVL Rotations</span>
+                        <span class="badge-tag me-1 mb-1">In/Pre/Post Order</span>
+                        <span class="badge-tag mb-1">BFS</span>
+                    </div>
+                    <a href="visualize-tree.html" class="btn btn-sky w-100">
+                        Launch Tree Engine <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 4. Dynamic Programming Grid -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon">
+                        <i class="bi bi-grid-3x3"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">DP & Recursion Grid</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Step through 2D memoization grids for 0/1 Knapsack, Longest Common Subsequence (LCS), and Fibonacci call stack trees.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">0/1 Knapsack</span>
+                        <span class="badge-tag me-1 mb-1">LCS Matrix</span>
+                        <span class="badge-tag me-1 mb-1">Fibonacci</span>
+                        <span class="badge-tag mb-1">Backtrack Path</span>
+                    </div>
+                    <a href="visualize-dp.html" class="btn btn-sky w-100">
+                        Launch DP Engine <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 5. Search Visualizer -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Search Visualizer</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Find any target value inside custom or randomly generated arrays using sequential linear scan and binary halving algorithms.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">Linear Search</span>
+                        <span class="badge-tag mb-1">Binary Search</span>
+                    </div>
+                    <a href="visualize-search.html" class="btn btn-sky w-100">
+                        Launch Search Engine <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 6. Graph Visualizer -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Graph Visualizer</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Explore node traversal, level-by-level breadth exploration, and deep backtracking trees with animated vector SVG canvases.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">Breadth-First Search (BFS)</span>
+                        <span class="badge-tag mb-1">Depth-First Search (DFS)</span>
+                    </div>
+                    <a href="visualize-graph.html" class="btn btn-sky w-100">
+                        Launch Graph Engine <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 7. Pathfinding & Maze Generator -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon" style="background:#ecfdf5; color:#059669;">
+                        <i class="bi bi-compass-fill"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Pathfinding & Mazes</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Draw custom walls, generate automated recursive mazes, and watch A*, Dijkstra, BFS & DFS find the shortest route.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">A* Heuristic</span>
+                        <span class="badge-tag me-1 mb-1">Dijkstra</span>
+                        <span class="badge-tag me-1 mb-1">Recursive Maze</span>
+                    </div>
+                    <a href="visualize-pathfinding.html" class="btn btn-sky w-100">
+                        Launch Pathfinding <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 8. Backtracking Suite -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon" style="background:#fef2f2; color:#dc2626;">
+                        <i class="bi bi-arrow-return-left"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Backtracking Suite</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Solve constraint satisfaction problems. Watch the N-Queens chessboard and Tower of Hanoi disk movements with call stack recursion.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">N-Queens</span>
+                        <span class="badge-tag me-1 mb-1">Tower of Hanoi</span>
+                        <span class="badge-tag me-1 mb-1">Conflict Detection</span>
+                    </div>
+                    <a href="visualize-backtracking.html" class="btn btn-sky w-100">
+                        Launch Backtracking <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 9. Linear Data Structures Sandbox -->
+            <div class="col">
+                <div class="card card-custom h-100 p-4 d-flex flex-column">
+                    <div class="card-feature-icon" style="background:#eff6ff; color:#2563eb;">
+                        <i class="bi bi-layers-fill"></i>
+                    </div>
+                    <h2 class="h5 fw-bold mb-2 text-sky-900">Data Structures Sandbox</h2>
+                    <p class="text-muted-custom small mb-4 flex-grow-1">
+                        Inspect dynamic memory and pointer re-linking in Singly/Doubly Linked Lists, LIFO Stack, FIFO Queue, and Hash Table Chaining.
+                    </p>
+                    <div class="mb-3">
+                        <span class="badge-tag me-1 mb-1">Linked Lists</span>
+                        <span class="badge-tag me-1 mb-1">Stack & Queue</span>
+                        <span class="badge-tag me-1 mb-1">Hash Chaining</span>
+                    </div>
+                    <a href="visualize-ds.html" class="btn btn-sky w-100">
+                        Launch DS Sandbox <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-2 g-4">
-            <div class="col">
-                <a href="visualize-sorting.html" class="card-link">
-                    <div class="card h-100 border-secondary bg-secondary bg-opacity-10 p-4">
-                        <h3 class="h5 text-white">Sorting Visualizer</h3>
-                        <p class="text-secondary">Visualize sorting algorithms with an array input, size slider, and
-                            live animation.</p>
-                        <p class="text-secondary mb-0"><strong>Works with:</strong> Bubble, Selection, Insertion, Quick,
-                            Merge, Heap</p>
+        <!-- Quick Tips Section -->
+        <div class="card card-custom p-4 border-sky bg-white">
+            <div class="row align-items-center gy-3">
+                <div class="col-lg-8">
+                    <h3 class="h5 fw-bold mb-1 text-sky-900">Looking for algorithm theory or interactive challenges?</h3>
+                    <p class="text-muted-custom small mb-0">
+                        Practice with predictive breakpoint challenges or explore our complete library of 12 documented algorithms with time & space complexity analysis.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                        <a href="challenge.html" class="btn btn-primary btn-sm">
+                            <i class="bi bi-controller"></i> Guess Step Challenge
+                        </a>
+                        <a href="algorithm-details.html?algo=quick" class="btn btn-sky-outline btn-sm">
+                            <i class="bi bi-journal-code"></i> Browse Theory
+                        </a>
                     </div>
-                </a>
-            </div>
-            <div class="col">
-                <a href="visualize-search.html" class="card-link">
-                    <div class="card h-100 border-secondary bg-secondary bg-opacity-10 p-4">
-                        <h3 class="h5 text-white">Search Visualizer</h3>
-                        <p class="text-secondary">Visualize search algorithms by entering an array and a target value to
-                            search for.</p>
-                        <p class="text-secondary mb-0"><strong>Works with:</strong> Linear Search, Binary Search</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col">
-                <a href="visualize-graph.html" class="card-link">
-                    <div class="card h-100 border-secondary bg-secondary bg-opacity-10 p-4">
-                        <h3 class="h5 text-white">Graph Visualizer</h3>
-                        <p class="text-secondary">Explore BFS and DFS traversals on user-defined or random graphs.</p>
-                        <p class="text-secondary mb-0"><strong>Works with:</strong> Breadth-First Search, Depth-First
-                            Search</p>
-                    </div>
-                </a>
+                </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-dark border-top border-secondary py-4">
-        <div class="container text-center text-secondary small">AlgoLearn — select the right page for your algorithm
-            type.</div>
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
 </body>
 
 </html>

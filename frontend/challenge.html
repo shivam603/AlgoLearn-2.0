@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Next Step — AlgoLearn Challenge Mode</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
+        <div class="container">
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+            <div>
+                <span class="badge-sky">
+                    <i class="bi bi-controller text-primary"></i> Gamified Learning Arena
+                </span>
+                <h1 class="h3 fw-bold mt-1 mb-1">Interactive DSA Challenge: Guess the Next Step</h1>
+                <p class="text-muted-custom small mb-0">Test your mental execution model. Watch the visualizer reach a breakpoint, then predict the exact next algorithmic operation!</p>
+            </div>
+            <div class="d-flex gap-2 mt-2 mt-md-0">
+                <a href="practice.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-mortarboard-fill"></i> DSA Quiz Bank
+                </a>
+                <a href="duel.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-fire"></i> Duel Arena
+                </a>
+            </div>
+        </div>
+
+        <!-- Scoreboard Bar -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card p-3 bg-white border-sky text-center shadow-sm">
+                    <span class="text-muted-custom small">Score</span>
+                    <h2 class="h4 fw-bold text-sky-900 mb-0" id="challenge-score">0 pts</h2>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card p-3 bg-white border-sky text-center shadow-sm">
+                    <span class="text-muted-custom small">Streak</span>
+                    <h2 class="h4 fw-bold text-warning mb-0" id="challenge-streak">🔥 0 Streak</h2>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card p-3 bg-white border-sky text-center shadow-sm">
+                    <span class="text-muted-custom small">Round</span>
+                    <h2 class="h4 fw-bold text-success mb-0" id="challenge-round">1 / 5</h2>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card p-3 bg-white border-sky text-center shadow-sm">
+                    <span class="text-muted-custom small">Accuracy</span>
+                    <h2 class="h4 fw-bold text-primary mb-0" id="challenge-accuracy">100%</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 align-items-stretch">
+            <!-- Left Challenge Card -->
+            <div class="col-lg-6">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary" id="challenge-algo-tag">Quick Sort</span>
+                        <span class="badge-sky" id="challenge-stage-tag">Breakpoint: Step #4</span>
+                    </div>
+
+                    <h2 class="h5 fw-bold text-sky-900 mb-0" id="challenge-question-text">
+                        The visualizer has paused. Given the active elements highlighted, what is the next step?
+                    </h2>
+
+                    <!-- Live Mini Canvas for Question Context -->
+                    <div class="duel-canvas-mini" id="challenge-canvas" style="height: 140px;">
+                        <!-- Array bars rendered by JS -->
+                    </div>
+
+                    <!-- Multiple Choice Options -->
+                    <div class="d-grid gap-2" id="challenge-options-container">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Next Button -->
+                    <button type="button" id="btn-next-question" class="btn btn-primary btn-sm w-100 d-none mt-2">
+                        Next Challenge Round <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                    <!-- Feedback & Explanation Card -->
+                    <div id="challenge-feedback-card" class="card p-3 bg-light border-sky d-none mt-auto">
+                        <h3 class="h6 fw-bold mb-1" id="feedback-heading">Explanation</h3>
+                        <p id="feedback-body" class="text-muted-custom small mb-0"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Visualizer Step Trace & Reference -->
+            <div class="col-lg-6">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <h3 class="h5 fw-bold text-sky-900 mb-0">Algorithmic Step Trace</h3>
+                    <p class="text-muted-custom small mb-0">Study the chronological state history up to this exact breakpoint:</p>
+
+                    <div class="step-feed-container flex-grow-1" id="challenge-step-tape" style="min-height: 240px; overflow-y: auto; background: var(--sky-50); border-radius: 8px; padding: 8px;">
+                        <!-- Step pills -->
+                    </div>
+
+                    <div class="p-3 bg-light rounded border border-sky small">
+                        <i class="bi bi-lightbulb-fill text-warning me-1"></i>
+                        <strong>Pro Tip:</strong> Look at the pointer markers and active comparison colors on the array bars to deduce the branch condition.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
+    <script src="challenge.js"></script>
+</body>
+
+</html>

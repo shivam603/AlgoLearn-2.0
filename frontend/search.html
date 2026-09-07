@@ -5,99 +5,159 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algorithm Search — AlgoLearn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <title>Algorithm Lookup & Search — AlgoLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div class="btn-group" role="group">
-                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
-                <a class="btn btn-outline-light btn-sm" href="visualize.html">Visualizer</a>
-                <a class="btn btn-outline-light btn-sm" href="practice.html">Practice</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="container py-5 text-center position-relative overflow-hidden">
-        <div class="hero-code-bg" aria-hidden="true">
-            <div class="code-line" style="--top: 15%; --delay: 0s;">const search = 'algorithm';</div>
-            <div class="code-line" style="--top: 40%; --delay: 1.2s;">if (query.includes('sort')) {}</div>
-            <div class="code-line" style="--top: 60%; --delay: 2.6s;">console.log('find best algorithm');</div>
-        </div>
-        <div class="position-relative" style="z-index: 1;">
-            <p class="text-info text-uppercase fw-semibold mb-3 letter-spacing">Algorithm Lookup</p>
-            <h1 class="display-5 fw-bold mb-3">Search algorithms by name, category, or concept.</h1>
-            <p class="lead text-secondary mx-auto" style="max-width: 760px;">Type a keyword to find the right algorithm,
-                review its key ideas, and open the full tutorial page.</p>
-            <div class="search-banner card border border-info border-opacity-25 shadow-sm mx-auto mt-4"
-                style="max-width: 760px;">
-                <div class="d-flex align-items-center justify-content-between gap-3 flex-column flex-md-row p-3">
-                    <div class="search-label px-3 py-2 rounded-pill">Search</div>
-                    <input id="header_search_input" class="form-control search-input flex-grow-1" type="search"
-                        placeholder="Search algorithms, categories, or practice topics"
-                        aria-label="Search algorithms" />
-                    <span class="text-secondary small mb-0">Try keywords like <strong>sort</strong>,
-                        <strong>graph</strong>, or <strong>BFS</strong>.</span>
+    <!-- Header -->
+    <header class="py-4 text-center bg-white border-bottom">
+        <div class="container">
+            <span class="badge-sky">
+                <i class="bi bi-binoculars-fill"></i> Algorithm Discovery
+            </span>
+            <h1 class="display-6 fw-bold mt-2 text-sky-900">Instant Algorithm Search & Lookup</h1>
+            <p class="lead text-muted-custom mx-auto" style="max-width: 680px;">
+                Find algorithms by name, keyword, complexity, or use-case. Click any result to view instant summaries, Big-O metrics, and full code tutorials.
+            </p>
+            <div class="card card-custom p-2 mx-auto mt-4 border-sky" style="max-width: 680px;">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-0 text-muted">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input id="header_search_input" class="form-control border-0 shadow-none" type="search" placeholder="Type to search (e.g. quick, binary, shortest path, O(n log n))..." />
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="container pb-5">
+    <!-- Main Content -->
+    <main class="container py-5">
         <div class="row g-4">
+            <!-- Results Column -->
             <div class="col-lg-5">
-                <div class="card bg-secondary bg-opacity-10 border-secondary p-4 h-100">
-                    <h2 class="h5 text-white mb-3">Find an algorithm</h2>
-                    <div class="mb-3">
-                        <label for="search_query" class="form-label text-white">Search</label>
-                        <input id="search_query" type="text" class="form-control bg-dark text-white border-secondary"
-                            placeholder="e.g. binary, graph, BFS" />
+                <div class="card card-custom p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h5 fw-bold mb-0 text-sky-900">Matching Algorithms</h2>
+                        <span id="results-count" class="badge-sky">12 algorithms found</span>
                     </div>
-                    <p class="text-secondary small mb-3">Search by algorithm name, category, or keywords like "sort",
-                        "search", "graph".</p>
-                    <div id="results-count" class="text-white small mb-3"></div>
-                    <div id="search-results" class="list-group"></div>
-                    <p id="no-results" class="text-secondary small mt-3 d-none">No matching algorithms found. Try a
-                        broader keyword like "graph" or "sort".</p>
+
+                    <div class="mb-3">
+                        <input id="search_query" type="text" class="form-control form-control-sm" placeholder="Filter list by keyword..." />
+                    </div>
+
+                    <div id="search-results" class="d-flex flex-column gap-2" style="max-height: 520px; overflow-y: auto;"></div>
+                    <p id="no-results" class="text-muted-custom small mt-3 d-none">No algorithms matched your query. Try searching for "sort", "graph", "tree", or "search".</p>
                 </div>
             </div>
+
+            <!-- Preview Column -->
             <div class="col-lg-7">
-                <div class="card bg-secondary bg-opacity-10 border-secondary p-4 h-100">
-                    <h2 class="h5 text-white mb-3">Preview</h2>
-                    <div id="preview-target" class="text-secondary small mb-3">Select an algorithm from the list to see
-                        its summary, complexity and use case.</div>
-                    <div id="algo-preview" class="d-none">
-                        <h3 class="h5 text-white mb-2" id="preview-title"></h3>
-                        <p class="text-white mb-3" id="preview-summary"></p>
+                <div class="card card-custom p-4 h-100 d-flex flex-column">
+                    <h2 class="h5 fw-bold mb-3 text-sky-900">Algorithm Quick Preview</h2>
+                    
+                    <div id="preview-target" class="text-muted-custom small my-auto text-center py-5">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--sky-500);">
+                            <i class="bi bi-binoculars"></i>
+                        </div>
+                        <p class="mb-0">Select an algorithm on the left to inspect its summary, Big-O complexity, and use cases.</p>
+                    </div>
+
+                    <div id="algo-preview" class="d-none d-flex flex-column h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="h4 fw-bold mb-0 text-sky-900" id="preview-title"></h3>
+                            <span class="badge-sky" id="preview-category"></span>
+                        </div>
+                        <p class="text-muted-custom mb-3" id="preview-summary"></p>
+                        
                         <div class="mb-3">
-                            <span class="badge bg-info text-dark me-2" id="preview-category"></span>
-                            <span class="badge bg-secondary text-white" id="preview-keywords"></span>
+                            <span class="badge-tag" id="preview-keywords"></span>
                         </div>
-                        <div class="mb-4 text-secondary small">
-                            <p class="mb-1"><strong class="text-white">Time:</strong> <span id="preview-time"></span>
-                            </p>
-                            <p class="mb-1"><strong class="text-white">Space:</strong> <span id="preview-space"></span>
-                            </p>
-                            <p class="mb-0"><strong class="text-white">Use case:</strong> <span
-                                    id="preview-usecase"></span></p>
+
+                        <div class="card p-3 bg-light border-sky mb-4">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <span class="text-muted-custom small d-block">Time Complexity</span>
+                                    <strong class="text-sky-900 fs-6" id="preview-time"></strong>
+                                </div>
+                                <div class="col-6">
+                                    <span class="text-muted-custom small d-block">Space Complexity</span>
+                                    <strong class="text-sky-900 fs-6" id="preview-space"></strong>
+                                </div>
+                            </div>
                         </div>
-                        <button id="open-details-btn" class="btn btn-info">Open Full Explanation</button>
+
+                        <div class="card p-3 bg-sky-50 border-sky mb-4 flex-grow-1">
+                            <h4 class="h6 fw-bold text-sky-900 mb-1">Recommended Use Case</h4>
+                            <p class="text-muted-custom small mb-0" id="preview-usecase"></p>
+                        </div>
+
+                        <button id="open-details-btn" class="btn btn-sky w-100 mt-auto">
+                            <span>Open Complete Explanation & Code Walkthrough</span> <i class="bi bi-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-dark border-top border-secondary py-4">
-        <div class="container text-center text-secondary small">AlgoLearn — search for algorithms and learn how they
-            work.</div>
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
     <script src="algorithm-search.js"></script>
 </body>
 

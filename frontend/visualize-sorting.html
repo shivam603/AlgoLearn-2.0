@@ -6,146 +6,367 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorting Visualizer — AlgoLearn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div class="btn-group" role="group">
-                <a class="btn btn-outline-light btn-sm" href="visualize.html">Visualizer Home</a>
-                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="container py-4">
-        <div class="dashboard-header mb-4 text-center text-white">
-            <h1 class="display-6 mb-1">Sorting Visualizer</h1>
-            <p class="text-secondary mb-0">Choose a sorting algorithm, enter or generate an array, and watch the sorting
-                happen step by step.</p>
+        <!-- Dashboard Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+            <div>
+                <span class="badge-sky">
+                    <i class="bi bi-bar-chart-steps"></i> Sorting Engine
+                </span>
+                <h1 class="h3 fw-bold mt-1 mb-1">Sorting Visualizer</h1>
+                <p class="text-muted-custom small mb-0">Customize array parameters, adjust speed, and watch sorting algorithms animate in real-time.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+                <a href="duel.html" class="btn btn-warning btn-sm fw-bold">
+                    <i class="bi bi-fire"></i> Algorithm Duel / Race
+                </a>
+                <a href="challenge.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-controller"></i> Guess Step Challenge
+                </a>
+                <a href="algorithm-details.html?algo=quick" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-journal-code"></i> Theory
+                </a>
+            </div>
         </div>
 
         <div class="row g-4 align-items-stretch">
-            <div class="col-lg-4 mb-3 mb-lg-0">
-                <div class="card dashboard-panel shadow-sm border-secondary bg-dark text-white h-100">
-                    <div class="card-body">
-                        <h2 class="h5 text-white mb-3">Controls</h2>
-                        <div class="mb-3">
-                            <label for="array_input" class="form-label text-white">Custom Array</label>
-                            <textarea id="array_input" class="form-control bg-secondary text-white" rows="3"
-                                placeholder="Enter numbers separated by commas, spaces, or both"></textarea>
-                            <div id="array-error" class="form-text text-danger d-none">Please enter a valid
-                                comma-separated list of numbers.</div>
-                            <button type="button" class="btn btn-info w-100 mt-2 loadArrayButton">Load Array</button>
-                        </div>
+            <!-- Left Controls Column -->
+            <div class="col-lg-4">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <h2 class="h5 fw-bold mb-0 text-sky-900">Control Panel</h2>
+                        <!-- Sound Toggle -->
+                        <button type="button" class="sound-control-pill btn-sound-toggle" title="Toggle Sound Synthesis">
+                            <i class="bi bi-volume-mute-fill text-muted"></i>
+                            <span class="sound-btn-text">Sound OFF</span>
+                        </button>
+                    </div>
 
-                        <div class="mb-3">
-                            <button type="button" class="btn btn-success w-100 newArray">Generate New Array</button>
+                    <!-- Array Presets -->
+                    <div>
+                        <label class="form-label mb-1" style="font-size:0.8rem; font-weight:700;">Array Distribution Presets</label>
+                        <div class="d-flex flex-wrap gap-1">
+                            <button type="button" class="array-preset-btn" onclick="generatePresetArray('random', parseInt(document.getElementById('arr_sz').value || 35))">
+                                🎲 Random
+                            </button>
+                            <button type="button" class="array-preset-btn" onclick="generatePresetArray('nearly_sorted', parseInt(document.getElementById('arr_sz').value || 35))">
+                                📈 Nearly Sorted
+                            </button>
+                            <button type="button" class="array-preset-btn" onclick="generatePresetArray('reversed', parseInt(document.getElementById('arr_sz').value || 35))">
+                                📉 Reversed
+                            </button>
+                            <button type="button" class="array-preset-btn" onclick="generatePresetArray('few_unique', parseInt(document.getElementById('arr_sz').value || 35))">
+                                🧬 Few Unique
+                            </button>
+                            <button type="button" class="array-preset-btn" onclick="generatePresetArray('sawtooth', parseInt(document.getElementById('arr_sz').value || 35))">
+                                🪚 Sawtooth
+                            </button>
                         </div>
+                    </div>
 
-                        <div class="mb-4">
-                            <label for="arr_sz" class="form-label text-white">Array Size</label>
-                            <input id="arr_sz" type="range" min="5" max="100" step="1" value="60" class="form-range">
-                            <div class="d-flex justify-content-between text-secondary small mt-1">
-                                <span>5</span><span>100</span>
+                    <!-- Custom Array Input -->
+                    <div>
+                        <label for="array_input" class="form-label mb-1" style="font-size:0.8rem;">Custom Array (CSV / Numbers)</label>
+                        <textarea id="array_input" class="form-control" rows="2" placeholder="e.g. 45, 12, 85, 32, 89, 39, 69, 22"></textarea>
+                        <div id="array-error" class="form-text text-danger d-none">Please enter a valid list of positive numbers.</div>
+                        <button type="button" class="btn btn-sky-outline btn-sm w-100 mt-2 loadArrayButton">
+                            <i class="bi bi-arrow-down-square-fill"></i> Load Custom Array
+                        </button>
+                    </div>
+
+                    <!-- Generate Random Button -->
+                    <div>
+                        <button type="button" class="btn btn-sky w-100 newArray">
+                            <i class="bi bi-shuffle"></i> Generate Random Array
+                        </button>
+                    </div>
+
+                    <!-- Sliders -->
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label for="arr_sz" class="form-label mb-1">Array Size</label>
+                            <input id="arr_sz" type="range" min="5" max="80" step="1" value="35" class="form-range">
+                            <div class="d-flex justify-content-between text-muted-custom small">
+                                <span>5</span><span>80</span>
                             </div>
                         </div>
-
-                        <div class="mb-4">
-                            <label for="speed_input" class="form-label text-white">Animation Speed</label>
-                            <input id="speed_input" type="range" min="20" max="300" step="10" value="60"
-                                class="form-range">
-                            <div class="d-flex justify-content-between text-secondary small mt-1">
+                        <div class="col-6">
+                            <label for="speed_input" class="form-label mb-1">Speed</label>
+                            <input id="speed_input" type="range" min="20" max="300" step="10" value="120" class="form-range">
+                            <div class="d-flex justify-content-between text-muted-custom small">
                                 <span>Slow</span><span>Fast</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="btn-group-vertical w-100 gap-2 mb-3" role="group" aria-label="Algorithm buttons">
-                            <button type="button" class="btn btn-outline-primary bubbleSort">Bubble Sort</button>
-                            <button type="button" class="btn btn-outline-primary selectionSort">Selection Sort</button>
-                            <button type="button" class="btn btn-outline-primary insertionSort">Insertion Sort</button>
-                            <button type="button" class="btn btn-outline-primary quickSort">Quick Sort</button>
-                            <button type="button" class="btn btn-outline-primary mergeSort">Merge Sort</button>
-                            <button type="button" class="btn btn-outline-primary heapSort">Heap Sort</button>
-                        </div>
-
-                        <div
-                            class="complexity-panel p-3 mb-3 rounded-3 border border-secondary bg-secondary bg-opacity-10">
-                            <h3 class="h6 text-white mb-2">Algorithm Complexity</h3>
-                            <div class="d-flex justify-content-between text-secondary small">
-                                <div><strong class="text-white">Time</strong>: <span id="complexity-time">Select
-                                        algorithm</span></div>
-                                <div><strong class="text-white">Space</strong>: <span id="complexity-space">Select
-                                        algorithm</span></div>
+                    <!-- Algorithm Selection Buttons -->
+                    <div>
+                        <label class="form-label mb-1">Select Algorithm to Execute</label>
+                        <div class="d-grid gap-2" role="group" aria-label="Algorithm buttons">
+                            <div class="row g-2">
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100 bubbleSort" onclick="window.CodeSync?.setAlgo('bubble')"><i class="bi bi-filter"></i> Bubble</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100 selectionSort" onclick="window.CodeSync?.setAlgo('selection')"><i class="bi bi-check2-square"></i> Selection</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100 insertionSort" onclick="window.CodeSync?.setAlgo('insertion')"><i class="bi bi-box-arrow-in-right"></i> Insertion</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100 quickSort" onclick="window.CodeSync?.setAlgo('quick')"><i class="bi bi-lightning-charge-fill"></i> Quick</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100 mergeSort" onclick="window.CodeSync?.setAlgo('merge')"><i class="bi bi-bezier2"></i> Merge</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100 heapSort" onclick="window.CodeSync?.setAlgo('heap')"><i class="bi bi-diagram-3-fill"></i> Heap</button></div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="history-section pt-3 border-top border-secondary mt-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h3 class="h6 text-white mb-0">Saved Sessions</h3>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-outline-light clearHistoryBtn">Clear
-                                        History</button>
-                                    <button type="button" class="btn btn-outline-light downloadHistoryBtn">Export
-                                        JSON</button>
-                                </div>
+                    <!-- Algorithm Complexity Display -->
+                    <div class="card p-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">Current Algorithm Big-O</h3>
+                        <div class="d-flex justify-content-between text-muted-custom small">
+                            <div><strong class="text-dark">Time:</strong> <span id="complexity-time" class="badge-sky">Select algorithm</span></div>
+                            <div><strong class="text-dark">Space:</strong> <span id="complexity-space" class="badge-sky">Select algorithm</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Performance History Panel -->
+                    <div class="pt-3 border-top mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3 class="h6 fw-bold mb-0 text-sky-900">Session History</h3>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-sky-subtle btn-sm clearHistoryBtn">Clear</button>
+                                <button type="button" class="btn btn-sky-subtle btn-sm downloadHistoryBtn">Export JSON</button>
                             </div>
-                            <div class="text-secondary small mb-2">Click any saved session to reload that array into the
-                                visualizer.</div>
-                            <div id="history-container" class="table-responsive mt-2">
-                                <table class="table table-dark table-sm mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Time</th>
-                                            <th scope="col">Algorithm</th>
-                                            <th scope="col">Size</th>
-                                            <th scope="col">Time Complexity</th>
-                                            <th scope="col">Space Complexity</th>
-                                            <th scope="col">Duration</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="history-body"></tbody>
-                                </table>
-                            </div>
+                        </div>
+                        <p class="text-muted-custom small mb-2">Click any saved row to reload that array.</p>
+                        <div id="history-container" class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                            <table class="table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Algorithm</th>
+                                        <th>Size</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Right Visualizer Canvas Column -->
             <div class="col-lg-8">
-                <div class="card visualizer-panel shadow-sm border-secondary bg-dark text-white h-100">
-                    <div class="card-body d-flex flex-column h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h2 class="h5 mb-0">Array Visualization</h2>
-                                <p class="text-secondary small mb-0">Each bar height corresponds to a number in the
-                                    array.</p>
-                            </div>
-                            <div class="text-end text-secondary small">Use the controls to adjust size, speed, and
-                                algorithm.</div>
+                <div class="visualizer-canvas-container h-100 d-flex flex-column gap-3">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-1">
+                        <div>
+                            <h2 class="h5 fw-bold mb-0 text-sky-900">Array Canvas</h2>
+                            <p class="text-muted-custom small mb-0">Select visualization style and watch real-time sorting execution.</p>
                         </div>
-                        <div id="bars" class="flex-container"></div>
-                        <div class="learn-panel mt-4 p-3 rounded-3 border border-secondary bg-secondary bg-opacity-10">
-                            <h3 class="h6 text-white mb-3">Algorithm Explorer</h3>
-                            <div id="algorithm-explanation" class="text-secondary small">
-                                Search for Kruskal or Dijkstra on the home page to learn graph algorithms, then
-                                return here to experiment with sorting algorithms.
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <!-- View Mode Selector -->
+                            <div class="view-mode-bar" role="group" aria-label="Visualizer Display Modes">
+                                <button type="button" class="view-mode-btn active" data-mode="bars" title="Vertical Bar Chart">
+                                    <i class="bi bi-bar-chart-fill"></i> <span>Bars</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="line" title="Connected Line Graph & Area Chart">
+                                    <i class="bi bi-graph-up"></i> <span>Line Graph</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="scatter" title="Scatter Plot Points">
+                                    <i class="bi bi-circle-fill"></i> <span>Scatter</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="spectrum" title="Color Spectrum Rainbow">
+                                    <i class="bi bi-palette-fill"></i> <span>Spectrum</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="lollipop" title="Lollipop / Stem Pins">
+                                    <i class="bi bi-pin-map-fill"></i> <span>Pins</span>
+                                </button>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Bars Container -->
+                    <div id="bars" class="flex-container"></div>
+
+                    <!-- Time-Travel Stepper & Scrubber Bar -->
+                    <div class="stepper-timeline-bar">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-stepper-ctrl btn-stepper-reset" title="Jump to Beginning">
+                                <i class="bi bi-skip-start-fill"></i>
+                            </button>
+                            <button type="button" class="btn btn-stepper-ctrl btn-stepper-prev" title="Step Backward (Previous Operation)">
+                                <i class="bi bi-caret-left-fill"></i>
+                            </button>
+                            <button type="button" class="btn btn-stepper-ctrl btn-stepper-play" title="Play / Pause Replay">
+                                <i class="bi bi-play-fill"></i> <span class="stepper-play-text">Play</span>
+                            </button>
+                            <button type="button" class="btn btn-stepper-ctrl btn-stepper-next" title="Step Forward (Next Operation)">
+                                <i class="bi bi-caret-right-fill"></i>
+                            </button>
+                        </div>
+                        <input type="range" id="stepper-slider" class="stepper-scrubber" min="0" max="0" value="0" disabled title="Drag timeline scrubber">
+                        <span id="stepper-counter" class="badge-sky" style="font-size:0.75rem; white-space: nowrap;">0 / 0 steps</span>
+                    </div>
+
+                    <!-- Live Code Synchronizer & Multi-Language Viewer -->
+                    <div class="code-sync-card">
+                        <div class="code-sync-header">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="bi bi-code-slash text-sky-400"></i>
+                                <span id="code-sync-algo-title" class="fw-bold text-white small" style="font-size:0.8rem;">Bubble Sort — PYTHON Implementation</span>
+                            </div>
+                            <div class="code-lang-tabs">
+                                <button type="button" class="code-lang-tab active" data-lang="python">Python</button>
+                                <button type="button" class="code-lang-tab" data-lang="cpp">C++</button>
+                                <button type="button" class="code-lang-tab" data-lang="java">Java</button>
+                                <button type="button" class="code-lang-tab" data-lang="javascript">JS</button>
+                            </div>
+                        </div>
+                        <div id="code-sync-lines" class="code-sync-lines-container"></div>
+                    </div>
+
+                    <!-- Live Operation & Step Execution Tracker Card -->
+                    <div class="card p-3 bg-white border-sky shadow-sm">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 pb-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width: 28px; height: 28px; font-size: 0.85rem;"><i class="bi bi-cpu-fill"></i></span>
+                                <div>
+                                    <h3 class="h6 fw-bold mb-0 text-sky-900">Live Operation Tracker & Step Metrics</h3>
+                                    <span class="text-muted-custom small" style="font-size:0.75rem;">Every operation is recorded, counted and plotted step-by-step.</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge-sky" id="step-ops-rate"><i class="bi bi-speedometer2"></i> Live Trace</span>
+                            </div>
+                        </div>
+
+                        <!-- Metrics Counters -->
+                        <div class="row g-2 text-center mb-3">
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded bg-sky-50 border border-sky-100">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Total Operations</div>
+                                    <div class="fw-bold text-sky-900 fs-5" id="step-total-ops">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded" style="background:#fffbeb; border:1px solid #fde68a;">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Comparisons</div>
+                                    <div class="fw-bold fs-5" style="color:#b45309;" id="step-comparisons">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Swaps / Writes</div>
+                                    <div class="fw-bold fs-5" style="color:#15803d;" id="step-swaps">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded" style="background:#f5f3ff; border:1px solid #ddd6fe;">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Active Phase</div>
+                                    <div class="fw-bold fs-6 pt-1 text-truncate" style="color:#6d28d9;" id="step-phase">Ready</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Operations Ratio Progress Bar -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between text-muted-custom small mb-1" style="font-size:0.72rem;">
+                                <span><strong style="color:#b45309;">●</strong> Comparisons vs <strong style="color:#0369a1;">●</strong> Swaps / Moves</span>
+                                <span id="step-ratio-label">0% Comparisons / 0% Swaps</span>
+                            </div>
+                            <div class="progress" style="height: 6px; background-color: #f1f5f9;">
+                                <div id="step-comp-bar" class="progress-bar" role="progressbar" style="width: 50%; background-color:#f59e0b;"></div>
+                                <div id="step-swap-bar" class="progress-bar" role="progressbar" style="width: 50%; background-color:#0284c7;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Active Step Highlight Banner -->
+                        <div class="p-2 rounded bg-light border border-sky-200 mb-3 d-flex align-items-center gap-2" id="step-active-banner">
+                            <span class="badge bg-sky-600 text-white" id="step-badge" style="font-size:0.75rem;">STEP 0</span>
+                            <span class="text-dark small fw-semibold flex-grow-1" id="step-active-desc">Waiting for algorithm execution to begin...</span>
+                        </div>
+
+                        <!-- Step Timeline Tape / Mini Operation Feed -->
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-1 text-muted-custom small" style="font-size:0.75rem;">
+                                <span><i class="bi bi-clock-history"></i> Operation Execution Feed (Chronological Tape)</span>
+                                <span id="step-count-badge" class="badge-sky py-0">0 logged</span>
+                            </div>
+                            <div id="step-feed-container" class="step-feed-container" style="max-height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 4px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div class="text-center text-muted-custom small py-3" id="step-feed-empty">No operations performed yet. Click an algorithm button to watch live step execution.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Algorithm Explanation Card -->
+                    <div class="card p-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">Algorithm Mechanics</h3>
+                        <p id="algorithm-explanation" class="text-muted-custom small mb-0">
+                            Choose an algorithm from the controls on the left to start sorting and see real-time execution analysis.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="code-sync.js"></script>
+    <script src="time-travel.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
     <script src="sorting.js"></script>
     <script src="bubble.js"></script>
     <script src="insertion.js"></script>

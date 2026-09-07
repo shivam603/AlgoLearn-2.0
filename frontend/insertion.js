@@ -1,40 +1,46 @@
 async function insertion() {
-    console.log('In insertion()');
     const ele = document.querySelectorAll(".bar");
-    // color
+    StepTracker.reset();
     ele[0].style.background = 'green';
+    StepTracker.logSorted(0, getValueFromHeight(ele[0].style.height));
+
     for (let i = 1; i < ele.length; i++) {
-        console.log('In ith loop');
         let j = i - 1;
         let key = ele[i].style.height;
-        // color
+        const keyVal = getValueFromHeight(key);
+        StepTracker.logPhase(`Inserting element at index ${i} (${keyVal})`);
         ele[i].style.background = 'blue';
 
         await waitforme(delay);
 
-        while (j >= 0 && (parseInt(ele[j].style.height) > parseInt(key))) {
-            console.log('In while loop');
-            // color
+        while (j >= 0) {
+            const valJ = getValueFromHeight(ele[j].style.height);
+            const needsShift = parseInt(ele[j].style.height) > parseInt(key);
+            StepTracker.logComparison(j, i, valJ, keyVal, needsShift ? 'Shifting right' : 'Correct position found');
+
+            if (!needsShift) break;
+
             ele[j].style.background = 'blue';
-            ele[j + 1].style.height = ele[j].style.height;
+            setBarHeight(ele[j + 1], ele[j].style.height);
             j--;
 
             await waitforme(delay);
 
-            // color
             for (let k = i; k >= 0; k--) {
                 ele[k].style.background = 'green';
             }
         }
-        ele[j + 1].style.height = key;
-        // color
+        setBarHeight(ele[j + 1], key);
         ele[i].style.background = 'green';
+        StepTracker.logSorted(j + 1, keyVal);
     }
+    StepTracker.logPhase('Completed');
 }
 
 const inSortbtn = document.querySelector(".insertionSort");
 inSortbtn.addEventListener('click', async function () {
-    setComplexityInfo('Insertion Sort'); disableSortingBtn();
+    setComplexityInfo('Insertion Sort');
+    disableSortingBtn();
     disableSizeSlider();
     disableNewArrayBtn();
     const start = Date.now();
@@ -46,5 +52,3 @@ inSortbtn.addEventListener('click', async function () {
     enableSizeSlider();
     enableNewArrayBtn();
 });
-
-

@@ -34,7 +34,7 @@ const algorithmLibrary = [
         title: 'Quick Sort',
         category: 'Sorting',
         summary: 'A divide-and-conquer sort that partitions elements around a pivot and sorts each side recursively.',
-        time: 'O(n log n) average',
+        time: 'O(n log n) avg',
         space: 'O(log n)',
         usecase: 'Excellent for general-purpose sorting with good pivot selection.',
         keywords: 'partition pivot recursive'
@@ -128,17 +128,26 @@ function normalizeQuery(query) {
 function buildResultCard(algo) {
     const item = document.createElement('button');
     item.type = 'button';
-    item.className = 'list-group-item list-group-item-action bg-dark text-white border-secondary text-start';
+    item.className = 'btn text-start p-3 bg-white border rounded-3 w-100 mb-2 shadow-sm transition-fast';
+    item.style.borderColor = 'var(--border-subtle)';
     item.innerHTML = `
         <div class="d-flex justify-content-between align-items-start">
             <div>
-                <h3 class="h6 mb-1 text-white">${algo.title}</h3>
-                <p class="mb-1 text-secondary small">${algo.summary}</p>
-                <div class="text-secondary small"><strong>Category:</strong> ${algo.category}</div>
+                <h3 class="h6 fw-bold mb-1 text-sky-900">${algo.title}</h3>
+                <p class="mb-1 text-muted-custom small">${algo.summary}</p>
+                <span class="badge-tag">${algo.category}</span>
             </div>
-            <small class="text-info">${algo.time}</small>
+            <span class="badge-sky">${algo.time}</span>
         </div>
     `;
+    item.addEventListener('mouseenter', () => {
+        item.style.borderColor = 'var(--sky-400)';
+        item.style.backgroundColor = 'var(--sky-50)';
+    });
+    item.addEventListener('mouseleave', () => {
+        item.style.borderColor = 'var(--border-subtle)';
+        item.style.backgroundColor = '#ffffff';
+    });
     item.addEventListener('click', () => {
         showAlgorithmPreview(algo);
     });
@@ -150,15 +159,16 @@ function renderSearchResults(results) {
     const countLabel = document.getElementById('results-count');
     const noResults = document.getElementById('no-results');
 
+    if (!resultsContainer) return;
     resultsContainer.innerHTML = '';
     if (!results.length) {
-        countLabel.textContent = '0 algorithms match your search.';
-        noResults.classList.remove('d-none');
+        if (countLabel) countLabel.textContent = '0 algorithms found';
+        if (noResults) noResults.classList.remove('d-none');
         return;
     }
 
-    countLabel.textContent = `${results.length} algorithm${results.length === 1 ? '' : 's'} found`;
-    noResults.classList.add('d-none');
+    if (countLabel) countLabel.textContent = `${results.length} algorithm${results.length === 1 ? '' : 's'} found`;
+    if (noResults) noResults.classList.add('d-none');
 
     results.forEach(algo => {
         resultsContainer.appendChild(buildResultCard(algo));
@@ -177,15 +187,17 @@ function showAlgorithmPreview(algo) {
     const openButton = document.getElementById('open-details-btn');
     const previewTarget = document.getElementById('preview-target');
 
+    if (!preview || !previewTitle) return;
+
     previewTitle.textContent = algo.title;
     previewSummary.textContent = algo.summary;
     previewCategory.textContent = algo.category;
-    previewKeywords.textContent = algo.keywords;
+    previewKeywords.textContent = `Keywords: ${algo.keywords}`;
     previewTime.textContent = algo.time;
     previewSpace.textContent = algo.space;
     previewUsecase.textContent = algo.usecase;
     openButton.onclick = () => window.location.href = `algorithm-details.html?algo=${algo.key}`;
-    previewTarget.classList.add('d-none');
+    if (previewTarget) previewTarget.classList.add('d-none');
     preview.classList.remove('d-none');
 }
 
@@ -201,7 +213,25 @@ function filterAlgorithms(query) {
 window.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('search_query');
     const headerSearchInput = document.getElementById('header_search_input');
-    renderSearchResults(algorithmLibrary);
+    
+    // Check if query param exists
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q') || '';
+
+    if (initialQuery) {
+        if (input) input.value = initialQuery;
+        if (headerSearchInput) headerSearchInput.value = initialQuery;
+        const initialResults = filterAlgorithms(initialQuery);
+        renderSearchResults(initialResults);
+        if (initialResults.length > 0) {
+            showAlgorithmPreview(initialResults[0]);
+        }
+    } else {
+        renderSearchResults(algorithmLibrary);
+        if (algorithmLibrary.length > 0) {
+            showAlgorithmPreview(algorithmLibrary[0]);
+        }
+    }
 
     if (input) {
         input.addEventListener('input', () => {

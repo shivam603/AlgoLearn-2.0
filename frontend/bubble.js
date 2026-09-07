@@ -1,14 +1,17 @@
 async function bubble() {
-    console.log('In bubbe()');
     const ele = document.querySelectorAll(".bar");
+    StepTracker.reset();
     for (let i = 0; i < ele.length - 1; i++) {
-        console.log('In ith loop');
+        StepTracker.logPhase(`Pass ${i + 1} / ${ele.length - 1}`);
         for (let j = 0; j < ele.length - i - 1; j++) {
-            console.log('In jth loop');
             ele[j].style.background = 'blue';
             ele[j + 1].style.background = 'blue';
-            if (parseInt(ele[j].style.height) > parseInt(ele[j + 1].style.height)) {
-                console.log('In if condition');
+            const valA = getValueFromHeight(ele[j].style.height);
+            const valB = getValueFromHeight(ele[j + 1].style.height);
+            const shouldSwap = parseInt(ele[j].style.height) > parseInt(ele[j + 1].style.height);
+            StepTracker.logComparison(j, j + 1, valA, valB, shouldSwap ? 'Swap required' : 'In order');
+
+            if (shouldSwap) {
                 await waitforme(delay);
                 swap(ele[j], ele[j + 1]);
             }
@@ -16,8 +19,11 @@ async function bubble() {
             ele[j + 1].style.background = 'cyan';
         }
         ele[ele.length - 1 - i].style.background = 'green';
+        StepTracker.logSorted(ele.length - 1 - i, getValueFromHeight(ele[ele.length - 1 - i].style.height));
     }
     ele[0].style.background = 'green';
+    StepTracker.logSorted(0, getValueFromHeight(ele[0].style.height));
+    StepTracker.logPhase('Completed');
 }
 
 const bubSortbtn = document.querySelector(".bubbleSort");

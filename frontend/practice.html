@@ -5,91 +5,144 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practice Problems — AlgoLearn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <title>Practice Problems & Quiz — AlgoLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div class="btn-group" role="group">
-                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
-                <a class="btn btn-outline-light btn-sm" href="search.html">Search</a>
-                <a class="btn btn-outline-light btn-sm" href="visualize.html">Visualizer</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="container py-5 text-center position-relative overflow-hidden">
-        <div class="hero-code-bg" aria-hidden="true">
-            <div class="code-line" style="--top: 12%; --delay: 0s;">const practice = ['bubble', 'binary', 'dfs'];</div>
-            <div class="code-line" style="--top: 40%; --delay: 1.2s;">console.log('solve problems');</div>
-            <div class="code-line" style="--top: 65%; --delay: 2.8s;">answerQuestions();</div>
-        </div>
-        <div class="position-relative" style="z-index: 1;">
-            <p class="text-info text-uppercase fw-semibold mb-3 letter-spacing">Practice Problems</p>
-            <h1 class="display-5 fw-bold mb-3">Build confidence with algorithm-based questions.</h1>
-            <p class="lead text-secondary mx-auto" style="max-width: 760px;">Pick an algorithm to review key challenges,
-                choose the right approach, and solve guided problems that connect theory to practice.</p>
+    <!-- Header -->
+    <header class="py-5 text-center bg-white border-bottom border-sky">
+        <div class="container">
+            <span class="badge-sky">
+                <i class="bi bi-mortarboard-fill"></i> Interactive Arena
+            </span>
+            <h1 class="display-6 fw-bold mt-2 text-sky-900">Algorithm Practice & Problem Sets</h1>
+            <p class="lead text-muted-custom mx-auto" style="max-width: 680px;">
+                Test your understanding across all 12 algorithms. Review edge cases, invariant mechanics, and Big-O runtime tradeoffs with guided solution hints.
+            </p>
         </div>
     </header>
 
-    <main class="container pb-5">
+    <!-- Main Content -->
+    <main class="container py-5">
         <div class="row g-4">
-            <div class="col-lg-5">
-                <div class="card practice-card p-4 h-100">
-                    <h2 class="h5 text-white mb-3">Choose a topic</h2>
-                    <div class="mb-4">
-                        <label for="practice_algo" class="form-label text-secondary">Algorithm</label>
-                        <select id="practice_algo" class="form-select practice-select">
-                            <option value="bubble">Bubble Sort</option>
-                            <option value="selection">Selection Sort</option>
-                            <option value="insertion">Insertion Sort</option>
-                            <option value="quick">Quick Sort</option>
-                            <option value="merge">Merge Sort</option>
-                            <option value="heap">Heap Sort</option>
-                            <option value="linear">Linear Search</option>
-                            <option value="binary">Binary Search</option>
-                            <option value="bfs">Breadth-First Search</option>
-                            <option value="dfs">Depth-First Search</option>
-                            <option value="kruskal">Kruskal's Algorithm</option>
-                            <option value="dijkstra">Dijkstra's Algorithm</option>
+            <!-- Topic Selection Column -->
+            <div class="col-lg-4">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <h2 class="h5 fw-bold mb-0 text-sky-900">Choose a Topic</h2>
+                    
+                    <div>
+                        <label for="practice_algo" class="form-label">Algorithm Module</label>
+                        <select id="practice_algo" class="form-select">
+                            <optgroup label="Sorting Algorithms">
+                                <option value="bubble" selected>Bubble Sort</option>
+                                <option value="selection">Selection Sort</option>
+                                <option value="insertion">Insertion Sort</option>
+                                <option value="quick">Quick Sort</option>
+                                <option value="merge">Merge Sort</option>
+                                <option value="heap">Heap Sort</option>
+                            </optgroup>
+                            <optgroup label="Searching Algorithms">
+                                <option value="linear">Linear Search</option>
+                                <option value="binary">Binary Search</option>
+                            </optgroup>
+                            <optgroup label="Graph & Trees">
+                                <option value="bfs">Breadth-First Search (BFS)</option>
+                                <option value="dfs">Depth-First Search (DFS)</option>
+                                <option value="kruskal">Kruskal's MST</option>
+                                <option value="dijkstra">Dijkstra's Shortest Path</option>
+                            </optgroup>
                         </select>
                     </div>
-                    <div class="mb-4">
-                        <p class="text-secondary mb-2"><strong>How this helps:</strong></p>
-                        <ul class="practice-list mb-0">
-                            <li>Turn algorithm concepts into practice prompts.</li>
-                            <li>See where each algorithm is most useful.</li>
-                            <li>Review the answer approach and jump to the tutorial.</li>
+
+                    <div class="card p-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">Practice Tips</h3>
+                        <ul class="text-muted-custom small ps-3 mb-0">
+                            <li class="mb-1">Try to answer each question before clicking the solution hint.</li>
+                            <li class="mb-1">Focus on time complexity best/worst cases and stability.</li>
+                            <li>Jump directly to the algorithm tutorial if you need a code refresh.</li>
                         </ul>
                     </div>
-                    <button id="open-tutorial" class="btn btn-info btn-lg w-100">Open Algorithm Tutorial</button>
+
+                    <button id="open-tutorial" class="btn btn-sky w-100 mt-auto">
+                        <span>Open Algorithm Tutorial</span> <i class="bi bi-arrow-right"></i>
+                    </button>
                 </div>
             </div>
-            <div class="col-lg-7">
-                <div class="card practice-results p-4 h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-4">
+
+            <!-- Questions Column -->
+            <div class="col-lg-8">
+                <div class="card card-custom p-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-4 pb-2 border-bottom">
                         <div>
-                            <h2 class="h5 text-white mb-2" id="practice-title">Bubble Sort Practice</h2>
-                            <p id="practice-summary" class="text-secondary mb-0">Answer questions that reinforce sorting
-                                behavior, pivot choice, and runtime tradeoffs.</p>
+                            <h2 class="h4 fw-bold text-sky-900 mb-1" id="practice-title">Bubble Sort Practice</h2>
+                            <p id="practice-summary" class="text-muted-custom small mb-0">Work through questions that reinforce how repeated passes and swaps order a list.</p>
                         </div>
                     </div>
-                    <div id="practice-questions" class="practice-questions"></div>
+                    
+                    <div id="practice-questions"></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-dark border-top border-secondary py-4">
-        <div class="container text-center text-secondary small">AlgoLearn — solve problems and make algorithms stick.
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
     <script src="practice.js"></script>
 </body>
 

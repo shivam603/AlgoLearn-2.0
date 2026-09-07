@@ -8,11 +8,19 @@ async function heapify(ele, n, i) {
     ele[i].style.background = 'yellow';
     await waitforme(delay);
 
-    if (left < n && parseInt(ele[left].style.height) > parseInt(ele[largest].style.height)) {
-        largest = left;
+    if (left < n) {
+        const valLeft = getValueFromHeight(ele[left].style.height);
+        const valLargest = getValueFromHeight(ele[largest].style.height);
+        const isBigger = parseInt(ele[left].style.height) > parseInt(ele[largest].style.height);
+        StepTracker.logComparison(left, largest, valLeft, valLargest, isBigger ? 'Left child larger' : 'Root larger');
+        if (isBigger) largest = left;
     }
-    if (right < n && parseInt(ele[right].style.height) > parseInt(ele[largest].style.height)) {
-        largest = right;
+    if (right < n) {
+        const valRight = getValueFromHeight(ele[right].style.height);
+        const valLargest = getValueFromHeight(ele[largest].style.height);
+        const isBigger = parseInt(ele[right].style.height) > parseInt(ele[largest].style.height);
+        StepTracker.logComparison(right, largest, valRight, valLargest, isBigger ? 'Right child larger' : 'Current largest holds');
+        if (isBigger) largest = right;
     }
 
     if (largest !== i) {
@@ -31,21 +39,26 @@ async function heapify(ele, n, i) {
 async function heapSort() {
     const ele = document.querySelectorAll('.bar');
     const n = ele.length;
+    StepTracker.logPhase('Building Max-Heap');
 
     for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
         await heapify(ele, n, i);
     }
 
+    StepTracker.logPhase('Extracting Max Element from Heap');
     for (let i = n - 1; i > 0; i--) {
         await waitforme(delay);
         swap(ele[0], ele[i]);
         ele[i].style.background = 'green';
+        StepTracker.logSorted(i, getValueFromHeight(ele[i].style.height));
         await heapify(ele, i, 0);
     }
 
     if (n > 0) {
         ele[0].style.background = 'green';
+        StepTracker.logSorted(0, getValueFromHeight(ele[0].style.height));
     }
+    StepTracker.logPhase('Completed');
 }
 
 const heapSortBtn = document.querySelector('.heapSort');
@@ -54,6 +67,7 @@ heapSortBtn.addEventListener('click', async function () {
     disableSortingBtn();
     disableSizeSlider();
     disableNewArrayBtn();
+    StepTracker.reset();
     const start = Date.now();
     await heapSort();
     const duration = Date.now() - start;

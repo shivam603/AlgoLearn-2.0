@@ -1,125 +1,122 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlgoLearn — Learn Algorithms</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <title>AlgoLearn — Master Data Structures & Algorithms Visually</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div>
-                <a class="btn btn-outline-info btn-sm me-2" href="visualize.html">Visualizer</a>
-                <a class="btn btn-outline-light btn-sm me-2" href="search.html">Search</a>
-                <a class="btn btn-outline-light btn-sm me-2" href="practice.html">Practice</a>
-                <a class="btn btn-outline-light btn-sm" href="#concepts">Concepts</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger" id="open-panel-nav-btn">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="container py-5 position-relative overflow-hidden">
-        <div class="hero-code-bg" aria-hidden="true">
-            <div class="code-line" style="--top: 10%; --delay: 0s;">const algorithm = 'learning';</div>
-            <div class="code-line" style="--top: 35%; --delay: 1.5s;">for (let i = 0; i &lt; n; i++) {}</div>
-            <div class="code-line" style="--top: 55%; --delay: 3s;">if (distance &lt; best) best = distance;</div>
-            <div class="code-line" style="--top: 75%; --delay: 4.5s;">return shortestPath;</div>
-        </div>
-        <div class="position-relative" style="z-index: 1;">
-            <div class="row align-items-center gy-4">
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <div class="row align-items-center gy-5">
                 <div class="col-lg-6 text-center text-lg-start">
-                    <p class="text-info text-uppercase fw-semibold mb-3 letter-spacing">Algorithm Learning Platform</p>
-                    <h1 class="display-5 fw-bold mb-3">Explore, understand, and visualize algorithms.</h1>
-                    <p class="lead text-secondary mx-auto mx-lg-0" style="max-width: 760px;">Study algorithm concepts
-                        with clear topic cards, real examples, and performance guidance. Then use the search page to
-                        find any algorithm and the practice page to solve algorithm-based questions.</p>
-                    <div class="search-banner card border border-info border-opacity-25 shadow-sm mx-auto mt-4">
-                        <div
-                            class="d-flex align-items-center justify-content-between gap-3 flex-column flex-md-row p-3">
-                            <div class="search-label px-3 py-2 rounded-pill">Search</div>
-                            <input class="form-control search-input flex-grow-1" type="search"
-                                placeholder="Search algorithms, categories, or practice topics"
-                                aria-label="Search algorithms" />
-                            <a href="search.html" class="btn btn-info btn-lg">Open Search</a>
-                        </div>
+                    <div class="hero-badge">
+                        <i class="bi bi-stars text-sky-600"></i>
+                        <span>Full-Stack Interactive DSA Platform</span>
                     </div>
-                    <div class="d-flex justify-content-center justify-content-lg-start gap-3 mt-4">
-                        <a href="visualize.html" class="btn btn-info btn-lg">Go to Visualizer</a>
-                        <a href="search.html" class="btn btn-outline-light btn-lg">Search Algorithms</a>
-                        <a href="practice.html" class="btn btn-outline-light btn-lg">Practice Problems</a>
+                    <h1 class="display-5 fw-bold mb-3">
+                        Master Algorithms <span class="text-gradient-sky">Visually & Interactively</span>.
+                    </h1>
+                    <p class="lead mb-4">
+                        Step beyond static code. Explore 12 core algorithms with real-time bar & graph visualizers, step-by-step dry runs, complexity benchmarks, and targeted practice problems.
+                    </p>
+                    <div class="d-flex flex-wrap justify-content-center justify-content-lg-start gap-3 mb-4">
+                        <a href="visualize.html" class="btn btn-sky btn-lg">
+                            <i class="bi bi-play-circle-fill"></i> Launch Visualizers
+                        </a>
+                        <button type="button" class="btn btn-sky-outline btn-lg open-slide-panel-btn">
+                            <i class="bi bi-grid-1x2-fill"></i> Slide Panel (All Functions)
+                        </button>
+                        <a href="practice.html" class="btn btn-sky-subtle btn-lg">
+                            <i class="bi bi-mortarboard-fill"></i> Practice Problems
+                        </a>
+                    </div>
+                    <!-- Quick search widget -->
+                    <div class="card card-custom p-2 mt-2 border-sky">
+                        <form action="search.html" method="GET" class="d-flex align-items-center gap-2">
+                            <i class="bi bi-search ms-2 text-muted"></i>
+                            <input class="form-control border-0 bg-transparent shadow-none" type="search" name="q" placeholder="Search algorithms (e.g. Quick Sort, BFS, Dijkstra, Binary)..." />
+                            <button type="submit" class="btn btn-sky btn-sm text-nowrap px-3">Search</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-lg-6 d-flex justify-content-center">
-                    <div class="hero-illustration position-relative rounded-4 shadow-sm p-4">
-                        <div class="hero-illustration-inner">
-                            <svg viewBox="0 0 380 300" class="hero-illustration-svg" aria-hidden="true">
-                                <defs>
-                                    <linearGradient id="heroBg" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#0f172a" />
-                                        <stop offset="100%" stop-color="#111827" />
-                                    </linearGradient>
-                                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#38bdf8" />
-                                        <stop offset="100%" stop-color="#0ea5e9" />
-                                    </linearGradient>
-                                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feGaussianBlur stdDeviation="6" result="coloredBlur" />
-                                        <feMerge>
-                                            <feMergeNode in="coloredBlur" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-                                <rect x="0" y="0" width="380" height="300" rx="18" fill="url(#heroBg)" />
-                                <g filter="url(#glow)">
-                                    <circle cx="280" cy="80" r="28" fill="#0f172a" stroke="#38bdf8" stroke-width="3"
-                                        opacity="0.95" />
-                                </g>
-                                <g>
-                                    <path d="M84 212 V128 L118 156 L152 108 L186 176 L220 84" fill="none"
-                                        stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
-                                    <circle cx="84" cy="212" r="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="118" cy="156" r="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="152" cy="108" r="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="186" cy="176" r="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="220" cy="84" r="10" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                </g>
-                                <g>
-                                    <rect x="40" y="170" width="24" height="80" rx="8" fill="url(#barGradient)" />
-                                    <rect x="74" y="120" width="24" height="130" rx="8" fill="url(#barGradient)" />
-                                    <rect x="108" y="210" width="24" height="40" rx="8" fill="url(#barGradient)" />
-                                    <rect x="142" y="80" width="24" height="170" rx="8" fill="url(#barGradient)" />
-                                    <rect x="176" y="150" width="24" height="100" rx="8" fill="url(#barGradient)" />
-                                </g>
-                                <g>
-                                    <line x1="280" y1="210" x2="320" y2="240" stroke="#38bdf8" stroke-width="3" />
-                                    <line x1="320" y1="240" x2="280" y2="260" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="280" cy="210" r="13" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="320" cy="240" r="13" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                    <circle cx="280" cy="260" r="13" fill="#0f172a" stroke="#38bdf8" stroke-width="3" />
-                                </g>
-                                <g>
-                                    <circle cx="66" cy="68" r="14" fill="#0f172a" stroke="#22d3ee" stroke-width="3" />
-                                    <circle cx="48" cy="108" r="12" fill="#0f172a" stroke="#38bdf8"
-                                        stroke-width="2.5" />
-                                    <circle cx="86" cy="108" r="12" fill="#0f172a" stroke="#38bdf8"
-                                        stroke-width="2.5" />
-                                    <circle cx="66" cy="148" r="12" fill="#0f172a" stroke="#38bdf8"
-                                        stroke-width="2.5" />
-                                    <line x1="66" y1="82" x2="48" y2="96" stroke="#38bdf8" stroke-width="3" />
-                                    <line x1="66" y1="82" x2="86" y2="96" stroke="#38bdf8" stroke-width="3" />
-                                    <line x1="48" y1="120" x2="66" y2="136" stroke="#38bdf8" stroke-width="3" />
-                                    <line x1="86" y1="120" x2="66" y2="136" stroke="#38bdf8" stroke-width="3" />
-                                </g>
-                                <text x="60" y="30" fill="#7dd3fc" font-family="Inter, Arial, sans-serif" font-size="18"
-                                    font-weight="700">DSA</text>
-                            </svg>
+
+                <div class="col-lg-6">
+                    <div class="hero-interactive-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="badge-sky">
+                                    <i class="bi bi-broadcast"></i> Live Sandbox Preview
+                                </span>
+                                <h3 class="h6 mb-0 mt-1 fw-bold">Interactive Array Sorter</h3>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-sky-subtle" id="hero-random-btn">
+                                    <i class="bi bi-shuffle"></i> New Array
+                                </button>
+                                <button type="button" class="btn btn-sky" id="hero-sort-btn">
+                                    <i class="bi bi-play-fill"></i> Sort Now
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="hero-bars" class="flex-container" style="min-height: 220px;"></div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                            <span class="text-muted-custom small" id="hero-status">Click "Sort Now" to watch Bubble Sort in action</span>
+                            <a href="visualize-sorting.html" class="text-sky-700 fw-bold small text-decoration-none d-flex align-items-center gap-1">
+                                <span>Open Full Sorter</span> <i class="bi bi-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -127,331 +124,599 @@
         </div>
     </header>
 
-    <main class="container pb-5">
-        <section id="overview" class="mb-5">
-            <div class="row gy-4">
-                <div class="col-12">
-                    <div class="card overview-card p-4">
-                        <div class="overview-head mb-4">
-                            <h2 class="h4 text-white mb-2">What you will learn</h2>
-                            <p class="text-secondary mb-0">Build a strong algorithm intuition with concept-first
-                                guidance, practical examples, and clear performance comparisons.</p>
+    <!-- Key Platform Highlights -->
+    <section class="py-5 bg-white border-top border-bottom border-sky">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="badge-sky">
+                    <i class="bi bi-check-circle-fill"></i> Why AlgoLearn
+                </span>
+                <h2 class="h3 fw-bold mt-2">Everything You Need to Ace Algorithms</h2>
+                <p class="text-muted-custom mx-auto" style="max-width: 650px;">
+                    Designed to bridge abstract computer science theory with visual intuition and hands-on problem solving.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card card-custom card-feature">
+                        <div class="card-feature-icon">
+                            <i class="bi bi-bar-chart-line-fill"></i>
                         </div>
-                        <div class="row g-3">
-                            <div class="col-md-7">
-                                <ul class="overview-list">
-                                    <li>What each algorithm does and when to apply it</li>
-                                    <li>The step-by-step behavior of every algorithm</li>
-                                    <li>Concrete dry-run examples that make each idea memorable</li>
-                                </ul>
+                        <h3 class="h5 fw-bold mb-2">3 Interactive Visualizers</h3>
+                        <p class="text-muted-custom small mb-0">Customizable bar heights, speed throttles, target lookups, and SVG graph traversal animations.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card card-custom card-feature">
+                        <div class="card-feature-icon">
+                            <i class="bi bi-diagram-3-fill"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Dry-Run Step Walkthroughs</h3>
+                        <p class="text-muted-custom small mb-0">Detailed visual snapshots explaining variable changes, swaps, and recursive splits at every pass.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card card-custom card-feature">
+                        <div class="card-feature-icon">
+                            <i class="bi bi-layout-sidebar-inset-reverse"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Instant Slide Panel</h3>
+                        <p class="text-muted-custom small mb-0">Unified drawer containing all 12 algorithms, 3 engines, practice topics, and complexity cheat sheets.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card card-custom card-feature">
+                        <div class="card-feature-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2">Practice & Quiz Arena</h3>
+                        <p class="text-muted-custom small mb-0">Curated conceptual prompts designed to reinforce algorithmic thinking, edge cases, and runtime analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithm Category Directory (12 Topics) -->
+    <main class="container py-5" id="concepts">
+        <div class="text-center mb-5">
+            <span class="badge-sky">
+                <i class="bi bi-book-fill"></i> Curriculum & Topics
+            </span>
+            <h2 class="display-6 fw-bold mt-2">12 Core Algorithms Covered</h2>
+            <p class="text-muted-custom mx-auto" style="max-width: 700px;">
+                Explore in-depth guides with complete JavaScript implementations, pseudo-code, Big-O metrics, and live visualizers.
+            </p>
+        </div>
+
+        <!-- 1. Sorting Algorithms -->
+        <div class="mb-5">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-sky"><i class="bi bi-sort-numeric-down"></i> Sorting Suite</span>
+                    <h3 class="h4 mb-0 fw-bold">Sorting Algorithms (6)</h3>
+                </div>
+                <a href="visualize-sorting.html" class="btn btn-sky-subtle btn-sm">
+                    Launch Sorting Engine <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- Bubble Sort -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-filter"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Bubble Sort</h4>
                             </div>
-                            <div class="col-md-5">
-                                <div class="overview-feature p-4 rounded-4">
-                                    <h3 class="h6 text-white mb-3">Focused learning outcomes</h3>
-                                    <p class="text-secondary mb-2"><strong>Performance insight:</strong> Compare time
-                                        and space cost across algorithms.</p>
-                                    <p class="text-secondary mb-2"><strong>Algorithm choice:</strong> Learn when
-                                        sorting, searching, or graph methods are the best fit.</p>
-                                    <p class="text-secondary mb-0"><strong>Concept clarity:</strong> Understand
-                                        stability, best case, average case, and worst case.</p>
-                                </div>
-                            </div>
+                            <span class="badge-sky">O(n²)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Repeatedly compares and swaps adjacent elements until the largest values bubble to the top.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=bubble" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-sorting.html" class="btn btn-sky btn-sm">Animate</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="card overview-card p-4">
-                        <div class="overview-head mb-4">
-                            <h3 class="h4 text-white mb-2">How this helps students</h3>
-                            <p class="text-secondary mb-0">This learning path is designed to connect algorithm theory
-                                with hands-on practice and decision-making.</p>
+
+                <!-- Selection Sort -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-check2-square"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Selection Sort</h4>
+                            </div>
+                            <span class="badge-sky">O(n²)</span>
                         </div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="feature-card p-3 rounded-4 border border-info border-opacity-15">
-                                    <h4 class="h6 text-white mb-2">Concept-first review</h4>
-                                    <p class="text-secondary mb-0">Study the meaning and mechanics of each algorithm
-                                        before visualizing it.</p>
-                                </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Finds the minimum element from the unsorted section and places it at the sorted boundary.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=selection" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-sorting.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insertion Sort -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-box-arrow-in-right"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Insertion Sort</h4>
                             </div>
-                            <div class="col-md-6">
-                                <div class="feature-card p-3 rounded-4 border border-info border-opacity-15">
-                                    <h4 class="h6 text-white mb-2">Visual reinforcement</h4>
-                                    <p class="text-secondary mb-0">See the array change in real time to understand how
-                                        sorting works.</p>
-                                </div>
+                            <span class="badge-sky">O(n²)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Builds a sorted array one element at a time by shifting elements into their proper positions.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=insertion" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-sorting.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Sort -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-lightning-charge-fill"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Quick Sort</h4>
                             </div>
-                            <div class="col-md-6">
-                                <div class="feature-card p-3 rounded-4 border border-info border-opacity-15">
-                                    <h4 class="h6 text-white mb-2">Practice-ready</h4>
-                                    <p class="text-secondary mb-0">Move seamlessly from explanation to algorithm
-                                        problems and review.</p>
-                                </div>
+                            <span class="badge-sky">O(n log n)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            High-performance divide-and-conquer algorithm partitioning arrays around a pivot element.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=quick" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-sorting.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Merge Sort -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-bezier2"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Merge Sort</h4>
                             </div>
-                            <div class="col-md-6">
-                                <div class="feature-card p-3 rounded-4 border border-info border-opacity-15">
-                                    <h4 class="h6 text-white mb-2">Built for clarity</h4>
-                                    <p class="text-secondary mb-0">Keep the focus on the core idea, not just code
-                                        details.</p>
-                                </div>
+                            <span class="badge-sky">O(n log n)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Stable divide-and-conquer sorting that recursively divides arrays and merges sorted halves.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=merge" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-sorting.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heap Sort -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-diagram-3-fill"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Heap Sort</h4>
                             </div>
+                            <span class="badge-sky">O(n log n)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Utilizes a max-heap data structure to repeatedly extract the maximum root element in place.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=heap" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-sorting.html" class="btn btn-sky btn-sm">Animate</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="practice-promo" class="mb-5">
-            <div class="row g-4 align-items-center">
-                <div class="col-lg-6">
-                    <div class="card pastel-card border-info border-opacity-25 p-4 h-100">
-                        <h2 class="h4 text-white mb-3">Practice problems</h2>
-                        <p class="text-secondary mb-3">Improve your algorithm skills with targeted questions for
-                            sorting, searching and graph algorithms. Each problem is linked to the right algorithm page
-                            so you can review theory before solving it.</p>
-                        <ul class="text-white small mb-3">
-                            <li>Algorithm-based questions grouped by topic</li>
-                            <li>Practice with real examples and conceptual prompts</li>
-                            <li>Jump to the algorithm detail page for explanation and code</li>
-                        </ul>
-                        <a href="practice.html" class="btn btn-info btn-lg">Open Practice</a>
+        <!-- 2. Searching Algorithms -->
+        <div class="mb-5">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-sky"><i class="bi bi-search"></i> Search Suite</span>
+                    <h3 class="h4 mb-0 fw-bold">Searching Algorithms (2)</h3>
+                </div>
+                <a href="visualize-search.html" class="btn btn-sky-subtle btn-sm">
+                    Launch Search Engine <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <!-- Linear Search -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-search"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Linear Search</h4>
+                            </div>
+                            <span class="badge-sky">O(n)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Sequentially inspects every element in the array from start to end until the target is found.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=linear" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-search.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card bg-secondary bg-opacity-10 border-secondary p-4 h-100">
-                        <h3 class="h5 text-white mb-3">Why practice matters</h3>
-                        <p class="text-secondary mb-3">Learning algorithms is easier when you apply the concepts in
-                            problem form. This page gives you questions that match the algorithm you are studying.</p>
-                        <p class="text-white mb-0"><strong>Focus on:</strong> detecting algorithm patterns, choosing the
-                            right method, and reading input-output relationships.</p>
+
+                <!-- Binary Search -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-bullseye"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Binary Search</h4>
+                            </div>
+                            <span class="badge-sky">O(log n)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Efficient search on sorted arrays that repeatedly cuts the search window in half.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=binary" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                            <a href="visualize-search.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="concepts" class="mb-5">
+        <!-- 3. Graph & Tree Algorithms -->
+        <div class="mb-5">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-sky"><i class="bi bi-diagram-2-fill"></i> Graph Suite</span>
+                    <h3 class="h4 mb-0 fw-bold">Graph & Shortest Path Algorithms (4)</h3>
+                </div>
+                <a href="visualize-graph.html" class="btn btn-sky-subtle btn-sm">
+                    Launch Graph Engine <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                <!-- BFS -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-water"></i></span>
+                                <h4 class="h5 fw-bold mb-0">BFS</h4>
+                            </div>
+                            <span class="badge-sky">O(V+E)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Level-order graph traversal using a queue, ideal for shortest paths in unweighted graphs.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=bfs" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory</a>
+                            <a href="visualize-graph.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DFS -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-signpost-split-fill"></i></span>
+                                <h4 class="h5 fw-bold mb-0">DFS</h4>
+                            </div>
+                            <span class="badge-sky">O(V+E)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Deep path graph traversal using recursion/stacks, ideal for maze solving and cycle checks.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=dfs" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory</a>
+                            <a href="visualize-graph.html" class="btn btn-sky btn-sm">Animate</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kruskal's -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-share-fill"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Kruskal's</h4>
+                            </div>
+                            <span class="badge-sky">O(E log E)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Greedy algorithm building minimum spanning trees by picking minimum edge weights without cycles.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=kruskal" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dijkstra's -->
+                <div class="col">
+                    <div class="category-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box"><i class="bi bi-geo-alt-fill"></i></span>
+                                <h4 class="h5 fw-bold mb-0">Dijkstra's</h4>
+                            </div>
+                            <span class="badge-sky">O(E+V log V)</span>
+                        </div>
+                        <p class="text-muted-custom small mb-3 flex-grow-1">
+                            Finds the single-source shortest path across weighted graphs with non-negative edge costs.
+                        </p>
+                        <div class="d-flex gap-2 pt-2 border-top">
+                            <a href="algorithm-details.html?algo=dijkstra" class="btn btn-sky-subtle btn-sm flex-grow-1">Theory & Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complexity Matrix Table Section -->
+        <section class="mt-5 pt-4 border-top" id="complexity-matrix">
             <div class="text-center mb-4">
-                <h2 class="h4 text-white">Algorithm Concepts</h2>
-                <p class="text-secondary">Learn the key ideas behind each algorithm before trying them visually.</p>
+                <span class="badge-sky"><i class="bi bi-table"></i> Quick Reference</span>
+                <h3 class="h4 fw-bold mt-2">Big-O Complexity Matrix</h3>
+                <p class="text-muted-custom small">Compare Time and Space complexity tradeoffs at a glance.</p>
             </div>
 
-            <div class="row g-4 mb-5">
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Category</th>
+                            <th>Best Case Time</th>
+                            <th>Average Case Time</th>
+                            <th>Worst Case Time</th>
+                            <th>Space Complexity</th>
+                            <th>Stability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Bubble Sort</strong></td><td>Sorting</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+                        <tr><td><strong>Selection Sort</strong></td><td>Sorting</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
+                        <tr><td><strong>Insertion Sort</strong></td><td>Sorting</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+                        <tr><td><strong>Quick Sort</strong></td><td>Sorting</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td></tr>
+                        <tr><td><strong>Merge Sort</strong></td><td>Sorting</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Yes</td></tr>
+                        <tr><td><strong>Heap Sort</strong></td><td>Sorting</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td></tr>
+                        <tr><td><strong>Linear Search</strong></td><td>Search</td><td>O(1)</td><td>O(n)</td><td>O(n)</td><td>O(1)</td><td>N/A</td></tr>
+                        <tr><td><strong>Binary Search</strong></td><td>Search</td><td>O(1)</td><td>O(log n)</td><td>O(log n)</td><td>O(1)</td><td>N/A</td></tr>
+                        <tr><td><strong>BFS</strong></td><td>Graph</td><td>O(V + E)</td><td>O(V + E)</td><td>O(V + E)</td><td>O(V)</td><td>N/A</td></tr>
+                        <tr><td><strong>DFS</strong></td><td>Graph</td><td>O(V + E)</td><td>O(V + E)</td><td>O(V + E)</td><td>O(V)</td><td>N/A</td></tr>
+                        <tr><td><strong>Kruskal's MST</strong></td><td>Graph</td><td>O(E log E)</td><td>O(E log E)</td><td>O(E log E)</td><td>O(E)</td><td>N/A</td></tr>
+                        <tr><td><strong>Dijkstra's</strong></td><td>Graph</td><td>O(E + V log V)</td><td>O(E + V log V)</td><td>O(E + V log V)</td><td>O(V)</td><td>N/A</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Project Team Members Section -->
+        <section class="mt-5 pt-4 border-top" id="team">
+            <div class="text-center mb-4">
+                <span class="badge-sky">
+                    <i class="bi bi-people-fill"></i> Project Authors
+                </span>
+                <h3 class="h4 fw-bold mt-2">Team ANT-X</h3>
+                <p class="text-muted-custom small">Designed & Developed by Team ANT-X (Shivam, Siddharth & Amrit)</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <!-- Shivam -->
                 <div class="col-md-4">
-                    <div class="card algorithm-summary-card p-4 h-100">
-                        <h3 class="h5 text-white mb-2">Organized by type</h3>
-                        <p class="text-secondary mb-0">Algorithms are grouped into Sorting, Search, and Graph categories
-                            so you can find the right concept quickly.</p>
+                    <div class="team-card">
+                        <div class="team-avatar">S</div>
+                        <div class="flex-grow-1">
+                            <div class="team-name">Shivam</div>
+                            <div class="team-role">Full-Stack Development & Architecture</div>
+                            <div class="team-social-links">
+                                <a href="https://github.com/shivam603" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Shivam's GitHub">
+                                    <i class="bi bi-github"></i> <span>GitHub</span>
+                                </a>
+                                <a href="https://www.linkedin.com/in/shivam-ray-a38b73326/" target="_blank" rel="noopener noreferrer" class="team-social-btn team-linkedin" title="Shivam's LinkedIn">
+                                    <i class="bi bi-linkedin"></i> <span>LinkedIn</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Siddharth -->
                 <div class="col-md-4">
-                    <div class="card algorithm-summary-card p-4 h-100">
-                        <h3 class="h5 text-white mb-2">Clear focus</h3>
-                        <p class="text-secondary mb-0">Each card shows the main idea, how the algorithm works, and the
-                            important complexity facts.</p>
+                    <div class="team-card">
+                        <div class="team-avatar">S</div>
+                        <div class="flex-grow-1">
+                            <div class="team-name">Siddharth</div>
+                            <div class="team-role">Algorithm Visualizers & Frontend Design</div>
+                            <div class="team-social-links">
+                                <a href="https://github.com/siddharth0348-gif" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Siddharth's GitHub">
+                                    <i class="bi bi-github"></i> <span>GitHub</span>
+                                </a>
+                                <a href="https://www.linkedin.com/in/siddharth-pandey-b64721306/" target="_blank" rel="noopener noreferrer" class="team-social-btn team-linkedin" title="Siddharth's LinkedIn">
+                                    <i class="bi bi-linkedin"></i> <span>LinkedIn</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Amrit -->
                 <div class="col-md-4">
-                    <div class="card algorithm-summary-card p-4 h-100">
-                        <h3 class="h5 text-white mb-2">Easy navigation</h3>
-                        <p class="text-secondary mb-0">Click any card to visit the full tutorial page with code examples
-                            and step-by-step dry-run visuals.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-block mb-5">
-                <div class="category-header mb-4">
-                    <span class="algo-badge">Sorting</span>
-                    <h3 class="h5 text-white mb-0">Sorting Algorithms</h3>
-                </div>
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=bubble" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Bubble Sort</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A simple sorting method that
-                                    swaps adjacent values until the array is ordered.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> Repeated passes compare
-                                    neighbors and bubble the largest unsorted value to the end.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n²)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(1)</p>
+                    <div class="team-card">
+                        <div class="team-avatar">A</div>
+                        <div class="flex-grow-1">
+                            <div class="team-name">Amrit</div>
+                            <div class="team-role">Database Integration & Logic Verification</div>
+                            <div class="team-social-links">
+                                <a href="https://github.com/AmritRai07" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Amrit's GitHub">
+                                    <i class="bi bi-github"></i> <span>GitHub</span>
+                                </a>
+                                <a href="https://www.linkedin.com/in/amrit-kumar-rai-048120325/" target="_blank" rel="noopener noreferrer" class="team-social-btn team-linkedin" title="Amrit's LinkedIn">
+                                    <i class="bi bi-linkedin"></i> <span>LinkedIn</span>
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=selection" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Selection Sort</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A sorting algorithm that
-                                    repeatedly chooses the smallest remaining element.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> Each pass scans the
-                                    unsorted section, selects the minimum, then swaps it with the next sorted position.
-                                </p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n²)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(1)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=insertion" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Insertion Sort</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A sorting algorithm that
-                                    builds a sorted list one element at a time.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It takes the next unsorted
-                                    value and inserts it into the correct position among the already-sorted values.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n²)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(1)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=quick" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Quick Sort</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A fast divide-and-conquer
-                                    sorting algorithm using a pivot.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It partitions the array
-                                    around a pivot, then recursively sorts each partition.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n log n)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(log n)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=merge" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Merge Sort</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A stable divide-and-conquer
-                                    sort that merges sorted halves.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It recursively splits the
-                                    array in half, sorts both sides, and merges them back together.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n log n)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(n)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=heap" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Heap Sort</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A sort that uses a heap data
-                                    structure to extract the next largest value.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It builds a max heap, then
-                                    repeatedly removes the root and rebuilds the heap until sorted.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n log n)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(1)</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-block mb-5">
-                <div class="category-header mb-4">
-                    <span class="algo-badge">Search</span>
-                    <h3 class="h5 text-white mb-0">Search Algorithms</h3>
-                </div>
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=linear" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Linear Search</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A search algorithm that
-                                    checks each value until it finds the target.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It scans the list
-                                    sequentially, stopping when the target is found or the list ends.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(n)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(1)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=binary" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Binary Search</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A search algorithm for
-                                    sorted lists that halves the search range each step.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It compares the target to
-                                    the middle element, then continues in the lower or upper half.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(log n)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(1)</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="category-block mb-5">
-                <div class="category-header mb-4">
-                    <span class="algo-badge">Graph</span>
-                    <h3 class="h5 text-white mb-0">Graph Algorithms</h3>
-                </div>
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=bfs" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Breadth-First Search</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A graph traversal algorithm
-                                    that visits nodes level by level.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It starts at a source
-                                    node, explores all neighbors first, and uses a queue to track the next nodes to
-                                    visit.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(V + E)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(V)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=dfs" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Depth-First Search</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A graph traversal algorithm
-                                    that explores as far as possible along each branch before backtracking.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It starts at a source node
-                                    and follows one path to the end, using a stack or recursion to return and explore
-                                    remaining branches.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(V + E)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(V)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=kruskal" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Kruskal's Algorithm</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A graph algorithm that
-                                    builds a minimum spanning tree by selecting edges in weight order.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It sorts edges by weight
-                                    and adds each edge unless it creates a cycle.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(E log E)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(E)</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="algorithm-details.html?algo=dijkstra" class="card-link">
-                            <div class="card algorithm-card h-100 p-4">
-                                <h3 class="h5 text-white">Dijkstra's Algorithm</h3>
-                                <p class="text-secondary mb-2"><strong>What it is:</strong> A graph algorithm for
-                                    finding shortest paths from one node to all others in a weighted graph.</p>
-                                <p class="text-secondary mb-2"><strong>How it works:</strong> It repeatedly picks the
-                                    nearest unvisited node, then updates distances to its neighbors.</p>
-                                <p class="text-white mb-0"><strong>Time:</strong> O(E + V log V)</p>
-                                <p class="text-white mb-0"><strong>Space:</strong> O(V)</p>
-                            </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="bg-dark border-top border-secondary py-4">
-        <div class="container text-center text-secondary small">
-            Powered by AlgoLearn — start with concepts and then practice in the visualizer.
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4">
+                    <a class="navbar-brand mb-2 d-inline-flex" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                    <div class="visitor-counter-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span>Total Visitors: <strong class="visitor-count-value visitor-number">1,428</strong></span>
+                    </div>
+                    <p class="text-muted-custom small">
+                        A full-stack web platform created by <strong>Team ANT-X</strong> (Shivam, Siddharth, and Amrit) for mastering Data Structures and Algorithms through interactive visualization and guided practice.
+                    </p>
+                    <div class="d-flex gap-2 text-muted-custom small mt-2">
+                        <span class="badge-sky"><i class="bi bi-cpu-fill"></i> Interactive DSA Platform</span>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <h5>Visualizers</h5>
+                    <ul>
+                        <li><a href="visualize-sorting.html">Sorting Visualizer</a></li>
+                        <li><a href="visualize-search.html">Search Visualizer</a></li>
+                        <li><a href="visualize-graph.html">Graph Visualizer</a></li>
+                        <li><a href="visualize.html">All Engines</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <h5>Algorithm Guides</h5>
+                    <ul>
+                        <li><a href="algorithm-details.html?algo=quick">Quick Sort</a></li>
+                        <li><a href="algorithm-details.html?algo=merge">Merge Sort</a></li>
+                        <li><a href="algorithm-details.html?algo=binary">Binary Search</a></li>
+                        <li><a href="algorithm-details.html?algo=dijkstra">Dijkstra's Algorithm</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h5>Team ANT-X</h5>
+                    <ul class="text-muted-custom small list-unstyled">
+                        <li class="mb-1"><i class="bi bi-person-fill text-sky-600 me-1"></i> <a href="https://github.com/shivam603" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-sky-900 fw-semibold">Shivam</a></li>
+                        <li class="mb-1"><i class="bi bi-person-fill text-sky-600 me-1"></i> <a href="https://github.com/siddharth0348-gif" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-sky-900 fw-semibold">Siddharth</a></li>
+                        <li class="mb-1"><i class="bi bi-person-fill text-sky-600 me-1"></i> <a href="https://github.com/AmritRai07" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-sky-900 fw-semibold">Amrit</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center pt-3 border-top text-muted-custom small">
+                AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+            </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
+    <script>
+        // Mini Interactive Hero Sandbox
+        (function() {
+            const container = document.getElementById('hero-bars');
+            const randomBtn = document.getElementById('hero-random-btn');
+            const sortBtn = document.getElementById('hero-sort-btn');
+            const statusEl = document.getElementById('hero-status');
+            let data = [];
+
+            function generateHeroArray() {
+                data = [35, 80, 20, 95, 45, 60, 15, 75, 50, 90, 30, 65];
+                renderHeroBars();
+                if (statusEl) statusEl.textContent = 'Random array ready. Click "Sort Now" to watch.';
+            }
+
+            function renderHeroBars(highlight = [], sortedIndices = []) {
+                if (!container) return;
+                container.innerHTML = '';
+                data.forEach((val, i) => {
+                    const barWrap = document.createElement('div');
+                    barWrap.className = 'bar-wrapper';
+                    const bar = document.createElement('div');
+                    bar.className = 'bar';
+                    bar.style.height = `${val * 1.8}px`;
+                    if (highlight.includes(i)) {
+                        bar.style.background = '#f59e0b'; // Amber compare
+                    } else if (sortedIndices.includes(i)) {
+                        bar.style.background = '#10b981'; // Green sorted
+                    }
+                    const label = document.createElement('span');
+                    label.className = 'bar-label';
+                    label.textContent = val;
+                    barWrap.appendChild(bar);
+                    barWrap.appendChild(label);
+                    container.appendChild(barWrap);
+                });
+            }
+
+            async function heroSort() {
+                if (!sortBtn || !randomBtn) return;
+                sortBtn.disabled = true;
+                randomBtn.disabled = true;
+                if (statusEl) statusEl.textContent = 'Sorting in progress...';
+
+                const len = data.length;
+                const sorted = [];
+                for (let i = 0; i < len - 1; i++) {
+                    for (let j = 0; j < len - i - 1; j++) {
+                        renderHeroBars([j, j + 1], sorted);
+                        await new Promise(r => setTimeout(r, 90));
+                        if (data[j] > data[j + 1]) {
+                            const temp = data[j];
+                            data[j] = data[j + 1];
+                            data[j + 1] = temp;
+                            renderHeroBars([j, j + 1], sorted);
+                            await new Promise(r => setTimeout(r, 90));
+                        }
+                    }
+                    sorted.push(len - 1 - i);
+                }
+                sorted.push(0);
+                renderHeroBars([], sorted);
+                if (statusEl) statusEl.textContent = 'Array sorted successfully!';
+                sortBtn.disabled = false;
+                randomBtn.disabled = false;
+            }
+
+            if (randomBtn) randomBtn.addEventListener('click', generateHeroArray);
+            if (sortBtn) sortBtn.addEventListener('click', heroSort);
+
+            generateHeroArray();
+        })();
+    </script>
 </body>
 
 </html>

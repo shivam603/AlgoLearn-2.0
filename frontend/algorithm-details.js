@@ -13,7 +13,7 @@ const algorithmData = {
             { label: 'Start', values: [5, 2, 9, 1, 5, 6], highlight: [0, 1], note: 'Compare 5 and 2, swap because 5 > 2.' },
             { label: 'After swap', values: [2, 5, 9, 1, 5, 6], highlight: [1, 2], note: 'Compare 5 and 9, no swap.' },
             { label: 'Mid pass', values: [2, 5, 1, 9, 5, 6], highlight: [2, 3], note: 'Swap 9 and 1 so the larger element moves right.' },
-            { label: 'Pass end', values: [2, 5, 1, 5, 6, 9], highlight: [4, 5], note: 'Largest value 9 is now at the end.' }
+            { label: 'Pass end', values: [2, 5, 1, 5, 6, 9], highlight: [4, 5], note: 'Largest value 9 is now in its final position at the end.' }
         ]
     },
     selection: {
@@ -59,7 +59,7 @@ const algorithmData = {
         time: 'O(n log n) average',
         space: 'O(log n)',
         example: '[8, 4, 7, 3, 10, 5]',
-        usecase: 'Excellent for large data sets and general-purpose sorting when implemented with good pivot selection.',
+        usecase: 'Excellent for large datasets and general-purpose sorting when implemented with good pivot selection.',
         dryRun: [
             { label: 'Start', values: [8, 4, 7, 3, 10, 5], highlight: [5], note: 'Choose pivot 5 at the end of the array.' },
             { label: 'Partition', values: [4, 3, 5, 8, 10, 7], highlight: [0, 2], note: 'Move values smaller than pivot to the left.' },
@@ -84,8 +84,8 @@ const algorithmData = {
     },
     heap: {
         title: 'Heap Sort',
-        summary: 'Heap Sort builds a heap and repeatedly extracts the top element to sort the array.',
-        description: '<p><strong>What it is:</strong> Heap Sort is an in-place algorithm that uses a heap data structure to order elements.</p>',
+        summary: 'Heap Sort builds a heap and repeatedly extracts the top element to sort the array in place.',
+        description: '<p><strong>What it is:</strong> Heap Sort is an in-place algorithm that uses a binary heap data structure to order elements.</p>',
         details: '<p><strong>How it works:</strong> The algorithm first arranges the array into a max heap, then repeatedly swaps the heap root with the last element and reduces the heap size. It restores the heap after each swap until the array is sorted.</p>',
         pseudocode: 'buildMaxHeap(arr)\nfor end from n-1 down to 1:\n  swap(arr[0], arr[end])\n  siftDown(arr, 0, end-1)',
         time: 'O(n log n)',
@@ -109,9 +109,9 @@ const algorithmData = {
         example: '[7, 2, 9, 4, 3] target = 4',
         usecase: 'Best for small arrays, unsorted datasets, or one-off searches when building a faster index is not worth the cost.',
         dryRun: [
-            { label: 'Start', values: [7, 2, 9, 4, 3], highlight: [0], note: 'Check the first element 7 against the target 4.' },
+            { label: 'Start', values: [7, 2, 9, 4, 3], highlight: [0], note: 'Check the first element 7 against target 4.' },
             { label: 'Continue', values: [7, 2, 9, 4, 3], highlight: [1], note: 'Check the second element 2, still not a match.' },
-            { label: 'Match found', values: [7, 2, 9, 4, 3], highlight: [3], note: 'Found the target value 4 at index 3.' }
+            { label: 'Match found', values: [7, 2, 9, 4, 3], highlight: [3], note: 'Found target value 4 at index 3.' }
         ]
     },
     binary: {
@@ -131,7 +131,7 @@ const algorithmData = {
         ]
     },
     bfs: {
-        title: 'Breadth-First Search',
+        title: 'Breadth-First Search (BFS)',
         summary: 'Breadth-First Search traverses a graph level by level, exploring all neighbors before moving deeper.',
         description: '<p><strong>What it is:</strong> Breadth-First Search (BFS) is a graph traversal algorithm that visits nodes in order of their distance from the start node.</p>',
         details: '<p><strong>How it works:</strong> BFS uses a queue to explore the graph. It starts at the source node, enqueues its neighbors, and processes nodes in the order they were discovered. This guarantees that nodes are visited in increasing distance from the start.</p>',
@@ -147,7 +147,7 @@ const algorithmData = {
         ]
     },
     dfs: {
-        title: 'Depth-First Search',
+        title: 'Depth-First Search (DFS)',
         summary: 'Depth-First Search explores as far as possible along each branch before backtracking.',
         description: '<p><strong>What it is:</strong> Depth-First Search (DFS) is a graph traversal algorithm that follows one path to its end before exploring alternate branches.</p>',
         details: '<p><strong>How it works:</strong> DFS uses a stack or recursion to dive deep into the graph. Starting from the source, it visits a neighbor, then continues from that neighbor until it reaches a dead end, then backtracks and explores remaining neighbors.</p>',
@@ -218,22 +218,29 @@ const algorithmInfo = {
 
 const algorithmCodeSnippets = {
     bubble: `function bubbleSort(arr) {
-  for (let i = 0; i < arr.length - 1; i++) {
-    for (let j = 0; j < arr.length - 1 - i; j++) {
+  let len = arr.length;
+  for (let i = 0; i < len - 1; i++) {
+    let swapped = false;
+    for (let j = 0; j < len - 1 - i; j++) {
       if (arr[j] > arr[j + 1]) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        swapped = true;
       }
     }
+    if (!swapped) break; // Optimization
   }
   return arr;
 }`,
     selection: `function selectionSort(arr) {
-  for (let i = 0; i < arr.length - 1; i++) {
+  let len = arr.length;
+  for (let i = 0; i < len - 1; i++) {
     let minIndex = i;
-    for (let j = i + 1; j < arr.length; j++) {
+    for (let j = i + 1; j < len; j++) {
       if (arr[j] < arr[minIndex]) minIndex = j;
     }
-    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    if (minIndex !== i) {
+      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    }
   }
   return arr;
 }`,
@@ -285,9 +292,9 @@ function merge(left, right) {
 }`,
     linear: `function linearSearch(arr, target) {
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === target) return i;
+    if (arr[i] === target) return i; // Target index
   }
-  return -1;
+  return -1; // Not found
 }`,
     binary: `function binarySearch(arr, target) {
   let low = 0;
@@ -303,23 +310,27 @@ function merge(left, right) {
     bfs: `function breadthFirstSearch(graph, start) {
   const queue = [start];
   const visited = new Set([start]);
+  const order = [];
   while (queue.length) {
     const node = queue.shift();
-    for (const neighbor of graph[node]) {
+    order.push(node);
+    for (const neighbor of (graph[node] || [])) {
       if (!visited.has(neighbor)) {
         visited.add(neighbor);
         queue.push(neighbor);
       }
     }
   }
+  return order;
 }`,
     dfs: `function depthFirstSearch(graph, start, visited = new Set()) {
   visited.add(start);
-  for (const neighbor of graph[start]) {
+  for (const neighbor of (graph[start] || [])) {
     if (!visited.has(neighbor)) {
       depthFirstSearch(graph, neighbor, visited);
     }
   }
+  return Array.from(visited);
 }`,
     kruskal: `function kruskal(edges, nodes) {
   edges.sort((a, b) => a.weight - b.weight);
@@ -340,9 +351,9 @@ function merge(left, right) {
   dist[source] = 0;
 
   while (Object.keys(graph).length !== visited.size) {
-    const current = Object.keys(dist)
-      .filter(node => !visited.has(node))
-      .reduce((a, b) => (dist[a] < dist[b] ? a : b));
+    const unvisited = Object.keys(dist).filter(n => !visited.has(n));
+    if (!unvisited.length) break;
+    const current = unvisited.reduce((a, b) => (dist[a] < dist[b] ? a : b));
     visited.add(current);
     for (const neighbor of graph[current]) {
       const next = dist[current] + neighbor.weight;
@@ -355,7 +366,7 @@ function merge(left, right) {
 
 function renderArrayBars(values, highlight = []) {
     const container = document.createElement('div');
-    container.className = 'diagram-array mb-3';
+    container.className = 'diagram-array my-2';
 
     values.forEach((value, index) => {
         const bar = document.createElement('div');
@@ -363,13 +374,7 @@ function renderArrayBars(values, highlight = []) {
         if (highlight.includes(index)) {
             bar.classList.add('diagram-highlight');
         }
-        if (typeof value === 'number') {
-            bar.style.height = `${value * 7}px`;
-            bar.textContent = value;
-        } else {
-            bar.style.height = '52px';
-            bar.textContent = value;
-        }
+        bar.textContent = value;
         container.appendChild(bar);
     });
 
@@ -380,18 +385,22 @@ function renderDryRun(dryRunSteps) {
     const container = document.createElement('div');
     container.className = 'diagram-panel';
 
-    dryRunSteps.forEach(step => {
+    dryRunSteps.forEach((step, index) => {
         const item = document.createElement('div');
         item.className = 'diagram-step mb-3';
-        const label = document.createElement('h4');
-        label.className = 'h6 text-white mb-2';
-        label.textContent = step.label;
-        item.appendChild(label);
+        
+        const header = document.createElement('div');
+        header.className = 'd-flex align-items-center gap-2 mb-1';
+        header.innerHTML = `<span class="badge-sky" style="font-size:0.75rem;">Step ${index + 1}</span> <strong class="text-sky-900">${step.label}</strong>`;
+        item.appendChild(header);
+
         item.appendChild(renderArrayBars(step.values, step.highlight || []));
+        
         const note = document.createElement('p');
-        note.className = 'text-secondary mb-0';
+        note.className = 'text-muted-custom small mb-0 mt-1';
         note.textContent = step.note;
         item.appendChild(note);
+        
         container.appendChild(item);
     });
 
@@ -413,45 +422,77 @@ function renderAlgorithm() {
     const usecaseEl = document.getElementById('algo-usecase');
     const infoEl = document.getElementById('algo-info');
     const codeEl = document.getElementById('algo-code');
+    const practiceLink = document.getElementById('algo-practice-link');
+    const visualizerLink = document.getElementById('algo-visualizer-link');
 
     if (!algo) {
-        titleEl.textContent = 'Algorithm not found';
-        summaryEl.textContent = 'Please choose a valid topic from the home page.';
-        descEl.textContent = 'The selected algorithm does not exist. Use the home page to open a supported algorithm detail page.';
-        detailsEl.innerHTML = '';
-        pseudocodeEl.textContent = '';
-        dryrunEl.innerHTML = '';
-        timeEl.textContent = '—';
-        spaceEl.textContent = '—';
-        exampleEl.textContent = '—';
-        usecaseEl.textContent = '—';
-        if (infoEl) infoEl.innerHTML = '<p class="text-secondary mb-0">No algorithm information available.</p>';
+        if (titleEl) titleEl.textContent = 'Algorithm not found';
+        if (summaryEl) summaryEl.textContent = 'Please choose a valid topic from the home page.';
+        if (descEl) descEl.textContent = 'The selected algorithm does not exist. Use the navigation panel to open a supported algorithm tutorial.';
         return;
     }
 
-    titleEl.textContent = algo.title;
-    summaryEl.textContent = algo.summary;
-    descEl.innerHTML = algo.description;
-    detailsEl.innerHTML = algo.details;
-    pseudocodeEl.textContent = algo.pseudocode;
-    dryrunEl.innerHTML = '';
-    dryrunEl.appendChild(renderDryRun(algo.dryRun));
-    timeEl.textContent = algo.time;
-    spaceEl.textContent = algo.space;
-    exampleEl.textContent = algo.example;
-    usecaseEl.textContent = algo.usecase;
+    if (titleEl) titleEl.textContent = algo.title;
+    if (summaryEl) summaryEl.textContent = algo.summary;
+    if (descEl) descEl.innerHTML = algo.description;
+    if (detailsEl) detailsEl.innerHTML = algo.details;
+    if (pseudocodeEl) pseudocodeEl.textContent = algo.pseudocode;
+    if (dryrunEl) {
+        dryrunEl.innerHTML = '';
+        dryrunEl.appendChild(renderDryRun(algo.dryRun));
+    }
+    if (timeEl) timeEl.textContent = algo.time;
+    if (spaceEl) spaceEl.textContent = algo.space;
+    if (exampleEl) exampleEl.textContent = algo.example;
+    if (usecaseEl) usecaseEl.textContent = algo.usecase;
     if (codeEl) codeEl.textContent = algorithmCodeSnippets[key] || 'Example code is available in the documentation.';
+    
+    // Set dynamic visualizer target
+    if (visualizerLink) {
+        if (['bubble', 'selection', 'insertion', 'quick', 'merge', 'heap'].includes(key)) {
+            visualizerLink.href = 'visualize-sorting.html';
+            visualizerLink.innerHTML = '<i class="bi bi-play-circle-fill"></i> <span>Launch Sorting Visualizer</span>';
+        } else if (['linear', 'binary'].includes(key)) {
+            visualizerLink.href = 'visualize-search.html';
+            visualizerLink.innerHTML = '<i class="bi bi-search"></i> <span>Launch Search Visualizer</span>';
+        } else {
+            visualizerLink.href = 'visualize-graph.html';
+            visualizerLink.innerHTML = '<i class="bi bi-diagram-3-fill"></i> <span>Launch Graph Visualizer</span>';
+        }
+    }
+
+    if (practiceLink) {
+        practiceLink.href = `practice.html?algo=${key}`;
+    }
+
     if (infoEl) {
         const info = algorithmInfo[key] || {};
         infoEl.innerHTML = `
-            <dl class="row text-secondary small mb-0">
-                <dt class="col-6">Type</dt><dd class="col-6">${info.category || 'N/A'}</dd>
-                <dt class="col-6">Stability</dt><dd class="col-6">${info.stable || 'N/A'}</dd>
-                <dt class="col-6">Best case</dt><dd class="col-6">${info.best || '—'}</dd>
-                <dt class="col-6">Average case</dt><dd class="col-6">${info.average || '—'}</dd>
-                <dt class="col-6">Worst case</dt><dd class="col-6">${info.worst || '—'}</dd>
-            </dl>`;
+            <table class="table-custom">
+                <tbody>
+                    <tr><td class="text-muted-custom">Category</td><td><strong>${info.category || 'N/A'}</strong></td></tr>
+                    <tr><td class="text-muted-custom">Stability</td><td><strong>${info.stable || 'N/A'}</strong></td></tr>
+                    <tr><td class="text-muted-custom">Best Case</td><td><span class="badge-sky">${info.best || '—'}</span></td></tr>
+                    <tr><td class="text-muted-custom">Average Case</td><td><span class="badge-sky">${info.average || '—'}</span></td></tr>
+                    <tr><td class="text-muted-custom">Worst Case</td><td><span class="badge-sky">${info.worst || '—'}</span></td></tr>
+                </tbody>
+            </table>`;
     }
 }
 
-window.addEventListener('DOMContentLoaded', renderAlgorithm);
+window.addEventListener('DOMContentLoaded', () => {
+    renderAlgorithm();
+
+    const copyBtn = document.getElementById('copy-code-btn');
+    const codeEl = document.getElementById('algo-code');
+    if (copyBtn && codeEl) {
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeEl.textContent).then(() => {
+                copyBtn.innerHTML = '<i class="bi bi-check2"></i> <span>Copied!</span>';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="bi bi-clipboard"></i> <span>Copy Code</span>';
+                }, 2000);
+            });
+        });
+    }
+});

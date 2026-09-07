@@ -6,118 +6,192 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graph Visualizer — AlgoLearn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div class="btn-group" role="group">
-                <a class="btn btn-outline-light btn-sm" href="visualize.html">Visualizer Home</a>
-                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="container py-4">
-        <div class="dashboard-header mb-4 text-center text-white">
-            <h1 class="display-6 mb-1">Graph Visualizer</h1>
-            <p class="text-secondary mb-0">Visualize graph traversal with BFS and DFS using your own edges or a random
-                graph.</p>
+        <!-- Dashboard Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+            <div>
+                <span class="badge-sky">
+                    <i class="bi bi-diagram-3"></i> Graph Engine
+                </span>
+                <h1 class="h3 fw-bold mt-1 mb-1">Graph Traversal Visualizer</h1>
+                <p class="text-muted-custom small mb-0">Visualize Breadth-First Search (BFS) and Depth-First Search (DFS) traversals on custom or random graphs.</p>
+            </div>
+            <div class="d-flex gap-2 mt-2 mt-md-0">
+                <a href="algorithm-details.html?algo=bfs" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-water"></i> BFS Guide
+                </a>
+                <a href="algorithm-details.html?algo=dfs" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-signpost-split-fill"></i> DFS Guide
+                </a>
+            </div>
         </div>
 
         <div class="row g-4 align-items-stretch">
-            <div class="col-lg-5 mb-3 mb-lg-0">
-                <div class="card dashboard-panel shadow-sm border-secondary bg-dark text-white h-100">
-                    <div class="card-body d-flex flex-column h-100">
-                        <h2 class="h5 text-white mb-3">Graph Controls</h2>
-                        <div class="mb-3">
-                            <label for="graph_input" class="form-label text-white">Graph Edges</label>
-                            <textarea id="graph_input" class="form-control bg-secondary text-white" rows="4"
-                                placeholder="Enter edges like A-B, B-C, C-D"></textarea>
-                            <div id="graph-error" class="form-text text-danger d-none">Enter edges in the format A-B,
-                                B-C, C-D.</div>
-                            <button type="button" class="btn btn-info w-100 mt-2 loadGraphBtn">Load Graph</button>
-                        </div>
+            <!-- Left Controls Column -->
+            <div class="col-lg-5">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <h2 class="h5 fw-bold mb-0 text-sky-900">Graph Controls</h2>
 
-                        <div class="mb-3">
-                            <button type="button" class="btn btn-success w-100 generateGraph">Generate Random
-                                Graph</button>
-                        </div>
+                    <!-- Graph Edges Input -->
+                    <div>
+                        <label for="graph_input" class="form-label">Custom Graph Edges</label>
+                        <textarea id="graph_input" class="form-control" rows="3" placeholder="e.g. A-B, A-C, B-D, C-E, D-F"></textarea>
+                        <div id="graph-error" class="form-text text-danger d-none">Enter edges in the format A-B, B-C, C-D.</div>
+                        <button type="button" class="btn btn-sky-outline btn-sm w-100 mt-2 loadGraphBtn">
+                            <i class="bi bi-arrow-down-square-fill"></i> Load Custom Graph
+                        </button>
+                    </div>
 
-                        <div class="mb-4">
-                            <label for="node_count" class="form-label text-white">Node Count</label>
+                    <!-- Generate Random Button -->
+                    <div>
+                        <button type="button" class="btn btn-sky w-100 generateGraph">
+                            <i class="bi bi-shuffle"></i> Generate Random Graph
+                        </button>
+                    </div>
+
+                    <!-- Sliders -->
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label for="node_count" class="form-label">Node Count</label>
                             <input id="node_count" type="range" min="4" max="10" step="1" value="6" class="form-range">
-                            <div class="d-flex justify-content-between text-secondary small mt-1">
+                            <div class="d-flex justify-content-between text-muted-custom small">
                                 <span>4</span><span>10</span>
                             </div>
                         </div>
-
-                        <div class="mb-4">
-                            <label for="speed_input" class="form-label text-white">Animation Speed</label>
-                            <input id="speed_input" type="range" min="20" max="300" step="10" value="80"
-                                class="form-range">
-                            <div class="d-flex justify-content-between text-secondary small mt-1">
+                        <div class="col-6">
+                            <label for="speed_input" class="form-label">Speed</label>
+                            <input id="speed_input" type="range" min="20" max="300" step="10" value="100" class="form-range">
+                            <div class="d-flex justify-content-between text-muted-custom small">
                                 <span>Slow</span><span>Fast</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="btn-group-vertical w-100 gap-2 mb-3" role="group"
-                            aria-label="Graph algorithm buttons">
-                            <button type="button" class="btn btn-outline-primary bfsBtn">Breadth First Search</button>
-                            <button type="button" class="btn btn-outline-primary dfsBtn">Depth First Search</button>
-                        </div>
-
-                        <div
-                            class="complexity-panel p-3 mb-3 rounded-3 border border-secondary bg-secondary bg-opacity-10">
-                            <h3 class="h6 text-white mb-2">Graph Complexity</h3>
-                            <div class="text-secondary small">
-                                <div><strong class="text-white">Time</strong>: <span id="graph-time">O(V+E)</span></div>
-                                <div><strong class="text-white">Space</strong>: <span id="graph-space">O(V)</span></div>
+                    <!-- Algorithm Selection Buttons -->
+                    <div>
+                        <label class="form-label">Select Traversal Method</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sky-outline w-100 bfsBtn">
+                                    <i class="bi bi-water"></i> BFS
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sky-outline w-100 dfsBtn">
+                                    <i class="bi bi-signpost-split-fill"></i> DFS
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="card bg-secondary bg-opacity-10 border-secondary p-3 mt-auto">
-                            <h3 class="h6 text-white mb-3">Traversal Info</h3>
-                            <p id="graph-result" class="text-secondary small mb-2">Load a graph or generate a random one
-                                to begin.</p>
-                            <p id="graph-structure" class="text-secondary small mb-0"></p>
+                    <!-- Graph Complexity -->
+                    <div class="card p-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">Graph Complexity</h3>
+                        <div class="d-flex justify-content-between text-muted-custom small">
+                            <div><strong class="text-dark">Time:</strong> <span id="graph-time" class="badge-sky">O(V+E)</span></div>
+                            <div><strong class="text-dark">Space:</strong> <span id="graph-space" class="badge-sky">O(V)</span></div>
                         </div>
+                    </div>
+
+                    <!-- Traversal Output -->
+                    <div class="card p-3 bg-sky-50 border-sky mt-auto">
+                        <h3 class="h6 fw-bold mb-1 text-sky-900">Traversal State</h3>
+                        <p id="graph-result" class="text-muted-custom small mb-2">Random graph ready. Choose BFS or DFS to start.</p>
+                        <p id="graph-structure" class="text-muted-custom small mb-0"></p>
                     </div>
                 </div>
             </div>
 
+            <!-- Right Visualizer Canvas Column -->
             <div class="col-lg-7">
-                <div class="card visualizer-panel shadow-sm border-secondary bg-dark text-white h-100">
-                    <div class="card-body d-flex flex-column h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h2 class="h5 mb-0">Graph Visualization</h2>
-                                <p class="text-secondary small mb-0">Nodes and edges are drawn from your input.
-                                    Highlighted colors show traversal progress.</p>
-                            </div>
-                            <div class="text-end text-secondary small">BFS uses a queue, DFS explores deeply first.
-                            </div>
+                <div class="visualizer-canvas-container h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h2 class="h5 fw-bold mb-0 text-sky-900">Graph Topology Canvas</h2>
+                            <p class="text-muted-custom small mb-0">Dynamic SVG node rendering with active traversal animation.</p>
                         </div>
-                        <div id="graph-canvas" class="graph-canvas mb-3"></div>
-                        <div
-                            class="learn-panel mt-auto p-3 rounded-3 border border-secondary bg-secondary bg-opacity-10">
-                            <h3 class="h6 text-white mb-3">How graph traversal works</h3>
-                            <p id="graph-algorithm-explanation" class="text-secondary small mb-0">BFS visits nodes level
-                                by level. DFS follows one path to the end before backtracking.</p>
+                        <div class="d-flex gap-2">
+                            <span class="badge" style="background:#fef08a; color:#854d0e;">Yellow: Active</span>
+                            <span class="badge" style="background:#dcfce7; color:#15803d;">Green: Visited</span>
                         </div>
+                    </div>
+
+                    <!-- SVG Canvas Container -->
+                    <div id="graph-canvas" class="graph-canvas mb-3"></div>
+
+                    <!-- Algorithm Explanation Card -->
+                    <div class="card p-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">How Graph Traversal Works</h3>
+                        <p id="graph-algorithm-explanation" class="text-muted-custom small mb-0">
+                            BFS visits all immediate neighbors first using a FIFO queue. DFS dives deep into one branch until a dead end is reached, then backtracks using a stack.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
     <script src="graph.js"></script>
 </body>
 

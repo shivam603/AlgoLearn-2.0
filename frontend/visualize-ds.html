@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Data Structures Sandbox — AlgoLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
+        <div class="container">
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+            <div>
+                <span class="badge-sky">
+                    <i class="bi bi-layers-fill"></i> Memory & Pointer Mechanics
+                </span>
+                <h1 class="h3 fw-bold mt-1 mb-1">Data Structures Interactive Sandbox</h1>
+                <p class="text-muted-custom small mb-0">Experiment with dynamic node memory allocation, pointer re-linking, stack/queue operations, and hash table collisions.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
+                <button type="button" class="sound-control-pill btn-sound-toggle">
+                    <i class="bi bi-volume-mute-fill text-muted"></i>
+                    <span class="sound-btn-text">Sound OFF</span>
+                </button>
+                <button type="button" class="sound-control-pill btn-voice-toggle">
+                    <i class="bi bi-mic-mute-fill text-muted"></i>
+                    <span class="voice-btn-text">Voice OFF</span>
+                </button>
+                <a href="visualize-tree.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-diagram-3-fill"></i> Tree Visualizer
+                </a>
+            </div>
+        </div>
+
+        <!-- DS Selector Ribbon -->
+        <div class="card card-custom p-3 mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sky-outline btn-sm active ds-tab-btn" data-target="linkedlist">
+                        🔗 Linked List (Singly / Doubly)
+                    </button>
+                    <button type="button" class="btn btn-sky-outline btn-sm ds-tab-btn" data-target="stackqueue">
+                        📦 Stack & Queue
+                    </button>
+                    <button type="button" class="btn btn-sky-outline btn-sm ds-tab-btn" data-target="hashtable">
+                        🗄️ Hash Table (Chaining)
+                    </button>
+                </div>
+
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-sky" id="ds-metric-count">Elements: 0</span>
+                    <span class="badge-sky" id="ds-metric-time">Time: O(1)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Linked List Section -->
+        <div id="ds-section-linkedlist" class="ds-section-block">
+            <div class="row g-4 align-items-stretch">
+                <!-- Controls -->
+                <div class="col-lg-4">
+                    <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                        <h2 class="h5 fw-bold mb-0 text-sky-900">Linked List Operations</h2>
+
+                        <div>
+                            <label class="form-label small fw-bold mb-1">List Type</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="ll-type" id="ll-singly" value="singly" checked>
+                                <label class="btn btn-outline-primary btn-sm" for="ll-singly">Singly Linked</label>
+                                <input type="radio" class="btn-check" name="ll-type" id="ll-doubly" value="doubly">
+                                <label class="btn btn-outline-primary btn-sm" for="ll-doubly">Doubly Linked</label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label small fw-bold mb-1">Node Value</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" id="ll-node-val" class="form-control" placeholder="e.g. 42" min="1" max="999">
+                                <button type="button" class="btn btn-primary" onclick="DataStructuresVisualizer.insertLLHead()">+ Head</button>
+                                <button type="button" class="btn btn-sky" onclick="DataStructuresVisualizer.insertLLTail()">+ Tail</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="form-label small fw-bold mb-1">Index Operations</label>
+                            <div class="input-group input-group-sm mb-2">
+                                <input type="number" id="ll-node-idx" class="form-control" placeholder="Index (0..N)" min="0">
+                                <button type="button" class="btn btn-sky-outline" onclick="DataStructuresVisualizer.insertLLIndex()">Insert at Index</button>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-danger btn-sm flex-grow-1" onclick="DataStructuresVisualizer.deleteLLHead()">
+                                    Delete Head
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm flex-grow-1" onclick="DataStructuresVisualizer.deleteLLTail()">
+                                    Delete Tail
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sky-subtle btn-sm flex-grow-1" onclick="DataStructuresVisualizer.traverseLL()">
+                                <i class="bi bi-arrow-right-circle"></i> Animate Traversal
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="DataStructuresVisualizer.clearLL()">
+                                Clear
+                            </button>
+                        </div>
+
+                        <div class="card p-3 bg-light border-sky mt-auto">
+                            <h3 class="h6 fw-bold mb-1 text-sky-900">Pointer Complexity</h3>
+                            <div class="d-flex justify-content-between text-muted-custom small" style="font-size:0.75rem;">
+                                <span>Head Insert: <strong>O(1)</strong></span>
+                                <span>Tail Insert: <strong>O(1)</strong></span>
+                                <span>Search: <strong>O(N)</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas -->
+                <div class="col-lg-8">
+                    <div class="visualizer-canvas-container h-100 d-flex flex-column justify-content-center p-4">
+                        <div id="ll-canvas-container" class="d-flex flex-wrap align-items-center gap-2 p-3 overflow-x-auto" style="min-height: 200px;">
+                            <!-- Linked list nodes rendered by JS -->
+                        </div>
+                        <div id="ll-status-banner" class="text-center fw-bold text-sky-900 small mt-3">
+                            Linked list initialized. Insert nodes to watch pointer chaining.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Stack & Queue Section -->
+        <div id="ds-section-stackqueue" class="ds-section-block d-none">
+            <div class="row g-4 align-items-stretch">
+                <!-- Stack Controls & Canvas -->
+                <div class="col-md-6">
+                    <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="h5 fw-bold mb-0 text-sky-900">📚 Stack (LIFO)</h2>
+                            <span class="badge-sky">Top Pointer</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="stack-val-input" class="form-control" placeholder="e.g. 88">
+                            <button type="button" class="btn btn-primary" onclick="DataStructuresVisualizer.pushStack()">Push</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="DataStructuresVisualizer.popStack()">Pop</button>
+                            <button type="button" class="btn btn-sky-outline" onclick="DataStructuresVisualizer.peekStack()">Peek</button>
+                        </div>
+
+                        <div class="stack-canvas-bucket flex-grow-1 d-flex flex-column-reverse align-items-center p-3" id="stack-bucket" style="min-height: 220px; border: 2px dashed #0284c7; border-top: none; border-radius: 0 0 12px 12px; background: var(--sky-50);">
+                            <!-- Stack items -->
+                        </div>
+                        <div id="stack-status" class="text-center text-muted-custom small">Stack is empty.</div>
+                    </div>
+                </div>
+
+                <!-- Queue Controls & Canvas -->
+                <div class="col-md-6">
+                    <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="h5 fw-bold mb-0 text-sky-900">🚶‍♂️ Queue (FIFO)</h2>
+                            <span class="badge-sky">Front & Rear</span>
+                        </div>
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="queue-val-input" class="form-control" placeholder="e.g. 55">
+                            <button type="button" class="btn btn-primary" onclick="DataStructuresVisualizer.enqueueQueue()">Enqueue</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="DataStructuresVisualizer.dequeueQueue()">Dequeue</button>
+                            <button type="button" class="btn btn-sky-outline" onclick="DataStructuresVisualizer.peekQueue()">Front</button>
+                        </div>
+
+                        <div class="queue-canvas-line flex-grow-1 d-flex align-items-center gap-2 p-3 overflow-x-auto" id="queue-line" style="min-height: 220px; border: 2px dashed #059669; border-left: none; border-right: none; background: #f0fdf4;">
+                            <!-- Queue items -->
+                        </div>
+                        <div id="queue-status" class="text-center text-muted-custom small">Queue is empty.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Hash Table Section -->
+        <div id="ds-section-hashtable" class="ds-section-block d-none">
+            <div class="row g-4 align-items-stretch">
+                <!-- Controls -->
+                <div class="col-lg-4">
+                    <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                        <h2 class="h5 fw-bold mb-0 text-sky-900">Hash Table (Chaining)</h2>
+
+                        <div>
+                            <label class="form-label small fw-bold mb-1">Key Input</label>
+                            <div class="input-group input-group-sm">
+                                <input type="number" id="ht-key-input" class="form-control" placeholder="Key (e.g. 47)">
+                                <button type="button" class="btn btn-primary" onclick="DataStructuresVisualizer.insertHashTable()">Insert Key</button>
+                                <button type="button" class="btn btn-sky-outline" onclick="DataStructuresVisualizer.searchHashTable()">Search</button>
+                            </div>
+                        </div>
+
+                        <div class="card p-3 bg-light border-sky">
+                            <h3 class="h6 fw-bold mb-1 text-sky-900">Hash Function Formula</h3>
+                            <div class="font-monospace text-sky-900 fw-bold small">
+                                Index = Key % 7 (Bucket 0..6)
+                            </div>
+                            <div class="text-muted-custom small mt-1" style="font-size:0.75rem;">
+                                Collisions are resolved using separate chaining linked lists.
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-secondary btn-sm mt-auto" onclick="DataStructuresVisualizer.clearHashTable()">
+                            Reset Hash Table
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Buckets Display -->
+                <div class="col-lg-8">
+                    <div class="visualizer-canvas-container h-100 p-4">
+                        <h3 class="h6 fw-bold mb-3 text-sky-900">7-Bucket Hash Map Array</h3>
+                        <div id="ht-buckets-container" class="d-flex flex-column gap-2">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-custom mt-4">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="voice-narrator.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
+    <script src="data-structures.js"></script>
+</body>
+
+</html>

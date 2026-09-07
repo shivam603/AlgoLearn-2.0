@@ -6,158 +6,305 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Visualizer — AlgoLearn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
-<body class="bg-dark text-white">
-    <nav class="navbar navbar-dark bg-dark border-bottom border-secondary">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
         <div class="container">
-            <a class="navbar-brand" href="index.html">AlgoLearn</a>
-            <div class="btn-group" role="group">
-                <a class="btn btn-outline-light btn-sm" href="visualize.html">Visualizer Home</a>
-                <a class="btn btn-outline-light btn-sm" href="index.html">Home</a>
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="container py-4">
-        <div class="dashboard-header mb-4 text-center text-white">
-            <h1 class="display-6 mb-1">Search Visualizer</h1>
-            <p class="text-secondary mb-0">Pick a search algorithm, enter your array and target value, and see how the
-                search progresses.</p>
+        <!-- Dashboard Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+            <div>
+                <span class="badge-sky">
+                    <i class="bi bi-search"></i> Search Engine
+                </span>
+                <h1 class="h3 fw-bold mt-1 mb-1">Search Visualizer</h1>
+                <p class="text-muted-custom small mb-0">Enter an array and a target number, then see how Linear and Binary Search locate the element.</p>
+            </div>
+            <div class="d-flex gap-2 mt-2 mt-md-0">
+                <a href="algorithm-details.html?algo=binary" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-bullseye"></i> Binary Search Guide
+                </a>
+                <a href="practice.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-mortarboard-fill"></i> Practice Quiz
+                </a>
+            </div>
         </div>
 
         <div class="row g-4 align-items-stretch">
-            <div class="col-lg-5 mb-3 mb-lg-0">
-                <div class="card dashboard-panel shadow-sm border-secondary bg-dark text-white h-100">
-                    <div class="card-body">
-                        <h2 class="h5 text-white mb-3">Search Controls</h2>
-                        <div class="mb-3">
-                            <label for="array_input" class="form-label text-white">Array Input</label>
-                            <textarea id="array_input" class="form-control bg-secondary text-white" rows="3"
-                                placeholder="Enter numbers separated by commas, spaces, or both"></textarea>
-                            <div id="array-error" class="form-text text-danger d-none">Please enter a valid list of
-                                numbers.</div>
-                            <button type="button" class="btn btn-info w-100 mt-2 loadArrayButton">Load Array</button>
-                        </div>
+            <!-- Left Controls Column -->
+            <div class="col-lg-5">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <h2 class="h5 fw-bold mb-0 text-sky-900">Search Controls</h2>
 
-                        <div class="mb-4">
-                            <label for="search_value" class="form-label text-white">Search Target</label>
-                            <input id="search_value" type="number" step="1" class="form-control bg-secondary text-white"
-                                placeholder="Enter a number to search for">
-                            <div id="target-error" class="form-text text-danger d-none">Please enter a valid target
-                                number.</div>
-                        </div>
+                    <!-- Array Input -->
+                    <div>
+                        <label for="array_input" class="form-label">Array Input</label>
+                        <textarea id="array_input" class="form-control" rows="2" placeholder="e.g. 10, 24, 35, 48, 56, 67, 78, 89"></textarea>
+                        <div id="array-error" class="form-text text-danger d-none">Please enter a valid list of numbers.</div>
+                        <button type="button" class="btn btn-sky-outline btn-sm w-100 mt-2 loadArrayButton">
+                            <i class="bi bi-arrow-down-square-fill"></i> Load Array
+                        </button>
+                    </div>
 
-                        <div class="mb-3">
-                            <button type="button" class="btn btn-success w-100 generateArray">Generate Random
-                                Array</button>
-                        </div>
+                    <!-- Target Input -->
+                    <div>
+                        <label for="search_value" class="form-label">Target Number to Search</label>
+                        <input id="search_value" type="number" step="1" class="form-control" placeholder="Enter target number (e.g. 56)">
+                        <div id="target-error" class="form-text text-danger d-none">Please enter a valid target number.</div>
+                    </div>
 
-                        <div class="mb-4">
-                            <label for="speed_input" class="form-label text-white">Animation Speed</label>
-                            <input id="speed_input" type="range" min="20" max="300" step="10" value="80"
-                                class="form-range">
-                            <div class="d-flex justify-content-between text-secondary small mt-1">
-                                <span>Slow</span><span>Fast</span>
+                    <!-- Generate Random Button -->
+                    <div>
+                        <button type="button" class="btn btn-sky w-100 generateArray">
+                            <i class="bi bi-shuffle"></i> Generate Random Array
+                        </button>
+                    </div>
+
+                    <!-- Speed Slider -->
+                    <div>
+                        <label for="speed_input" class="form-label">Animation Speed</label>
+                        <input id="speed_input" type="range" min="20" max="300" step="10" value="100" class="form-range">
+                        <div class="d-flex justify-content-between text-muted-custom small">
+                            <span>Slow</span><span>Fast</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div>
+                        <label class="form-label">Select Search Algorithm</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sky-outline w-100 linearSearch">
+                                    <i class="bi bi-search"></i> Linear Search
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" class="btn btn-sky-outline w-100 binarySearch">
+                                    <i class="bi bi-bullseye"></i> Binary Search
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="btn-group-vertical w-100 gap-2 mb-3" role="group"
-                            aria-label="Search algorithm buttons">
-                            <button type="button" class="btn btn-outline-primary linearSearch">Linear Search</button>
-                            <button type="button" class="btn btn-outline-primary binarySearch">Binary Search</button>
-                        </div>
-
-                        <div
-                            class="complexity-panel p-3 mb-3 rounded-3 border border-secondary bg-secondary bg-opacity-10">
-                            <h3 class="h6 text-white mb-2">Search Complexity</h3>
-                            <div class="text-secondary small mb-3"><strong class="text-white">Algorithm</strong>: <span
-                                    id="algorithm-name">Select algorithm</span></div>
-                            <div class="complexity-chart">
-                                <div class="complexity-row">
-                                    <span class="metric-label">Time</span>
-                                    <div class="complexity-track">
-                                        <div id="complexity-time-bar" class="complexity-fill time-fill"></div>
-                                    </div>
-                                    <span id="complexity-time" class="metric-value">Select algorithm</span>
+                    <!-- Complexity Meter -->
+                    <div class="card p-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">Search Complexity: <span id="algorithm-name" class="text-sky-700">Select algorithm</span></h3>
+                        <div class="complexity-chart">
+                            <div class="complexity-row">
+                                <span class="metric-label">Time</span>
+                                <div class="complexity-track">
+                                    <div id="complexity-time-bar" class="complexity-fill time-fill" style="width: 20%;"></div>
                                 </div>
-                                <div class="complexity-row">
-                                    <span class="metric-label">Space</span>
-                                    <div class="complexity-track">
-                                        <div id="complexity-space-bar" class="complexity-fill space-fill"></div>
-                                    </div>
-                                    <span id="complexity-space" class="metric-value">Select algorithm</span>
+                                <span id="complexity-time" class="metric-value">—</span>
+                            </div>
+                            <div class="complexity-row">
+                                <span class="metric-label">Space</span>
+                                <div class="complexity-track">
+                                    <div id="complexity-space-bar" class="complexity-fill space-fill" style="width: 20%;"></div>
                                 </div>
+                                <span id="complexity-space" class="metric-value">—</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="card bg-secondary bg-opacity-10 border-secondary p-3 mb-3">
-                            <h3 class="h6 text-white mb-3">Search result</h3>
-                            <p id="search-result" class="text-secondary small mb-0">Load an array and select an
-                                algorithm.</p>
+                    <!-- Search Result Status Box -->
+                    <div class="card p-3 bg-sky-50 border-sky">
+                        <h3 class="h6 fw-bold mb-1 text-sky-900">Search Output</h3>
+                        <p id="search-result" class="text-muted-custom small mb-0">Load an array and select an algorithm to begin.</p>
+                    </div>
+
+                    <!-- Search History -->
+                    <div class="pt-3 border-top mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3 class="h6 fw-bold mb-0 text-sky-900">Search History</h3>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-sky-subtle btn-sm clearHistoryBtn">Clear</button>
+                                <button type="button" class="btn btn-sky-subtle btn-sm downloadHistoryBtn">Export JSON</button>
+                            </div>
                         </div>
-
-                        <div class="history-section pt-3 border-top border-secondary mt-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h3 class="h6 text-white mb-0">Search History</h3>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-outline-light clearHistoryBtn">Clear
-                                        History</button>
-                                    <button type="button" class="btn btn-outline-light downloadHistoryBtn">Export
-                                        JSON</button>
-                                </div>
-                            </div>
-                            <div class="text-secondary small mb-2">Click any saved session to reload that array into the
-                                visualizer.</div>
-                            <div id="history-container" class="table-responsive mt-2">
-                                <table class="table table-dark table-sm mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Time</th>
-                                            <th scope="col">Algorithm</th>
-                                            <th scope="col">Size</th>
-                                            <th scope="col">Time</th>
-                                            <th scope="col">Space</th>
-                                            <th scope="col">Duration</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="history-body"></tbody>
-                                </table>
-                            </div>
+                        <div id="history-container" class="table-responsive" style="max-height: 160px; overflow-y: auto;">
+                            <table class="table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Algorithm</th>
+                                        <th>Size</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Right Visualizer Canvas Column -->
             <div class="col-lg-7">
-                <div class="card visualizer-panel shadow-sm border-secondary bg-dark text-white h-100">
-                    <div class="card-body d-flex flex-column h-100">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h2 class="h5 mb-0">Array Visualization</h2>
-                                <p class="text-secondary small mb-0">Each bar represents one array value.</p>
+                <div class="visualizer-canvas-container h-100">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <div>
+                            <h2 class="h5 fw-bold mb-0 text-sky-900">Search Canvas</h2>
+                            <p class="text-muted-custom small mb-0">Select visualization style and watch active search scans.</p>
+                        </div>
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <!-- View Mode Selector -->
+                            <div class="view-mode-bar" role="group" aria-label="Visualizer Display Modes">
+                                <button type="button" class="view-mode-btn active" data-mode="bars" title="Vertical Bar Chart">
+                                    <i class="bi bi-bar-chart-fill"></i> <span>Bars</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="line" title="Connected Line Graph & Area Chart">
+                                    <i class="bi bi-graph-up"></i> <span>Line Graph</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="scatter" title="Scatter Plot Points">
+                                    <i class="bi bi-circle-fill"></i> <span>Scatter</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="spectrum" title="Color Spectrum Rainbow">
+                                    <i class="bi bi-palette-fill"></i> <span>Spectrum</span>
+                                </button>
+                                <button type="button" class="view-mode-btn" data-mode="lollipop" title="Lollipop / Stem Pins">
+                                    <i class="bi bi-pin-map-fill"></i> <span>Pins</span>
+                                </button>
                             </div>
-                            <div class="text-end text-secondary small">Highlight shows the current search position.
+                            <div class="d-none d-xl-flex gap-1 ms-1">
+                                <span class="badge" style="background:#e0f2fe; color:#0369a1;">Scan</span>
+                                <span class="badge" style="background:#dcfce7; color:#15803d;">Found</span>
                             </div>
                         </div>
-                        <div id="bars" class="flex-container"></div>
-                        <div class="learn-panel mt-4 p-3 rounded-3 border border-secondary bg-secondary bg-opacity-10">
-                            <h3 class="h6 text-white mb-3">How search works</h3>
-                            <p id="search-algorithm-explanation" class="text-secondary small mb-0">Linear search checks
-                                each item one by one. Binary search checks the middle item, then narrows the range.</p>
+                    </div>
+
+                    <!-- Bars Container -->
+                    <div id="bars" class="flex-container"></div>
+
+                    <!-- Live Operation & Step Execution Tracker Card -->
+                    <div class="card p-3 mt-3 bg-white border-sky shadow-sm">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2 pb-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width: 28px; height: 28px; font-size: 0.85rem;"><i class="bi bi-cpu-fill"></i></span>
+                                <div>
+                                    <h3 class="h6 fw-bold mb-0 text-sky-900">Live Search Operation Tracker</h3>
+                                    <span class="text-muted-custom small" style="font-size:0.75rem;">Step-by-step element inspection and decision tree tracing.</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge-sky" id="step-ops-rate"><i class="bi bi-speedometer2"></i> Live Trace</span>
+                            </div>
                         </div>
+
+                        <!-- Metrics Counters -->
+                        <div class="row g-2 text-center mb-3">
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded bg-sky-50 border border-sky-100">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Total Operations</div>
+                                    <div class="fw-bold text-sky-900 fs-5" id="step-total-ops">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded" style="background:#fffbeb; border:1px solid #fde68a;">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Inspections / Checks</div>
+                                    <div class="fw-bold fs-5" style="color:#b45309;" id="step-comparisons">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Range Splits</div>
+                                    <div class="fw-bold fs-5" style="color:#15803d;" id="step-swaps">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 rounded" style="background:#f5f3ff; border:1px solid #ddd6fe;">
+                                    <div class="text-muted-custom small" style="font-size:0.72rem;">Search Status</div>
+                                    <div class="fw-bold fs-6 pt-1 text-truncate" style="color:#6d28d9;" id="step-phase">Ready</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Step Highlight Banner -->
+                        <div class="p-2 rounded bg-light border border-sky-200 mb-3 d-flex align-items-center gap-2" id="step-active-banner">
+                            <span class="badge bg-sky-600 text-white" id="step-badge" style="font-size:0.75rem;">STEP 0</span>
+                            <span class="text-dark small fw-semibold flex-grow-1" id="step-active-desc">Waiting for search execution to begin...</span>
+                        </div>
+
+                        <!-- Step Timeline Tape / Mini Operation Feed -->
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-1 text-muted-custom small" style="font-size:0.75rem;">
+                                <span><i class="bi bi-clock-history"></i> Search Execution Feed (Chronological Tape)</span>
+                                <span id="step-count-badge" class="badge-sky py-0">0 logged</span>
+                            </div>
+                            <div id="step-feed-container" class="step-feed-container" style="max-height: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding: 4px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                                <div class="text-center text-muted-custom small py-3" id="step-feed-empty">No search operations performed yet. Click Linear or Binary Search to watch live step execution.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Algorithm Explanation Card -->
+                    <div class="card p-3 mt-3 bg-light border-sky">
+                        <h3 class="h6 fw-bold mb-2 text-sky-900">How Search Works</h3>
+                        <p id="search-algorithm-explanation" class="text-muted-custom small mb-0">
+                            Linear search checks each element one by one from left to right. Binary search requires a sorted list and cuts the search window in half at each comparison.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-        crossorigin="anonymous"></script>
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
     <script src="search.js"></script>
 </body>
 

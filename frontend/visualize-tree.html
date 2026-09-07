@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Search Tree & AVL Visualizer — AlgoLearn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom">
+        <div class="container">
+            <div class="top-navbar-content">
+                <!-- Left: Left-Panel Toggle & Brand -->
+                <div class="top-navbar-left">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                        <i class="bi bi-list"></i>
+                        <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
+                    </button>
+                    <a class="navbar-brand mb-0" href="index.html">
+                        <span class="navbar-brand-icon">
+                            <i class="bi bi-cpu-fill"></i>
+                        </span>
+                        <span>AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Center: Search Bar -->
+                <div class="top-nav-search-wrap">
+                    <form action="search.html" method="GET" class="top-nav-search-form">
+                        <i class="bi bi-search top-nav-search-icon"></i>
+                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
+                    </form>
+                </div>
+
+                <!-- Right: Visitor Bar & All Functions -->
+                <div class="top-navbar-right">
+                    <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
+                        <span class="visitor-live-dot"></span>
+                        <i class="bi bi-people-fill text-sky-600"></i>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                    </div>
+                    <button type="button" class="btn-panel-trigger btn-sm">
+                        <i class="bi bi-grid-fill"></i>
+                        <span>All Functions</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+            <div>
+                <span class="badge-sky">
+                    <i class="bi bi-diagram-3-fill"></i> Tree Data Structures
+                </span>
+                <h1 class="h3 fw-bold mt-1 mb-1">BST & AVL Tree Visualizer</h1>
+                <p class="text-muted-custom small mb-0">Interact with Binary Search Trees and self-balancing AVL Trees. Insert, delete, search, and run animated traversals in real-time.</p>
+            </div>
+            <div class="d-flex gap-2 mt-2 mt-md-0">
+                <a href="visualize-graph.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-share-fill"></i> Graph Engine
+                </a>
+                <a href="visualize-dp.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-grid-3x3"></i> DP Grid Visualizer
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4 align-items-stretch">
+            <!-- Left Controls Column -->
+            <div class="col-lg-4">
+                <div class="card card-custom p-4 h-100 d-flex flex-column gap-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h5 fw-bold mb-0 text-sky-900">Tree Operations</h2>
+                        <button type="button" class="sound-control-pill btn-sound-toggle">
+                            <i class="bi bi-volume-mute-fill text-muted"></i>
+                            <span class="sound-btn-text">Sound OFF</span>
+                        </button>
+                    </div>
+
+                    <!-- Tree Mode (BST vs AVL) -->
+                    <div>
+                        <label class="form-label small fw-bold mb-1">Tree Structure Mode</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="tree-mode" id="mode-bst" value="bst" checked>
+                            <label class="btn btn-outline-primary btn-sm" for="mode-bst">Standard BST</label>
+                            <input type="radio" class="btn-check" name="tree-mode" id="mode-avl" value="avl">
+                            <label class="btn btn-outline-primary btn-sm" for="mode-avl">Balanced AVL Tree</label>
+                        </div>
+                    </div>
+
+                    <!-- Node Insert & Search Input -->
+                    <div>
+                        <label class="form-label small fw-bold mb-1">Node Value</label>
+                        <div class="input-group">
+                            <input type="number" id="tree-node-val" class="form-control form-control-sm" placeholder="e.g. 42" min="1" max="999">
+                            <button type="button" id="btn-tree-insert" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle"></i> Insert</button>
+                            <button type="button" id="btn-tree-search" class="btn btn-sky-outline btn-sm"><i class="bi bi-search"></i> Find</button>
+                            <button type="button" id="btn-tree-delete" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- Animated Traversals -->
+                    <div>
+                        <label class="form-label small fw-bold mb-1">Animated Traversals</label>
+                        <div class="d-grid gap-2">
+                            <div class="row g-2">
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100" onclick="TreeVisualizer.traverse('inorder')">In-Order (L-Root-R)</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100" onclick="TreeVisualizer.traverse('preorder')">Pre-Order (Root-L-R)</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100" onclick="TreeVisualizer.traverse('postorder')">Post-Order (L-R-Root)</button></div>
+                                <div class="col-6"><button type="button" class="btn btn-sky-outline btn-sm w-100" onclick="TreeVisualizer.traverse('levelorder')">Level-Order (BFS)</button></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Presets & Actions -->
+                    <div>
+                        <label class="form-label small fw-bold mb-1">Presets & Management</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-sky-subtle btn-sm" onclick="TreeVisualizer.generateRandomTree(9)">
+                                <i class="bi bi-shuffle"></i> Random Sample Tree
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="TreeVisualizer.clear()">
+                                <i class="bi bi-x-circle"></i> Clear Tree
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Operation Status Banner -->
+                    <div class="card p-3 bg-light border-sky mt-auto">
+                        <h3 class="h6 fw-bold mb-1 text-sky-900">Tree Log & Traversal Path</h3>
+                        <p id="tree-status-log" class="text-muted-custom small mb-0">Ready. Insert nodes or select a traversal to watch path animation.</p>
+                        <div id="tree-traversal-output" class="fw-bold text-sky-900 small mt-2 d-none"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Canvas Column -->
+            <div class="col-lg-8">
+                <div class="visualizer-canvas-container h-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h2 class="h5 fw-bold mb-0 text-sky-900">Tree Canvas</h2>
+                            <p class="text-muted-custom small mb-0">Dynamic vector rendering with automatic branch positioning & depth metrics.</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <span class="badge-sky" id="tree-nodes-count">Nodes: 0</span>
+                            <span class="badge-sky" id="tree-height-count">Height: 0</span>
+                        </div>
+                    </div>
+
+                    <!-- SVG Tree Container -->
+                    <div class="tree-svg-container flex-grow-1">
+                        <svg id="tree-svg" width="100%" height="100%" viewBox="0 0 800 480">
+                            <!-- Edges & Nodes dynamically drawn via JS -->
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container text-center text-muted-custom small">
+            AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="audio-synth.js"></script>
+    <script src="nav-panel.js?v=3.0"></script>
+    <script src="tree-visualizer.js"></script>
+</body>
+
+</html>
