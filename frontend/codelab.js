@@ -156,12 +156,13 @@ const CodeLabApp = {
         document.getElementById('exec-status-badge').textContent = 'Tracing...';
 
         try {
-            const result = await CodeLabTracer.traceJavaScript(code);
+            const result = await CodeLabTracer.trace(code, this.currentLang);
             
             if (!result.success) {
                 this.logConsole(`Error [${result.error.type}]: ${result.error.message} (Line ${result.error.line})`, 'error');
                 document.getElementById('exec-status-badge').className = 'badge bg-danger';
-                document.getElementById('exec-status-badge').textContent = 'Error';
+                document.getElementById('exec-status-badge').textContent = `Error L${result.error.line}`;
+                this.switchTab('console');
                 if (result.error.line && this.editor) {
                     this.editor.revealLineInCenter(result.error.line);
                 }
@@ -185,13 +186,26 @@ const CodeLabApp = {
                 this.renderStep(this.traceSteps[0]);
                 document.getElementById('exec-status-badge').className = 'badge bg-warning text-dark';
                 document.getElementById('exec-status-badge').textContent = 'Paused (Debug)';
+                this.switchTab('vars');
             } else {
                 // Continuous run
                 this.play();
+                this.switchTab('vars');
             }
         } catch (err) {
             this.logConsole("Execution tracing failed: " + err.message, "error");
+            this.switchTab('console');
         }
+    },
+
+    switchTab(target) {
+        document.querySelectorAll('.codelab-tab-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-target') === target);
+        });
+        document.querySelectorAll('.codelab-tab-content').forEach(sec => {
+            sec.classList.add('d-none');
+        });
+        document.getElementById(`deck-section-${target}`)?.classList.remove('d-none');
     },
 
     play() {
@@ -284,12 +298,9 @@ const CodeLabApp = {
         this.enablePlaybackControls(false);
         this.refreshDecorations();
         document.getElementById('step-counter').textContent = 'Step 0 / 0';
-        document.getElementById('vis-canvas-container').innerHTML = `
-            <div class="text-center text-muted-custom py-5">
-                <i class="bi bi-play-circle display-4 mb-2 d-block"></i>
-                <span>Click <strong>Run Code</strong> or <strong>Debug</strong> to start visualization</span>
-            </div>
-        `;
+        document.getElementById('exec-status-badge').className = 'badge bg-secondary';
+        document.getElementById('exec-status-badge').textContent = 'Ready';
+        this.renderInitialPreview(this.currentTemplateKey);
         document.getElementById('variables-body').innerHTML = '<tr><td colspan="3" class="text-muted text-center py-2">No active variables</td></tr>';
         document.getElementById('call-stack-list').innerHTML = '<li class="call-stack-item active"><span>global</span><span class="badge bg-secondary">depth 0</span></li>';
     },
@@ -336,7 +347,58 @@ const CodeLabApp = {
         const container = document.getElementById('vis-canvas-container');
         if (!container) return;
 
-        // Case A: Array Visualization (Sorting & Searching)
+        const vars = step.variables || {};
+
+        // Case 1: Stack Visualization (LIFO Beaker)
+        const isStack = step.dsType === 'stack' || vars.s !== undefined || vars.stack !== undefined || this.currentTemplateKey === 'stack';
+        if (isStack && (vars.s !== undefined || vars.stack !== undefined || step.arrayState)) {
+            const rawStack = vars.s !== undefined ? vars.s : (vars.stack !== undefined ? vars.stack : step.arrayState);
+            const stackArr = Array.isArray(rawStack) ? rawStack : (rawStack && rawStack._items ? rawStack._items : []);
+
+            let html = '<div class="d-flex flex-column align-items-center gap-2">';
+            html += '<div class="text-muted small fw-bold"><i class="bi bi-stack me-1"></i> Stack (LIFO) View</div>';
+            html += '<div class="vis-stack-wrap">';
+            if (stackArr.length === 0) {
+                html += '<div class="text-muted small py-4 text-center">Empty Stack (Ready for Push)</div>';
+            } else {
+                for (let i = 0; i < stackArr.length; i++) {
+                    const isTop = (i === stackArr.length - 1);
+                    html += `
+                        <div class="vis-stack-item ${isTop ? 'top-item' : ''}">
+                            ${isTop ? '<span class="badge bg-dark position-absolute start-0 ms-2" style="font-size:0.6rem;">TOP</span>' : ''}
+                            <span>${stackArr[i]}</span>
+                        </div>
+                    `;
+                }
+            }
+            html += '</div></div>';
+            container.innerHTML = html;
+            return;
+        }
+
+        // Case 2: Queue Visualization (FIFO Tube)
+        const isQueue = step.dsType === 'queue' || vars.q !== undefined || vars.queue !== undefined || this.currentTemplateKey === 'queue';
+        if (isQueue && (vars.q !== undefined || vars.queue !== undefined || step.arrayState)) {
+            const rawQueue = vars.q !== undefined ? vars.q : (vars.queue !== undefined ? vars.queue : step.arrayState);
+            const queueArr = Array.isArray(rawQueue) ? rawQueue : (rawQueue && rawQueue._items ? rawQueue._items : []);
+
+            let html = '<div class="d-flex flex-column align-items-center gap-2">';
+            html += '<div class="text-muted small fw-bold"><i class="bi bi-arrow-left-right me-1"></i> Queue (FIFO) Conveyor</div>';
+            html += '<div class="d-flex justify-content-between w-100 text-muted small px-3"><span>FRONT (Exit)</span><span>REAR (Entry)</span></div>';
+            html += '<div class="vis-queue-wrap">';
+            if (queueArr.length === 0) {
+                html += '<div class="text-muted small py-2 px-4 text-center">Empty Queue</div>';
+            } else {
+                for (let i = 0; i < queueArr.length; i++) {
+                    html += `<div class="vis-queue-item">${queueArr[i]}</div>`;
+                }
+            }
+            html += '</div></div>';
+            container.innerHTML = html;
+            return;
+        }
+
+        // Case 3: Array Visualization (Sorting & Searching)
         if (step.arrayState && Array.isArray(step.arrayState)) {
             const arr = step.arrayState;
             const maxVal = Math.max(...arr.map(v => typeof v === 'number' ? v : 10), 10);
@@ -379,10 +441,9 @@ const CodeLabApp = {
             return;
         }
 
-        // Case B: Linked List / Queue / Stack Visualization
-        const vars = step.variables || {};
+        // Case 4: Linked List / Nodes
         let detectedCollection = null;
-        for (let k of ['items', 'queue', 'stack', 'visited', 'order']) {
+        for (let k of ['items', 'visited', 'order']) {
             if (Array.isArray(vars[k])) {
                 detectedCollection = vars[k];
                 break;
@@ -402,6 +463,70 @@ const CodeLabApp = {
             html += '</div>';
             container.innerHTML = html;
         }
+    },
+
+    renderInitialPreview(templateKey) {
+        const container = document.getElementById('vis-canvas-container');
+        if (!container) return;
+
+        if (templateKey === 'stack') {
+            container.innerHTML = `
+                <div class="d-flex flex-column align-items-center gap-2">
+                    <div class="text-muted small fw-bold"><i class="bi bi-stack me-1"></i> Stack (LIFO) Ready</div>
+                    <div class="vis-stack-wrap">
+                        <div class="text-muted small py-4 text-center">Empty Stack (Ready for Push)</div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        if (templateKey === 'queue') {
+            container.innerHTML = `
+                <div class="d-flex flex-column align-items-center gap-2">
+                    <div class="text-muted small fw-bold"><i class="bi bi-arrow-left-right me-1"></i> Queue (FIFO) Ready</div>
+                    <div class="d-flex justify-content-between w-100 text-muted small px-3"><span>FRONT (Exit)</span><span>REAR (Entry)</span></div>
+                    <div class="vis-queue-wrap">
+                        <div class="text-muted small py-2 px-4 text-center">Empty Queue</div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        if (templateKey === 'linkedlist') {
+            container.innerHTML = `
+                <div class="d-flex flex-column align-items-center gap-2">
+                    <div class="text-muted small fw-bold"><i class="bi bi-link-45deg me-1"></i> Singly Linked List</div>
+                    <div class="vis-nodes-list">
+                        <div class="vis-node-box"><span>10</span></div><i class="bi bi-arrow-right vis-node-arrow"></i>
+                        <div class="vis-node-box"><span>20</span></div><i class="bi bi-arrow-right vis-node-arrow"></i>
+                        <div class="vis-node-box"><span>30</span></div><i class="bi bi-arrow-right vis-node-arrow"></i>
+                        <div class="vis-node-box"><span>40</span></div><i class="bi bi-arrow-right vis-node-arrow"></i>
+                        <span class="text-muted font-monospace">null</span>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Default Array Bars preview
+        const dummyArr = [45, 12, 85, 32, 89, 39, 69, 22];
+        const maxVal = 89;
+        let html = '<div class="vis-bars-wrap">';
+        for (let i = 0; i < dummyArr.length; i++) {
+            const val = dummyArr[i];
+            const heightPct = Math.max(Math.round((val / maxVal) * 180), 20);
+            html += `
+                <div class="vis-bar-col">
+                    <span class="vis-bar-val">${val}</span>
+                    <div class="vis-bar" style="height:${heightPct}px;"></div>
+                    <span class="vis-bar-idx">[${i}]</span>
+                </div>
+            `;
+        }
+        html += '</div>';
+        container.innerHTML = html;
     },
 
     renderVariablesTable(variables) {

@@ -142,6 +142,7 @@ print("Sorted:", numbers)`,
             cpp: `// Selection Sort C++
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 void selectionSort(std::vector<int>& arr) {
     int n = arr.size();
@@ -152,6 +153,12 @@ void selectionSort(std::vector<int>& arr) {
         }
         if (minIdx != i) std::swap(arr[i], arr[minIdx]);
     }
+}
+
+int main() {
+    std::vector<int> numbers = {64, 25, 12, 22, 11, 90, 48};
+    selectionSort(numbers);
+    return 0;
 }`,
             java: `public class Main {
     public static void selectionSort(int[] arr) {
@@ -165,6 +172,12 @@ void selectionSort(std::vector<int>& arr) {
             arr[minIdx] = arr[i];
             arr[i] = temp;
         }
+    }
+
+    public static void main(String[] args) {
+        int[] numbers = {64, 25, 12, 22, 11, 90, 48};
+        selectionSort(numbers);
+        System.out.println("Sorted: " + java.util.Arrays.toString(numbers));
     }
 }`
         }
@@ -211,6 +224,7 @@ insertion_sort(numbers)
 print("Sorted:", numbers)`,
             cpp: `// Insertion Sort C++
 #include <vector>
+#include <iostream>
 
 void insertionSort(std::vector<int>& arr) {
     int n = arr.size();
@@ -223,6 +237,12 @@ void insertionSort(std::vector<int>& arr) {
         }
         arr[j + 1] = key;
     }
+}
+
+int main() {
+    std::vector<int> numbers = {50, 20, 60, 10, 30, 40};
+    insertionSort(numbers);
+    return 0;
 }`,
             java: `public class Main {
     public static void insertionSort(int[] arr) {
@@ -235,6 +255,12 @@ void insertionSort(std::vector<int>& arr) {
             }
             arr[j + 1] = key;
         }
+    }
+
+    public static void main(String[] args) {
+        int[] numbers = {50, 20, 60, 10, 30, 40};
+        insertionSort(numbers);
+        System.out.println("Sorted: " + java.util.Arrays.toString(numbers));
     }
 }`
         }
@@ -289,6 +315,9 @@ sorted_nums = [11, 22, 33, 44, 55, 66, 77, 88, 99]
 res = binary_search(sorted_nums, 55)
 print("Found at:", res)`,
             cpp: `// Binary Search C++
+#include <vector>
+#include <iostream>
+
 int binarySearch(const std::vector<int>& arr, int target) {
     int low = 0, high = arr.size() - 1;
     while (low <= high) {
@@ -298,6 +327,12 @@ int binarySearch(const std::vector<int>& arr, int target) {
         else high = mid - 1;
     }
     return -1;
+}
+
+int main() {
+    std::vector<int> sortedNumbers = {11, 22, 33, 44, 55, 66, 77, 88, 99};
+    int result = binarySearch(sortedNumbers, 55);
+    return 0;
 }`,
             java: `public class Main {
     public static int binarySearch(int[] arr, int target) {
@@ -309,6 +344,12 @@ int binarySearch(const std::vector<int>& arr, int target) {
             else high = mid - 1;
         }
         return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] sortedNumbers = {11, 22, 33, 44, 55, 66, 77, 88, 99};
+        int result = binarySearch(sortedNumbers, 55);
+        System.out.println("Result: " + result);
     }
 }`
         }
@@ -344,11 +385,21 @@ linearSearch(list, 78);`,
 
 lst = [23, 45, 12, 78, 90, 56, 34]
 print("Index:", linear_search(lst, 78))`,
-            cpp: `int linearSearch(const std::vector<int>& arr, int target) {
+            cpp: `// Linear Search C++
+#include <vector>
+#include <iostream>
+
+int linearSearch(const std::vector<int>& arr, int target) {
     for (size_t i = 0; i < arr.size(); ++i) {
         if (arr[i] == target) return i;
     }
     return -1;
+}
+
+int main() {
+    std::vector<int> list = {23, 45, 12, 78, 90, 56, 34};
+    int result = linearSearch(list, 78);
+    return 0;
 }`,
             java: `public class Main {
     public static int linearSearch(int[] arr, int target) {
@@ -356,6 +407,12 @@ print("Index:", linear_search(lst, 78))`,
             if (arr[i] == target) return i;
         }
         return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] list = {23, 45, 12, 78, 90, 56, 34};
+        int result = linearSearch(list, 78);
+        System.out.println("Result: " + result);
     }
 }`
         }
@@ -420,6 +477,10 @@ nums = [35, 10, 80, 45, 20, 90, 55]
 quick_sort(nums, 0, len(nums) - 1)
 print("Sorted:", nums)`,
             cpp: `// Quick Sort C++
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
 void quickSort(std::vector<int>& arr, int low, int high) {
     if (low < high) {
         int pivot = arr[high];
@@ -432,6 +493,12 @@ void quickSort(std::vector<int>& arr, int low, int high) {
         quickSort(arr, low, pi - 1);
         quickSort(arr, pi + 1, high);
     }
+}
+
+int main() {
+    std::vector<int> numbers = {35, 10, 80, 45, 20, 90, 55};
+    quickSort(numbers, 0, numbers.size() - 1);
+    return 0;
 }`,
             java: `public class Main {
     public static void quickSort(int[] arr, int low, int high) {
@@ -449,6 +516,12 @@ void quickSort(std::vector<int>& arr, int low, int high) {
             quickSort(arr, low, pi - 1);
             quickSort(arr, pi + 1, high);
         }
+    }
+
+    public static void main(String[] args) {
+        int[] numbers = {35, 10, 80, 45, 20, 90, 55};
+        quickSort(numbers, 0, numbers.length - 1);
+        System.out.println("Sorted: " + java.util.Arrays.toString(numbers));
     }
 }`
         }
@@ -509,6 +582,9 @@ def merge(left, right):
 
 print(merge_sort([38, 27, 43, 3, 9, 82, 10]))`,
             cpp: `// Merge Sort C++
+#include <vector>
+#include <iostream>
+
 std::vector<int> mergeSort(std::vector<int> arr) {
     if (arr.size() <= 1) return arr;
     int mid = arr.size() / 2;
@@ -525,12 +601,38 @@ std::vector<int> mergeSort(std::vector<int> arr) {
     while (i < left.size()) res.push_back(left[i++]);
     while (j < right.size()) res.push_back(right[j++]);
     return res;
+}
+
+int main() {
+    std::vector<int> numbers = {38, 27, 43, 3, 9, 82, 10};
+    std::vector<int> sorted = mergeSort(numbers);
+    return 0;
 }`,
             java: `// Java Merge Sort template
 import java.util.Arrays;
 public class Main {
+    public static int[] mergeSort(int[] arr) {
+        if (arr.length <= 1) return arr;
+        int mid = arr.length / 2;
+        int[] left = Arrays.copyOfRange(arr, 0, mid);
+        int[] right = Arrays.copyOfRange(arr, mid, arr.length);
+        left = mergeSort(left);
+        right = mergeSort(right);
+        int[] res = new int[arr.length];
+        int i = 0, j = 0, k = 0;
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) res[k++] = left[i++];
+            else res[k++] = right[j++];
+        }
+        while (i < left.length) res[k++] = left[i++];
+        while (j < right.length) res[k++] = right[j++];
+        return res;
+    }
+
     public static void main(String[] args) {
-        System.out.println("Merge Sort Java Ready");
+        int[] numbers = {38, 27, 43, 3, 9, 82, 10};
+        int[] sorted = mergeSort(numbers);
+        System.out.println("Sorted: " + Arrays.toString(sorted));
     }
 }`
         }
@@ -735,7 +837,10 @@ def reverse_list(head):
 
 head = ListNode(10, ListNode(20, ListNode(30, ListNode(40))))
 rev = reverse_list(head)`,
-            cpp: `struct ListNode {
+            cpp: `// Linked List C++
+#include <iostream>
+
+struct ListNode {
     int val;
     ListNode* next;
     ListNode(int x, ListNode* n = nullptr) : val(x), next(n) {}
@@ -751,11 +856,17 @@ ListNode* reverseList(ListNode* head) {
         curr = nextTemp;
     }
     return prev;
+}
+
+int main() {
+    ListNode* head = new ListNode(10, new ListNode(20, new ListNode(30, new ListNode(40))));
+    ListNode* reversed = reverseList(head);
+    return 0;
 }`,
             java: `class ListNode {
     int val;
     ListNode next;
-    ListNode(int val) { this.val = val; }
+    ListNode(int val) { this.val = val; this.next = null; }
 }
 public class Main {
     public static ListNode reverseList(ListNode head) {
@@ -767,6 +878,14 @@ public class Main {
             curr = next;
         }
         return prev;
+    }
+
+    public static void main(String[] args) {
+        ListNode head = new ListNode(10);
+        head.next = new ListNode(20);
+        head.next.next = new ListNode(30);
+        head.next.next.next = new ListNode(40);
+        ListNode reversed = reverseList(head);
     }
 }`
         }
@@ -830,7 +949,11 @@ def inorder(root):
 root = TreeNode(50, TreeNode(30, TreeNode(20), TreeNode(40)), TreeNode(70, TreeNode(60), TreeNode(80)))
 inorder(root)
 print("Visited:", visited)`,
-            cpp: `struct TreeNode {
+            cpp: `// Binary Tree C++
+#include <vector>
+#include <iostream>
+
+struct TreeNode {
     int val;
     TreeNode* left;
     TreeNode* right;
@@ -842,6 +965,16 @@ void inorder(TreeNode* root, std::vector<int>& out) {
     inorder(root->left, out);
     out.push_back(root->val);
     inorder(root->right, out);
+}
+
+int main() {
+    TreeNode* root = new TreeNode(50,
+        new TreeNode(30, new TreeNode(20), new TreeNode(40)),
+        new TreeNode(70, new TreeNode(60), new TreeNode(80))
+    );
+    std::vector<int> visited;
+    inorder(root, visited);
+    return 0;
 }`,
             java: `class TreeNode {
     int val;
@@ -854,6 +987,15 @@ public class Main {
         inorder(root.left);
         System.out.print(root.val + " ");
         inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = new TreeNode(50);
+        root.left = new TreeNode(30);
+        root.right = new TreeNode(70);
+        root.left.left = new TreeNode(20);
+        root.left.right = new TreeNode(40);
+        inorder(root);
     }
 }`
         }
@@ -923,7 +1065,7 @@ print("BFS:", bfs(graph, 0))`,
             cpp: `// Graph BFS C++
 #include <vector>
 #include <queue>
-#include <unordered_set>
+#include <iostream>
 
 std::vector<int> bfs(const std::vector<std::vector<int>>& adj, int start) {
     std::vector<int> order;
@@ -942,11 +1084,42 @@ std::vector<int> bfs(const std::vector<std::vector<int>>& adj, int start) {
         }
     }
     return order;
+}
+
+int main() {
+    std::vector<std::vector<int>> adj = {{1, 2}, {0, 3, 4}, {0, 5}, {1}, {1, 5}, {2, 4}};
+    std::vector<int> result = bfs(adj, 0);
+    return 0;
 }`,
-            java: `// Graph BFS Java template
+            java: `// Graph BFS Java
+import java.util.*;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("BFS Java Template Ready");
+        int[][] graph = {
+            {1, 2},
+            {0, 3, 4},
+            {0, 5},
+            {1},
+            {1, 5},
+            {2, 4}
+        };
+        boolean[] visited = new boolean[graph.length];
+        Queue<Integer> q = new LinkedList<>();
+        List<Integer> order = new ArrayList<>();
+        visited[0] = true;
+        q.add(0);
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            order.add(u);
+            for (int v : graph[u]) {
+                if (!visited[v]) {
+                    visited[v] = true;
+                    q.add(v);
+                }
+            }
+        }
+        System.out.println("BFS: " + order);
     }
 }`
         }
@@ -1008,16 +1181,48 @@ graph = {0: [1, 2], 1: [0, 3, 4], 2: [0, 5], 3: [1], 4: [1, 5], 5: [2, 4]}
 print("DFS:", dfs(graph, 0))`,
             cpp: `// Graph DFS C++
 #include <vector>
+#include <iostream>
+
 void dfsHelper(int u, const std::vector<std::vector<int>>& adj, std::vector<bool>& vis, std::vector<int>& out) {
     vis[u] = true;
     out.push_back(u);
     for (int v : adj[u]) {
         if (!vis[v]) dfsHelper(v, adj, vis, out);
     }
+}
+
+int main() {
+    std::vector<std::vector<int>> adj = {{1, 2}, {0, 3, 4}, {0, 5}, {1}, {1, 5}, {2, 4}};
+    std::vector<bool> vis(adj.size(), false);
+    std::vector<int> out;
+    dfsHelper(0, adj, vis, out);
+    return 0;
 }`,
-            java: `public class Main {
+            java: `// Graph DFS Java
+import java.util.*;
+
+public class Main {
+    static void dfs(int u, int[][] graph, boolean[] visited, List<Integer> order) {
+        visited[u] = true;
+        order.add(u);
+        for (int v : graph[u]) {
+            if (!visited[v]) dfs(v, graph, visited, order);
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println("DFS Java Template Ready");
+        int[][] graph = {
+            {1, 2},
+            {0, 3, 4},
+            {0, 5},
+            {1},
+            {1, 5},
+            {2, 4}
+        };
+        boolean[] visited = new boolean[graph.length];
+        List<Integer> order = new ArrayList<>();
+        dfs(0, graph, visited, order);
+        System.out.println("DFS: " + order);
     }
 }`
         }
@@ -1105,14 +1310,65 @@ graph = {
     'D': {'B': 5, 'C': 8}
 }
 print(dijkstra(graph, 'A'))`,
-            cpp: `// Dijkstra C++
+            cpp: `// Dijkstra Shortest Path C++
 #include <vector>
-#include <queue>
-// Template ready for Judge0 compilation`,
-            java: `// Dijkstra Java
+#include <iostream>
+
+int main() {
+    std::vector<std::vector<int>> graph = {
+        {0, 4, 2, 0},
+        {4, 0, 1, 5},
+        {2, 1, 0, 8},
+        {0, 5, 8, 0}
+    };
+    int n = graph.size();
+    std::vector<int> dist(n, 9999);
+    std::vector<bool> visited(n, false);
+    dist[0] = 0;
+    for (int i = 0; i < n; i++) {
+        int u = -1;
+        for (int j = 0; j < n; j++) {
+            if (!visited[j] && (u == -1 || dist[j] < dist[u])) u = j;
+        }
+        if (u == -1 || dist[u] == 9999) break;
+        visited[u] = true;
+        for (int v = 0; v < n; v++) {
+            if (graph[u][v] > 0 && dist[u] + graph[u][v] < dist[v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+    std::cout << "Shortest distances computed" << std::endl;
+    return 0;
+}`,
+            java: `// Dijkstra Shortest Path Java
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Dijkstra Java Ready");
+        int[][] graph = {
+            {0, 4, 2, 0},
+            {4, 0, 1, 5},
+            {2, 1, 0, 8},
+            {0, 5, 8, 0}
+        };
+        int n = graph.length;
+        int[] dist = new int[n];
+        boolean[] visited = new boolean[n];
+        for (int i = 0; i < n; i++) dist[i] = 9999;
+        dist[0] = 0;
+        for (int i = 0; i < n; i++) {
+            int u = -1;
+            for (int j = 0; j < n; j++) {
+                if (!visited[j] && (u == -1 || dist[j] < dist[u])) u = j;
+            }
+            if (u == -1 || dist[u] == 9999) break;
+            visited[u] = true;
+            for (int v = 0; v < n; v++) {
+                if (graph[u][v] > 0 && dist[u] + graph[u][v] < dist[v]) {
+                    dist[v] = dist[u] + graph[u][v];
+                }
+            }
+        }
+        System.out.println("Distances: " + java.util.Arrays.toString(dist));
     }
 }`
         }

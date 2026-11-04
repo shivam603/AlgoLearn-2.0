@@ -259,8 +259,9 @@
         document.body.appendChild(overlay);
         document.body.appendChild(panel);
 
-        // Add Floating Toggle Button on bottom right
-        if (!document.getElementById('floating-panel-toggle')) {
+        // Add Floating Toggle Button on bottom right (skip on pages with dedicated toolbars like codelab)
+        const isCodeLab = window.location.pathname.includes('codelab') || document.querySelector('.codelab-workspace');
+        if (!document.getElementById('floating-panel-toggle') && !isCodeLab) {
             const floatBtn = document.createElement('button');
             floatBtn.id = 'floating-panel-toggle';
             floatBtn.className = 'floating-panel-toggle';
