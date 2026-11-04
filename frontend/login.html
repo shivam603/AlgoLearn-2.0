@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In to AlgoLearn Workspace — Authenticated Gateway</title>
+    <meta name="description" content="Sign in to your AlgoLearn Workspace to continue your Data Structures & Algorithms journey, interactive visualizers, and CodeLab studio.">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="algolearn-icon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Dedicated Centric Login Stylesheet -->
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body class="login-body">
+
+    <!-- Ambient Decorative Glow Background Orbs -->
+    <div class="login-ambient-glow glow-top-left"></div>
+    <div class="login-ambient-glow glow-bottom-right"></div>
+
+    <!-- Top Right Quick Controls -->
+    <div class="login-top-bar">
+        <a href="index.html" class="login-back-home-btn" title="Back to AlgoLearn Home">
+            <i class="bi bi-arrow-left"></i>
+            <span>Home</span>
+        </a>
+        <button type="button" class="login-theme-toggle-btn" id="theme-toggle-btn" title="Toggle Theme (Light / Dark / Neon)">
+            <i class="bi bi-sun-fill" id="theme-toggle-icon"></i>
+        </button>
+    </div>
+
+    <!-- Centric Authentication Stage -->
+    <main class="login-centric-container">
+        
+        <div class="login-card-wrapper">
+            <div class="login-card" id="login-card">
+
+                <!-- Brand Header -->
+                <div class="login-brand-header">
+                    <a href="index.html" class="login-brand-link">
+                        <img src="algolearn-icon.png" alt="AlgoLearn Emblem" class="login-brand-icon" />
+                        <span class="login-brand-text">AlgoLearn</span>
+                    </a>
+                </div>
+
+                <!-- Subtitle Pill / Badge -->
+                <div class="login-gateway-badge">
+                    <span>AUTHENTICATED GATEWAY</span>
+                </div>
+
+                <!-- Dynamic Heading & Subtitle -->
+                <h1 class="login-title" id="auth-title">Sign In to Your Workspace</h1>
+                <p class="login-subtitle" id="auth-subtitle">
+                    Continue your Data Structures & Algorithms journey, interactive visualizers, and CodeLab studio.
+                </p>
+
+                <!-- Feedback / Alert Notice -->
+                <div class="login-alert-box d-none" id="auth-alert" role="alert">
+                    <i class="bi bi-info-circle-fill alert-icon"></i>
+                    <span class="alert-message" id="auth-alert-msg"></span>
+                </div>
+
+                <!-- Social OAuth Buttons -->
+                <div class="login-social-group" id="social-group">
+                    <button type="button" class="btn-social-oauth btn-github" id="btn-oauth-github" title="Authenticate with GitHub Developer Profile">
+                        <div class="oauth-left">
+                            <i class="bi bi-github"></i>
+                            <span>Continue with GitHub</span>
+                        </div>
+                        <span class="oauth-badge-devpick">DEV PICK</span>
+                    </button>
+
+                    <button type="button" class="btn-social-oauth btn-google" id="btn-oauth-google" title="Authenticate with Google Student Profile">
+                        <div class="oauth-left">
+                            <svg class="google-svg-icon" viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+                                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                            </svg>
+                            <span>Continue with Google</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Centric Divider -->
+                <div class="login-divider-wrap" id="divider-wrap">
+                    <div class="divider-line"></div>
+                    <span class="divider-pill">OR STUDENT EMAIL</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- Main Interactive Authentication Form -->
+                <form id="auth-form" autocomplete="on">
+                    
+                    <!-- Full Name Field (Displayed in Registration Mode) -->
+                    <div class="form-group-custom d-none" id="group-fullname">
+                        <label for="input-fullname" class="label-row">
+                            <span class="label-title">Full Name</span>
+                            <span class="label-meta text-sky">Personalize IDE</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-person input-leading-icon"></i>
+                            <input type="text" id="input-fullname" class="login-input" placeholder="e.g. Alex Rivera" autocomplete="name" />
+                        </div>
+                    </div>
+
+                    <!-- Email / University ID Field -->
+                    <div class="form-group-custom">
+                        <div class="label-row">
+                            <label for="input-identity" class="label-title" id="label-identity">Email or University ID</label>
+                            <span class="label-meta text-sky" id="badge-sso">SSO ready</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="bi bi-mortarboard input-leading-icon"></i>
+                            <input type="text" id="input-identity" class="login-input" placeholder="dev@university.edu or @username" required autocomplete="username" />
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group-custom">
+                        <div class="label-row">
+                            <label for="input-password" class="label-title">Password</label>
+                            <button type="button" class="btn-forgot-link" id="btn-forgot-password">Forgot password?</button>
+                        </div>
+                        <div class="input-wrapper">
+                            <i class="bi bi-lock input-leading-icon"></i>
+                            <input type="password" id="input-password" class="login-input" placeholder="••••••••••••" required autocomplete="current-password" />
+                            <button type="button" class="btn-input-trailing" id="btn-toggle-password" aria-label="Toggle password visibility">
+                                <i class="bi bi-eye" id="icon-toggle-password"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick 1-Click Demo Fill Hint -->
+                    <div class="demo-account-hint" id="demo-hint-box">
+                        <span class="demo-hint-text">Quick Test:</span>
+                        <button type="button" class="btn-demo-fill" id="btn-fill-dev">
+                            <i class="bi bi-lightning-charge-fill text-warning"></i> dev@university.edu
+                        </button>
+                    </div>
+
+                    <!-- Remember Device Checkbox -->
+                    <div class="remember-row" id="group-remember">
+                        <label class="custom-chk-label" for="chk-remember">
+                            <input type="checkbox" id="chk-remember" checked />
+                            <span class="custom-chk-box">
+                                <i class="bi bi-check-lg"></i>
+                            </span>
+                            <span class="custom-chk-text">Remember this device (30 days)</span>
+                        </label>
+                    </div>
+
+                    <!-- Primary Action Button -->
+                    <button type="submit" class="btn-login-submit" id="btn-submit">
+                        <span id="btn-submit-text">Sign In to CodeLab</span>
+                        <i class="bi bi-arrow-right" id="btn-submit-icon"></i>
+                        <span class="spinner-border spinner-border-sm d-none ms-2" id="btn-spinner" role="status"></span>
+                    </button>
+                </form>
+
+                <!-- Bottom Footer Links -->
+                <div class="login-footer">
+                    <p class="signup-prompt">
+                        <span id="switch-mode-text">New to algorithmic mastery?</span>
+                        <button type="button" class="btn-switch-mode" id="btn-switch-mode">Sign up for free</button>
+                    </p>
+
+                    <a href="index.html" class="guest-explore-link">
+                        <span>Explore Visualizers as Guest (No login required)</span>
+                        <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Forgot Password Modal Notice -->
+    <div class="modal fade" id="forgotModal" tabindex="-1" aria-labelledby="forgotModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content forgot-modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="forgotModalLabel">
+                        <i class="bi bi-shield-lock text-sky me-2"></i>Reset Password
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-3">
+                    <p class="text-secondary small mb-3">
+                        Enter your university student email or developer username. We'll send a password reset gateway link.
+                    </p>
+                    <div class="input-wrapper mb-3">
+                        <i class="bi bi-envelope input-leading-icon"></i>
+                        <input type="email" id="modal-reset-email" class="login-input" placeholder="dev@university.edu" />
+                    </div>
+                    <div id="forgot-modal-alert" class="alert alert-info py-2 small d-none">
+                        Default demo password for <strong>dev@university.edu</strong> is <code>algo123</code>.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="btn-send-reset">Send Instructions</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Authentication Controller Script -->
+    <script src="login.js"></script>
+</body>
+
+</html>

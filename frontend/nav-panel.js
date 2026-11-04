@@ -104,6 +104,13 @@
                             </div>
                             <i class="bi bi-chevron-right text-muted-custom small"></i>
                         </a>
+                        <a href="login.html" class="drawer-list-item" data-search="sign in login workspace authentication account user sso">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-box-arrow-in-right text-sky-600"></i></span>
+                                <span class="fw-bold" style="font-size:0.88rem;">Sign In / Account</span>
+                            </div>
+                            <span class="badge bg-primary text-white fw-bold">Gateway</span>
+                        </a>
                         <a href="welcome.html" class="drawer-list-item" data-search="welcome onboarding guide about tour">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-stars text-info"></i></span>

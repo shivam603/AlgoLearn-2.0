@@ -2706,3 +2706,33 @@ html.theme-transition * {
     background: #1e293b;
     color: #f1f5f9;
 }
+
+/* Nav Sign In Button */
+.nav-login-btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.35rem 0.8rem;
+    color: var(--sky-700) !important;
+    border-color: rgba(2, 132, 199, 0.4) !important;
+    transition: all 0.2s ease;
+}
+
+.nav-login-btn:hover {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #0284c7 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+}
+
+body.theme-dark .nav-login-btn,
+body.theme-neon .nav-login-btn {
+    color: #38bdf8 !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+body.theme-dark .nav-login-btn:hover,
+body.theme-neon .nav-login-btn:hover {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+}
