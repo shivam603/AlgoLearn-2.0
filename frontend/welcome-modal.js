@@ -86,97 +86,15 @@
                         </form>
                     </div>
 
-                    <!-- RIGHT COLUMN: Radiant Chromatic Neon Logo -->
+                    <!-- RIGHT COLUMN: Official AlgoLearn Dark Theme Logo -->
                     <div class="welcome-graphic-col">
                         <div class="welcome-glow-emblem-wrap">
                             <div class="ambient-glow-layer glow-blue"></div>
-                            <div class="ambient-glow-layer glow-red"></div>
-                            <div class="ambient-glow-layer glow-amber-green"></div>
+                            <div class="ambient-glow-layer glow-teal"></div>
 
-                            <svg class="welcome-svg-emblem" viewBox="0 0 520 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="modal-glyph-body-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" stop-color="#24262d" />
-                                        <stop offset="50%" stop-color="#191a20" />
-                                        <stop offset="100%" stop-color="#111216" />
-                                    </linearGradient>
-
-                                    <linearGradient id="modal-edge-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
-                                        <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4" />
-                                    </linearGradient>
-
-                                    <linearGradient id="modal-edge-red" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" stop-color="#ff4d6d" stop-opacity="0.9" />
-                                        <stop offset="100%" stop-color="#c9184a" stop-opacity="0.4" />
-                                    </linearGradient>
-
-                                    <linearGradient id="modal-edge-amber-green" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9" />
-                                        <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.8" />
-                                        <stop offset="100%" stop-color="#10b981" stop-opacity="0.9" />
-                                    </linearGradient>
-
-                                    <filter id="modal-neon-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="blur1" />
-                                        <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2" />
-                                        <feMerge>
-                                            <feMergeNode in="blur1" />
-                                            <feMergeNode in="blur2" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-
-                                    <filter id="modal-neon-glow-red" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur1" />
-                                        <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2" />
-                                        <feMerge>
-                                            <feMergeNode in="blur1" />
-                                            <feMergeNode in="blur2" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-
-                                    <filter id="modal-neon-glow-amber-green" x="-50%" y="-50%" width="200%" height="200%">
-                                        <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur1" />
-                                        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur2" />
-                                        <feMerge>
-                                            <feMergeNode in="blur1" />
-                                            <feMergeNode in="blur2" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-
-                                <!-- Left Glyph: 'A' -->
-                                <g class="glyph-group glyph-a">
-                                    <path d="M 85,25 C 102,12 128,12 145,25 L 188,125 C 206,148 196,185 168,185 C 142,185 125,178 115,178 C 105,178 88,185 62,185 C 34,185 24,148 42,125 Z"
-                                          fill="none" stroke="#0099ff" stroke-width="12" filter="url(#modal-neon-glow-blue)" opacity="0.85" />
-                                    <path d="M 85,25 C 102,12 128,12 145,25 L 188,125 C 206,148 196,185 168,185 C 142,185 125,178 115,178 C 105,178 88,185 62,185 C 34,185 24,148 42,125 Z"
-                                          fill="url(#modal-glyph-body-grad)" stroke="url(#modal-edge-blue)" stroke-width="2.5" />
-                                </g>
-
-                                <!-- Middle Glyph: 'I' / 'L' -->
-                                <g class="glyph-group glyph-i">
-                                    <rect x="232" y="22" width="76" height="162" rx="38"
-                                          fill="none" stroke="#ff2a55" stroke-width="12" filter="url(#modal-neon-glow-red)" opacity="0.85" />
-                                    <rect x="232" y="22" width="76" height="162" rx="38"
-                                          fill="url(#modal-glyph-body-grad)" stroke="url(#modal-edge-red)" stroke-width="2.5" />
-                                </g>
-
-                                <!-- Right Glyph: 'S' -->
-                                <g class="glyph-group glyph-s">
-                                    <path d="M 345,58 C 345,36 364,22 386,22 L 460,22 C 484,22 502,38 502,60 C 502,82 484,98 460,98 L 405,98 C 385,98 375,108 375,122 L 375,122 C 375,122 345,58 345,58 Z"
-                                          fill="none" stroke="#fbbf24" stroke-width="10" filter="url(#modal-neon-glow-amber-green)" opacity="0.85" />
-                                    <path d="M 372,122 C 372,122 342,142 342,160 C 342,182 360,198 384,198 L 458,198 C 480,198 498,184 498,162 C 498,140 480,124 458,124 L 405,124 C 385,124 372,122 372,122 Z"
-                                          fill="none" stroke="#10b981" stroke-width="10" filter="url(#modal-neon-glow-amber-green)" opacity="0.85" />
-
-                                    <path d="M 345,58 C 345,36 364,22 386,22 L 460,22 C 484,22 502,38 502,60 C 502,82 484,98 460,98 L 402,98 C 372,98 345,80 345,58 Z"
-                                          fill="url(#modal-glyph-body-grad)" stroke="url(#modal-edge-amber-green)" stroke-width="2.5" />
-                                    <path d="M 498,162 C 498,184 479,198 457,198 L 383,198 C 359,198 341,182 341,160 C 341,138 359,122 383,122 L 441,122 C 471,122 498,140 498,162 Z"
-                                          fill="url(#modal-glyph-body-grad)" stroke="url(#modal-edge-amber-green)" stroke-width="2.5" />
-                                </g>
-                            </svg>
+                            <div class="welcome-logo-card">
+                                <img src="algolearn-logo-dark.jpg" alt="AlgoLearn Official Logo - Black Theme" class="welcome-logo-img" />
+                            </div>
                         </div>
                     </div>
                 </div>
