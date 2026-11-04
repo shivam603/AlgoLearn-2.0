@@ -1703,54 +1703,343 @@ html.theme-transition * {
     color: #38bdf8 !important;
 }
 
+/* ==========================================================================
+   CYBERPUNK NEON (HIGH-TECH MATRIX & SYNTHWAVE) DESIGN SYSTEM
+   Vibrant neon cyan, electric magenta, matrix emerald, and holographic glow
+   ========================================================================== */
 [data-theme="cyberpunk"] {
-    --bg-main: #05080c;
-    --card-bg: #0b1219;
-    --card-hover: #121f2b;
-    --text-main: #e2f8ff;
-    --text-muted: #64879b;
-    --border-subtle: #00ffaa33;
-    --border-sky: #00e1ff55;
-    --sky-50: #061118;
-    --sky-100: #0d202d;
+    --bg-main: #030712;
+    --bg-surface: #060b19;
+    --bg-surface-subtle: #0a1226;
+    --bg-glass: rgba(6, 11, 25, 0.82);
+    --card-bg: #070d1e;
+    --card-hover: #0c1836;
+    --text-primary: #f0fdfa;
+    --text-secondary: #a5f3fc;
+    --text-main: #f0fdfa;
+    --text-muted: #67e8f9;
+    --text-light: #94a3b8;
+    --border-subtle: rgba(0, 240, 255, 0.28);
+    --border-sky: rgba(0, 240, 255, 0.45);
+    --border-sky-active: #00f0ff;
+    --sky-50: #040814;
+    --sky-100: #081226;
+    --sky-200: #0e2246;
+    --sky-300: #0284c7;
+    --sky-400: #38bdf8;
+    --sky-500: #00f0ff;
+    --sky-600: #00e5ff;
+    --sky-700: #00f0ff;
+    --sky-800: #38bdf8;
     --sky-900: #00ffaa;
-    --sky-800: #00e1ff;
-    --sky-700: #38bdf8;
-    --primary: #00e1ff;
-    --accent: #00ffaa;
+    --primary: #00f0ff;
+    --primary-hover: #38bdf8;
+    --accent: #ff007f;
+    --accent-soft: rgba(255, 0, 127, 0.16);
+    --success: #00ff9f;
+    --warning: #ffe600;
+    --danger: #ff0055;
+    --purple: #d946ef;
+    
+    --shadow-sm: 0 0 12px rgba(0, 240, 255, 0.2);
+    --shadow-md: 0 0 25px rgba(0, 240, 255, 0.28), 0 8px 30px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 0 40px rgba(0, 240, 255, 0.4), 0 0 60px rgba(255, 0, 127, 0.2);
+    --shadow-xl: 0 0 55px rgba(0, 240, 255, 0.5), 0 0 80px rgba(255, 0, 127, 0.3);
 }
 
+/* 1. Body & Cyber Grid Environment */
 [data-theme="cyberpunk"] body {
-    background: #05080c radial-gradient(circle at 10% 20%, rgba(0, 225, 255, 0.08) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(0, 255, 170, 0.08) 0%, transparent 40%);
-    color: #e2f8ff;
+    background-color: #030712 !important;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.16) 0px, transparent 45%),
+        radial-gradient(at 100% 0%, rgba(255, 0, 127, 0.14) 0px, transparent 45%),
+        radial-gradient(at 50% 100%, rgba(0, 255, 159, 0.12) 0px, transparent 55%),
+        linear-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.04) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px !important;
+    background-attachment: fixed !important;
+    color: #f0fdfa !important;
 }
 
-[data-theme="cyberpunk"] .navbar-custom,
-[data-theme="cyberpunk"] .bg-white,
-[data-theme="cyberpunk"] .footer-custom,
-[data-theme="cyberpunk"] .algolearn-slide-panel {
-    background-color: #0b1219 !important;
-    border-color: #00ffaa44 !important;
-    color: #e2f8ff !important;
+/* 2. Top Navbar HUD */
+[data-theme="cyberpunk"] .navbar-custom {
+    background: rgba(6, 11, 25, 0.92) !important;
+    backdrop-filter: blur(18px) !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.45) !important;
+    box-shadow: 0 4px 25px rgba(0, 240, 255, 0.18), 0 1px 0 rgba(255, 0, 127, 0.35) !important;
 }
 
+[data-theme="cyberpunk"] .brand-title {
+    background: linear-gradient(135deg, #00f0ff 0%, #00ffaa 50%, #ff007f 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 0 14px rgba(0, 240, 255, 0.65)) !important;
+}
+
+[data-theme="cyberpunk"] .brand-subtitle {
+    color: #a5f3fc !important;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5) !important;
+}
+
+/* 3. Luminous Typography & Headings */
+[data-theme="cyberpunk"] h1, 
+[data-theme="cyberpunk"] h2, 
+[data-theme="cyberpunk"] h3, 
+[data-theme="cyberpunk"] h4,
+[data-theme="cyberpunk"] h5,
+[data-theme="cyberpunk"] h6,
+[data-theme="cyberpunk"] .card-title {
+    color: #f0fdfa !important;
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.55), 0 0 30px rgba(0, 240, 255, 0.25) !important;
+}
+
+[data-theme="cyberpunk"] .text-gradient-sky {
+    background: linear-gradient(135deg, #00f0ff 0%, #00ffaa 45%, #ff007f 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    filter: drop-shadow(0 0 16px rgba(0, 240, 255, 0.75)) drop-shadow(0 0 25px rgba(255, 0, 127, 0.45)) !important;
+}
+
+[data-theme="cyberpunk"] .text-sky-900,
+[data-theme="cyberpunk"] .text-sky-800,
+[data-theme="cyberpunk"] .text-sky-700,
+[data-theme="cyberpunk"] .text-sky-600 {
+    color: #00f0ff !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.55) !important;
+}
+
+[data-theme="cyberpunk"] .text-muted,
+[data-theme="cyberpunk"] .text-muted-custom,
+[data-theme="cyberpunk"] p.lead {
+    color: #a5f3fc !important; /* Crisp, luminous cyan silver (11:1 contrast) */
+}
+
+/* 4. Glassmorphic Glowing Cards & Panels */
 [data-theme="cyberpunk"] .card-custom,
 [data-theme="cyberpunk"] .drawer-item-card,
 [data-theme="cyberpunk"] .feature-card-custom,
 [data-theme="cyberpunk"] .top-nav-search-form,
-[data-theme="cyberpunk"] .step-pill-card {
-    background-color: #0f1922 !important;
-    border-color: #00e1ff33 !important;
-    color: #e2f8ff !important;
-    box-shadow: 0 0 15px rgba(0, 225, 255, 0.05);
+[data-theme="cyberpunk"] .hero-interactive-card,
+[data-theme="cyberpunk"] .step-pill-card,
+[data-theme="cyberpunk"] .stat-card,
+[data-theme="cyberpunk"] .bg-white {
+    background: rgba(7, 13, 30, 0.86) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 240, 255, 0.35) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 22px rgba(0, 240, 255, 0.14), inset 0 0 22px rgba(0, 240, 255, 0.03) !important;
+    color: #f0fdfa !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
 }
 
-[data-theme="cyberpunk"] .text-sky-900,
-[data-theme="cyberpunk"] .card-title,
-[data-theme="cyberpunk"] h1, [data-theme="cyberpunk"] h2, [data-theme="cyberpunk"] h3, [data-theme="cyberpunk"] h4 {
-    color: #00ffaa !important;
-    text-shadow: 0 0 8px rgba(0, 255, 170, 0.3);
+[data-theme="cyberpunk"] .card-custom:hover,
+[data-theme="cyberpunk"] .drawer-item-card:hover,
+[data-theme="cyberpunk"] .feature-card-custom:hover {
+    border-color: #00f0ff !important;
+    box-shadow: 0 12px 42px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 240, 255, 0.4), 0 0 55px rgba(255, 0, 127, 0.25), inset 0 0 25px rgba(0, 240, 255, 0.08) !important;
+    transform: translateY(-4px) !important;
 }
+
+/* 5. Slide-Out Function Panel */
+[data-theme="cyberpunk"] .algolearn-slide-panel {
+    background: rgba(4, 8, 20, 0.96) !important;
+    backdrop-filter: blur(24px) !important;
+    border-left: 2px solid #00f0ff !important;
+    box-shadow: -10px 0 60px rgba(0, 240, 255, 0.35) !important;
+}
+
+[data-theme="cyberpunk"] .slide-panel-header {
+    background: rgba(7, 13, 30, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.4) !important;
+}
+
+[data-theme="cyberpunk"] .drawer-category-title {
+    color: #00ffaa !important;
+    text-shadow: 0 0 10px rgba(0, 255, 170, 0.6) !important;
+    border-bottom: 1px solid rgba(0, 255, 170, 0.3) !important;
+}
+
+/* 6. Electrifying Neon Buttons */
+[data-theme="cyberpunk"] .btn-sky,
+[data-theme="cyberpunk"] .btn-primary {
+    background: linear-gradient(135deg, #00f0ff 0%, #0284c7 100%) !important;
+    border: 1px solid #00f0ff !important;
+    color: #030712 !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.4) !important;
+    text-shadow: none !important;
+    transition: all 0.25s ease !important;
+}
+
+[data-theme="cyberpunk"] .btn-sky:hover,
+[data-theme="cyberpunk"] .btn-primary:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #00f0ff 100%) !important;
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.9), 0 0 60px rgba(0, 255, 170, 0.5) !important;
+    transform: translateY(-2px) scale(1.02) !important;
+}
+
+[data-theme="cyberpunk"] .btn-sky-outline,
+[data-theme="cyberpunk"] .btn-outline-secondary,
+[data-theme="cyberpunk"] .btn-outline-info {
+    background: rgba(0, 240, 255, 0.06) !important;
+    border: 1px solid rgba(0, 240, 255, 0.6) !important;
+    color: #00f0ff !important;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.25) !important;
+    transition: all 0.2s ease !important;
+}
+
+[data-theme="cyberpunk"] .btn-sky-outline:hover,
+[data-theme="cyberpunk"] .btn-outline-secondary:hover,
+[data-theme="cyberpunk"] .btn-outline-info:hover {
+    background: #00f0ff !important;
+    color: #030712 !important;
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.85) !important;
+}
+
+[data-theme="cyberpunk"] .btn-sky-subtle,
+[data-theme="cyberpunk"] .btn-panel-trigger {
+    background: rgba(255, 0, 127, 0.14) !important;
+    border: 1px solid rgba(255, 0, 127, 0.5) !important;
+    color: #ff3399 !important;
+    box-shadow: 0 0 16px rgba(255, 0, 127, 0.3) !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+[data-theme="cyberpunk"] .btn-sky-subtle:hover,
+[data-theme="cyberpunk"] .btn-panel-trigger:hover {
+    background: #ff007f !important;
+    border-color: #ff007f !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 35px rgba(255, 0, 127, 0.9) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* 7. Neon Badges & Live Status Indicators */
+[data-theme="cyberpunk"] .badge-sky,
+[data-theme="cyberpunk"] .hero-badge {
+    background: rgba(0, 240, 255, 0.12) !important;
+    border: 1px solid rgba(0, 240, 255, 0.55) !important;
+    color: #00f0ff !important;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.3) !important;
+    font-weight: 600 !important;
+}
+
+[data-theme="cyberpunk"] .visitor-live-dot {
+    background-color: #00ff9f !important;
+    box-shadow: 0 0 12px #00ff9f, 0 0 24px #00ff9f !important;
+    animation: neon-pulse 1.8s infinite ease-in-out !important;
+}
+
+@keyframes neon-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 4px #00ff9f); }
+    50% { transform: scale(1.3); opacity: 0.85; filter: drop-shadow(0 0 12px #00ff9f); }
+}
+
+[data-theme="cyberpunk"] .visitor-badge {
+    background: rgba(0, 255, 159, 0.1) !important;
+    border-color: rgba(0, 255, 159, 0.4) !important;
+    color: #00ff9f !important;
+    box-shadow: 0 0 14px rgba(0, 255, 159, 0.25) !important;
+}
+
+/* 8. Neon Visualizer Engine Elements */
+[data-theme="cyberpunk"] .array-bar,
+[data-theme="cyberpunk"] .vis-bar {
+    background: linear-gradient(180deg, #00f0ff 0%, #0284c7 100%) !important;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.55), inset 0 0 8px rgba(255, 255, 255, 0.3) !important;
+    border-radius: 6px 6px 0 0 !important;
+}
+
+[data-theme="cyberpunk"] .array-bar.comparing,
+[data-theme="cyberpunk"] .vis-bar.comparing {
+    background: linear-gradient(180deg, #ffe600 0%, #f59e0b 100%) !important;
+    box-shadow: 0 0 28px rgba(255, 230, 0, 0.95), inset 0 0 10px rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-theme="cyberpunk"] .array-bar.swapping,
+[data-theme="cyberpunk"] .vis-bar.swapping {
+    background: linear-gradient(180deg, #ff007f 0%, #b5179e 100%) !important;
+    box-shadow: 0 0 32px rgba(255, 0, 127, 1), inset 0 0 10px rgba(255, 255, 255, 0.5) !important;
+}
+
+[data-theme="cyberpunk"] .array-bar.sorted,
+[data-theme="cyberpunk"] .vis-bar.sorted {
+    background: linear-gradient(180deg, #00ff9f 0%, #059669 100%) !important;
+    box-shadow: 0 0 25px rgba(0, 255, 159, 0.9), inset 0 0 8px rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-theme="cyberpunk"] .vis-viewport,
+[data-theme="cyberpunk"] .visualizer-canvas-card {
+    background: radial-gradient(circle at 50% 20%, #091533 0%, #030712 100%) !important;
+    border: 1px solid rgba(0, 240, 255, 0.35) !important;
+    box-shadow: inset 0 0 30px rgba(0, 240, 255, 0.08), 0 0 25px rgba(0, 240, 255, 0.15) !important;
+}
+
+[data-theme="cyberpunk"] .tree-node,
+[data-theme="cyberpunk"] .vis-node-box {
+    background: rgba(7, 13, 30, 0.92) !important;
+    border: 2px solid #00f0ff !important;
+    color: #00f0ff !important;
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.45) !important;
+}
+
+[data-theme="cyberpunk"] .tree-link,
+[data-theme="cyberpunk"] line.tree-branch {
+    stroke: #00f0ff !important;
+    filter: drop-shadow(0 0 8px #00f0ff) !important;
+}
+
+/* 9. Cyber Inputs & Tables */
+[data-theme="cyberpunk"] .form-control,
+[data-theme="cyberpunk"] .form-select {
+    background-color: rgba(6, 11, 25, 0.92) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    color: #f0fdfa !important;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="cyberpunk"] .form-control:focus,
+[data-theme="cyberpunk"] .form-select:focus {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.7) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="cyberpunk"] .table-custom {
+    border-color: rgba(0, 240, 255, 0.3) !important;
+}
+
+[data-theme="cyberpunk"] .table-custom th {
+    background-color: rgba(12, 22, 45, 0.95) !important;
+    color: #00f0ff !important;
+    border-bottom: 2px solid rgba(0, 240, 255, 0.45) !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5) !important;
+}
+
+[data-theme="cyberpunk"] .table-custom td {
+    color: #f0fdfa !important;
+    border-color: rgba(0, 240, 255, 0.15) !important;
+}
+
+/* 10. Footer HUD */
+[data-theme="cyberpunk"] .footer-custom {
+    background: rgba(4, 8, 20, 0.96) !important;
+    border-top: 1px solid rgba(0, 240, 255, 0.4) !important;
+    box-shadow: 0 -4px 30px rgba(0, 240, 255, 0.15) !important;
+    color: #a5f3fc !important;
+}
+
+[data-theme="cyberpunk"] .footer-custom a {
+    color: #00f0ff !important;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.4) !important;
+}
+
+[data-theme="cyberpunk"] .footer-custom a:hover {
+    color: #00ffaa !important;
+    text-shadow: 0 0 14px rgba(0, 255, 170, 0.8) !important;
+}
+
 
 /* ==========================================================================
    AUDIO SYNTH CONTROLS

@@ -42,10 +42,16 @@ const CodeLabApp = {
             const container = document.getElementById('monaco-editor-container');
             if (!container) return;
 
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const initialMonacoTheme = currentTheme === 'cyberpunk' ? 'cyberpunk-neon' : 'vs-dark';
+            if (currentTheme === 'cyberpunk' && window.AlgoTheme) {
+                window.AlgoTheme.applyTheme('cyberpunk', false);
+            }
+
             this.editor = monaco.editor.create(container, {
                 value: CodeLabTemplates.bubble.code.javascript,
                 language: 'javascript',
-                theme: 'vs-dark',
+                theme: initialMonacoTheme,
                 fontSize: 13,
                 fontFamily: "'JetBrains Mono', Consolas, monospace",
                 lineNumbers: 'on',

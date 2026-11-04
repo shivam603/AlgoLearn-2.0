@@ -722,5 +722,114 @@ body.codelab-body .text-muted-custom {
     color: #e2e8f0 !important;
 }
 
+/* ==========================================================================
+   CodeLab Studio Cyberpunk Neon Mode
+   ========================================================================== */
+[data-theme="cyberpunk"] body.codelab-body {
+    background-color: #030712 !important;
+}
+
+[data-theme="cyberpunk"] .codelab-navbar {
+    background: rgba(6, 11, 25, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.4) !important;
+    box-shadow: 0 4px 25px rgba(0, 240, 255, 0.18) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-brand-badge {
+    background: linear-gradient(135deg, #00f0ff 0%, #ff007f 100%) !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-workspace {
+    background-color: rgba(0, 240, 255, 0.25) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-panel {
+    background-color: #050a18 !important;
+}
+
+[data-theme="cyberpunk"] .panel-header {
+    background-color: #070e22 !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
+}
+
+[data-theme="cyberpunk"] .panel-title {
+    color: #00f0ff !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-bottom-bar {
+    background-color: #070e22 !important;
+    border-top: 1px solid rgba(0, 240, 255, 0.35) !important;
+    box-shadow: 0 -4px 25px rgba(0, 240, 255, 0.15) !important;
+}
+
+[data-theme="cyberpunk"] .btn-ide {
+    background: #0b152d !important;
+    border-color: rgba(0, 240, 255, 0.3) !important;
+    color: #f0fdfa !important;
+}
+
+[data-theme="cyberpunk"] .btn-ide:hover:not(:disabled) {
+    background: rgba(0, 240, 255, 0.15) !important;
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) !important;
+}
+
+[data-theme="cyberpunk"] .btn-ide.btn-run {
+    background: linear-gradient(135deg, #00f0ff 0%, #0284c7 100%) !important;
+    border-color: #00f0ff !important;
+    color: #030712 !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.65) !important;
+}
+
+[data-theme="cyberpunk"] .btn-ide.btn-debug {
+    background: linear-gradient(135deg, #ff007f 0%, #9333ea 100%) !important;
+    border-color: #ff007f !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 22px rgba(255, 0, 127, 0.7) !important;
+}
+
+[data-theme="cyberpunk"] .vis-viewport {
+    background: radial-gradient(circle at 50% 20%, #0c1a36 0%, #030712 100%) !important;
+    border: 1px solid rgba(0, 240, 255, 0.25) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-tabs-nav {
+    background-color: #070e22 !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.25) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-tab-btn {
+    color: #a5f3fc !important;
+}
+
+[data-theme="cyberpunk"] .codelab-tab-btn:hover {
+    color: #00f0ff !important;
+    background: rgba(0, 240, 255, 0.08) !important;
+}
+
+[data-theme="cyberpunk"] .codelab-tab-btn.active {
+    color: #00f0ff !important;
+    border-bottom-color: #00f0ff !important;
+    background: rgba(0, 240, 255, 0.15) !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.6) !important;
+}
+
+[data-theme="cyberpunk"] #step-counter {
+    color: #00f0ff !important;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7) !important;
+}
+
+[data-theme="cyberpunk"] #exec-status-badge.bg-secondary {
+    background-color: rgba(0, 240, 255, 0.15) !important;
+    border: 1px solid #00f0ff !important;
+    color: #00f0ff !important;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.4) !important;
+}
+
+
 
 
