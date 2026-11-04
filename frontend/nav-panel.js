@@ -71,8 +71,8 @@
         panel.innerHTML = `
             <div class="drawer-header">
                 <a href="index.html" class="d-flex align-items-center gap-2 text-decoration-none">
-                    <span class="navbar-brand-icon" style="width:32px; height:32px; font-size:1rem;">
-                        <i class="bi bi-cpu-fill"></i>
+                    <span class="navbar-brand-icon" style="width:34px; height:34px;">
+                        <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
                     </span>
                     <span class="fw-bold text-sky-900" style="font-size:1.15rem;">AlgoLearn</span>
                 </a>

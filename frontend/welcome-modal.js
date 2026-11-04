@@ -27,6 +27,10 @@
                 <div class="welcome-container" style="max-width:100%; gap: 3.5rem;">
                     <!-- LEFT COLUMN -->
                     <div class="welcome-content-col">
+                        <div class="welcome-brand-badge">
+                            <img src="algolearn-icon.png" alt="AlgoLearn Emblem" class="welcome-brand-badge-icon" />
+                            <span class="welcome-brand-badge-text">AlgoLearn Studio</span>
+                        </div>
                         <h1 class="welcome-title">Welcome to AlgoLearn Studio</h1>
                         <p class="welcome-subtitle">The modern way to code, debug & master algorithms visually.</p>
 
