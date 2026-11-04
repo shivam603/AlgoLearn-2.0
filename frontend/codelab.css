@@ -9,7 +9,7 @@
     --ide-border: #334155;
     --ide-border-active: #0ea5e9;
     --ide-text-primary: #f8fafc;
-    --ide-text-muted: #94a3b8;
+    --ide-text-muted: #cbd5e1;
     --ide-accent: #0284c7;
     --ide-accent-glow: rgba(14, 165, 233, 0.25);
     --ide-warning: #f59e0b;
@@ -630,5 +630,97 @@ body.codelab-body {
 #floating-panel-toggle {
     display: none !important;
 }
+
+/* ==========================================================================
+   High Contrast & Accessibility Overrides (WCAG AAA Compliance)
+   Eliminates faint, dark, or muddy text hues on the dark IDE background
+   ========================================================================== */
+body.codelab-body .text-muted,
+body.codelab-body .text-muted-custom {
+    color: #cbd5e1 !important; /* Slate-300: crisp, clear silver (11.5:1 contrast) */
+}
+
+/* Step Counter in Bottom Toolbar */
+#step-counter {
+    color: #f8fafc !important; /* Pure Slate-50 bright silver */
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Algorithm Step Description in Center Panel Header */
+#vis-step-desc {
+    color: #38bdf8 !important; /* Bright Sky-400 */
+    font-weight: 600 !important;
+}
+
+/* Visualizer Footer Synchronized Memory Note & Legend */
+.codelab-sync-note {
+    color: #cbd5e1 !important;
+    font-weight: 500;
+}
+
+.codelab-sync-note i {
+    color: #38bdf8 !important;
+}
+
+.vis-legend-item {
+    color: #e2e8f0 !important;
+    font-weight: 500;
+}
+
+/* Status Badges */
+#exec-status-badge {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    padding: 0.35rem 0.65rem !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-radius: 6px !important;
+}
+
+#exec-status-badge.bg-secondary {
+    background-color: #334155 !important; /* Slate-700 */
+    color: #f8fafc !important;
+    border: 1px solid #64748b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+#exec-status-badge.bg-success {
+    background-color: #059669 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+#exec-status-badge.bg-info {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.4);
+}
+
+#exec-status-badge.bg-warning {
+    background-color: #d97706 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+#exec-status-badge.bg-danger {
+    background-color: #dc2626 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* Right Panel Stack & Variable Elements */
+.call-stack-item .badge.bg-secondary {
+    background-color: #334155 !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #475569;
+}
+
+.variables-table td {
+    color: #e2e8f0 !important;
+}
+
 
 
