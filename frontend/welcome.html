@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to AlgoLearn Studio</title>
+    <meta name="description" content="Welcome to AlgoLearn Studio — The modern interactive platform to visualize algorithms and master Data Structures.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Welcome Stylesheet -->
+    <link rel="stylesheet" href="welcome.css">
+</head>
+
+<body class="welcome-body">
+
+    <main class="welcome-container" role="main">
+        
+        <!-- ==========================================
+             LEFT COLUMN: Onboarding Notice & Form
+             ========================================== -->
+        <section class="welcome-content-col" aria-label="Welcome Introduction">
+            <h1 class="welcome-title">Welcome to AlgoLearn Studio</h1>
+            <p class="welcome-subtitle">The modern way to code, debug & master algorithms visually.</p>
+
+            <p class="welcome-description">
+                AlgoLearn 2.0 combines full interactive visualizers with <strong>CodeLab Studio</strong>—a live Monaco IDE with real-time memory synchronization and step-by-step execution tracing. Code runs safely in a browser-isolated sandbox. Explore interactive <a href="visualize.html" class="welcome-link">algorithm visualizers</a> and <a href="codelab.html" class="welcome-link">CodeLab studio</a>.
+            </p>
+
+            <form id="welcome-form" onsubmit="return false;">
+                <div class="welcome-checkbox-group">
+                    <!-- Checkbox 1 (Required) -->
+                    <label class="custom-checkbox-row" id="row-acknowledge" for="chk-acknowledge">
+                        <input type="checkbox" id="chk-acknowledge" checked required />
+                        <span class="custom-checkbox-box">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+                        <span class="checkbox-label-text">
+                            <span class="checkbox-required-star">*</span> I acknowledge that I am using AlgoLearn for educational, competitive programming, and technical interview preparation.
+                        </span>
+                    </label>
+
+                    <!-- Checkbox 2 (Optional - Audio Synth) -->
+                    <label class="custom-checkbox-row" for="chk-audio">
+                        <input type="checkbox" id="chk-audio" checked />
+                        <span class="custom-checkbox-box">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+                        <span class="checkbox-label-text">
+                            Enable real-time Web Audio Synthesizer (auditory pitch feedback during array comparisons, swaps, and graph traversals).
+                        </span>
+                    </label>
+
+                    <!-- Checkbox 3 (Optional - CodeLab Studio Tour Hints) -->
+                    <label class="custom-checkbox-row" for="chk-hints">
+                        <input type="checkbox" id="chk-hints" checked />
+                        <span class="custom-checkbox-box">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+                        <span class="checkbox-label-text">
+                            Enable interactive debugging tooltips, keyboard shortcuts (F10 Step Over, F8 Continue), and memory change highlights.
+                        </span>
+                    </label>
+                </div>
+
+                <p class="welcome-terms-note">
+                    By clicking "Continue" you agree to explore the <a href="index.html">AlgoLearn Platform</a>. You can toggle between <strong>Light</strong>, <strong>Midnight Dark</strong>, and <strong>Cyberpunk Neon</strong> themes anytime from the navigation bar.
+                </p>
+
+                <div class="welcome-btn-row">
+                    <button type="button" class="btn-welcome-continue" id="btn-continue">
+                        <span>Continue</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+                    <a href="codelab.html" class="welcome-secondary-btn" id="btn-open-codelab">
+                        <span>Direct to CodeLab</span>
+                    </a>
+                </div>
+            </form>
+        </section>
+
+        <!-- ==========================================
+             RIGHT COLUMN: Radiant Chromatic Neon Logo
+             ========================================== -->
+        <section class="welcome-graphic-col" aria-label="AlgoLearn Studio Emblem">
+            <div class="welcome-glow-emblem-wrap">
+                <!-- Blurred Radiant Glow Halos behind the glyphs -->
+                <div class="ambient-glow-layer glow-blue"></div>
+                <div class="ambient-glow-layer glow-red"></div>
+                <div class="ambient-glow-layer glow-amber-green"></div>
+
+                <!-- Vector Chromatic Lettermark: AIS / ALS -->
+                <svg class="welcome-svg-emblem" viewBox="0 0 520 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Matte Carbon Surface Gradients -->
+                        <linearGradient id="glyph-body-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#24262d" />
+                            <stop offset="50%" stop-color="#191a20" />
+                            <stop offset="100%" stop-color="#111216" />
+                        </linearGradient>
+
+                        <!-- Glowing Edge Stroke Gradients -->
+                        <linearGradient id="edge-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
+                            <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4" />
+                        </linearGradient>
+
+                        <linearGradient id="edge-red" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ff4d6d" stop-opacity="0.9" />
+                            <stop offset="100%" stop-color="#c9184a" stop-opacity="0.4" />
+                        </linearGradient>
+
+                        <linearGradient id="edge-amber-green" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9" />
+                            <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.8" />
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0.9" />
+                        </linearGradient>
+
+                        <!-- Multi-tier Ambient Glow Filters -->
+                        <filter id="neon-glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="blur1" />
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+
+                        <filter id="neon-glow-red" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="15" result="blur1" />
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+
+                        <filter id="neon-glow-amber-green" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur1" />
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- 1. Left Glyph: 'A' Rounded Triangular Loop -->
+                    <g class="glyph-group glyph-a">
+                        <!-- Outer Ambient Glow Contour -->
+                        <path d="M 85,25 C 102,12 128,12 145,25 L 188,125 C 206,148 196,185 168,185 C 142,185 125,178 115,178 C 105,178 88,185 62,185 C 34,185 24,148 42,125 Z"
+                              fill="none" stroke="#0099ff" stroke-width="12" filter="url(#neon-glow-blue)" opacity="0.85" />
+                        <!-- Solid Matte Carbon Body -->
+                        <path d="M 85,25 C 102,12 128,12 145,25 L 188,125 C 206,148 196,185 168,185 C 142,185 125,178 115,178 C 105,178 88,185 62,185 C 34,185 24,148 42,125 Z"
+                              fill="url(#glyph-body-grad)" stroke="url(#edge-blue)" stroke-width="2.5" />
+                    </g>
+
+                    <!-- 2. Middle Glyph: 'I' / 'L' Sleek Rounded Capsule -->
+                    <g class="glyph-group glyph-i">
+                        <!-- Outer Ambient Glow Contour -->
+                        <rect x="232" y="22" width="76" height="162" rx="38"
+                              fill="none" stroke="#ff2a55" stroke-width="12" filter="url(#neon-glow-red)" opacity="0.85" />
+                        <!-- Solid Matte Carbon Body -->
+                        <rect x="232" y="22" width="76" height="162" rx="38"
+                              fill="url(#glyph-body-grad)" stroke="url(#edge-red)" stroke-width="2.5" />
+                    </g>
+
+                    <!-- 3. Right Glyph: 'S' Dual-Segment Ribbon Wave -->
+                    <g class="glyph-group glyph-s">
+                        <!-- Outer Ambient Glow Contour (Top & Bottom bars) -->
+                        <path d="M 345,58 C 345,36 364,22 386,22 L 460,22 C 484,22 502,38 502,60 C 502,82 484,98 460,98 L 405,98 C 385,98 375,108 375,122 L 375,122 C 375,122 345,58 345,58 Z"
+                              fill="none" stroke="#fbbf24" stroke-width="10" filter="url(#neon-glow-amber-green)" opacity="0.85" />
+                        <path d="M 372,122 C 372,122 342,142 342,160 C 342,182 360,198 384,198 L 458,198 C 480,198 498,184 498,162 C 498,140 480,124 458,124 L 405,124 C 385,124 372,122 372,122 Z"
+                              fill="none" stroke="#10b981" stroke-width="10" filter="url(#neon-glow-amber-green)" opacity="0.85" />
+
+                        <!-- Top S Curve Block -->
+                        <path d="M 345,58 C 345,36 364,22 386,22 L 460,22 C 484,22 502,38 502,60 C 502,82 484,98 460,98 L 402,98 C 372,98 345,80 345,58 Z"
+                              fill="url(#glyph-body-grad)" stroke="url(#edge-amber-green)" stroke-width="2.5" />
+                        
+                        <!-- Bottom S Curve Block -->
+                        <path d="M 498,162 C 498,184 479,198 457,198 L 383,198 C 359,198 341,182 341,160 C 341,138 359,122 383,122 L 441,122 C 471,122 498,140 498,162 Z"
+                              fill="url(#glyph-body-grad)" stroke="url(#edge-amber-green)" stroke-width="2.5" />
+                    </g>
+                </svg>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Onboarding Controller Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chkAcknowledge = document.getElementById('chk-acknowledge');
+            const chkAudio = document.getElementById('chk-audio');
+            const chkHints = document.getElementById('chk-hints');
+            const btnContinue = document.getElementById('btn-continue');
+            const rowAcknowledge = document.getElementById('row-acknowledge');
+            const btnOpenCodelab = document.getElementById('btn-open-codelab');
+
+            // Handle Continue button click
+            btnContinue.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                if (!chkAcknowledge.checked) {
+                    // Visual feedback: shake and focus required row
+                    rowAcknowledge.classList.add('shake-it');
+                    chkAcknowledge.focus();
+                    setTimeout(() => rowAcknowledge.classList.remove('shake-it'), 500);
+                    return;
+                }
+
+                // Save user preferences
+                localStorage.setItem('algolearn_welcomed', 'true');
+                localStorage.setItem('algolearn_sound_enabled', chkAudio.checked ? 'true' : 'false');
+                localStorage.setItem('algolearn_hints_enabled', chkHints.checked ? 'true' : 'false');
+
+                // Smooth exit animation
+                document.body.style.transition = 'opacity 0.4s ease';
+                document.body.style.opacity = '0';
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 350);
+            });
+
+            // Handle direct CodeLab button
+            btnOpenCodelab.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.setItem('algolearn_welcomed', 'true');
+                localStorage.setItem('algolearn_sound_enabled', chkAudio.checked ? 'true' : 'false');
+                localStorage.setItem('algolearn_hints_enabled', chkHints.checked ? 'true' : 'false');
+                window.location.href = 'codelab.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

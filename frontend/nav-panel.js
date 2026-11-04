@@ -104,6 +104,13 @@
                             </div>
                             <i class="bi bi-chevron-right text-muted-custom small"></i>
                         </a>
+                        <a href="welcome.html" class="drawer-list-item" data-search="welcome onboarding guide about tour">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-stars text-info"></i></span>
+                                <span class="fw-bold" style="font-size:0.88rem;">Welcome Guide</span>
+                            </div>
+                            <span class="badge bg-info text-dark fw-bold">Studio</span>
+                        </a>
                         <a href="codelab.html" class="drawer-list-item" data-search="codelab live code editor debugger studio monaco execution tracing ide">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-code-slash text-sky-600"></i></span>

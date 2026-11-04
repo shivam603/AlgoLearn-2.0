@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css?v=3.0">
+    <link rel="stylesheet" href="welcome.css">
+    <link rel="stylesheet" href="welcome-modal.css">
 </head>
 
 <body>
@@ -41,6 +43,10 @@
 
                 <!-- Right: Visitor Bar & All Functions -->
                 <div class="top-navbar-right">
+                    <a href="welcome.html" class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex align-items-center gap-1 welcome-trigger-btn" title="Open AlgoLearn Welcome & Onboarding Guide">
+                        <i class="bi bi-stars text-info"></i>
+                        <span>Welcome</span>
+                    </a>
                     <a href="codelab.html" class="btn btn-sky btn-sm d-none d-md-inline-flex align-items-center gap-1 text-white shadow-sm" title="Launch CodeLab Live IDE & Debugger">
                         <i class="bi bi-code-slash"></i>
                         <span class="fw-bold">CodeLab</span>
@@ -649,6 +655,7 @@
     <script src="theme-engine.js"></script>
     <script src="audio-synth.js"></script>
     <script src="nav-panel.js?v=3.0"></script>
+    <script src="welcome-modal.js"></script>
     <script>
         // Mini Interactive Hero Sandbox
         (function() {
