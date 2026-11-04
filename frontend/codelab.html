@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeLab — Live Coding & Interactive Debugging Studio | AlgoLearn</title>
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Base Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=3.0">
+    <!-- CodeLab Specialized Studio Stylesheet -->
+    <link rel="stylesheet" href="codelab.css">
+</head>
+
+<body class="codelab-body">
+    <!-- Studio Header Navbar -->
+    <header class="codelab-navbar">
+        <div class="d-flex align-items-center justify-content-between">
+            <!-- Left: Brand & Navigation -->
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Functions Drawer (Press [)">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <a class="navbar-brand d-flex align-items-center gap-2 mb-0 text-white text-decoration-none" href="index.html">
+                    <span class="navbar-brand-icon">
+                        <i class="bi bi-cpu-fill"></i>
+                    </span>
+                    <span class="fw-bold">AlgoLearn</span>
+                </a>
+                <span class="codelab-brand-badge d-none d-sm-inline">CodeLab Studio</span>
+                <span class="badge bg-secondary-subtle text-secondary small d-none d-md-inline">Live Execution Tracing & Debugger</span>
+            </div>
+
+            <!-- Right: Links & Controls -->
+            <div class="d-flex align-items-center gap-2">
+                <a href="visualize.html" class="btn btn-outline-secondary btn-sm text-light d-none d-md-inline-flex align-items-center gap-1">
+                    <i class="bi bi-bar-chart-fill"></i> Visualizers
+                </a>
+                <a href="practice.html" class="btn btn-outline-secondary btn-sm text-light d-none d-md-inline-flex align-items-center gap-1">
+                    <i class="bi bi-mortarboard-fill"></i> Practice
+                </a>
+                <button type="button" class="btn btn-sm btn-outline-info theme-toggle-btn d-flex align-items-center gap-1">
+                    <i class="bi bi-moon-stars-fill"></i>
+                </button>
+                <button type="button" class="btn btn-sky btn-sm btn-panel-trigger">
+                    <i class="bi bi-grid-fill"></i> <span class="d-none d-sm-inline">All Functions</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3-Panel Main Workspace Grid -->
+    <main class="codelab-workspace" id="codelab-workspace">
+        
+        <!-- ==========================================
+             LEFT PANEL: Monaco Code Editor
+             ========================================== -->
+        <section class="codelab-panel codelab-panel-left" aria-label="Code Editor Panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="bi bi-code-slash text-sky-400"></i>
+                    <span>Editor</span>
+                </div>
+                <!-- Language & Template Selectors -->
+                <div class="d-flex align-items-center gap-2">
+                    <select id="language-select" class="form-select form-select-sm bg-dark text-white border-secondary py-1" style="font-size: 0.75rem; width: 110px;">
+                        <option value="javascript" selected>JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="cpp">C++</option>
+                        <option value="java">Java</option>
+                    </select>
+                    <select id="template-select" class="form-select form-select-sm bg-dark text-white border-secondary py-1" style="font-size: 0.75rem; width: 160px;">
+                        <optgroup label="Sorting">
+                            <option value="bubble" selected>Bubble Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="merge">Merge Sort</option>
+                        </optgroup>
+                        <optgroup label="Searching">
+                            <option value="binary_search">Binary Search</option>
+                            <option value="linear_search">Linear Search</option>
+                        </optgroup>
+                        <optgroup label="Data Structures">
+                            <option value="stack">Stack (LIFO)</option>
+                            <option value="queue">Queue (FIFO)</option>
+                            <option value="linkedlist">Linked List</option>
+                            <option value="binary_tree">Binary Tree</option>
+                        </optgroup>
+                        <optgroup label="Graphs">
+                            <option value="bfs">Breadth-First Search</option>
+                            <option value="dfs">Depth-First Search</option>
+                            <option value="dijkstra">Dijkstra Shortest Path</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Monaco Container -->
+            <div id="monaco-editor-container" class="codelab-editor-container"></div>
+        </section>
+
+        <!-- ==========================================
+             CENTER PANEL: Live Visualizer Viewport
+             ========================================== -->
+        <section class="codelab-panel codelab-panel-center" aria-label="Algorithm Visualizer Viewport">
+            <div class="panel-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-bar-chart-steps text-warning"></i>
+                    <span class="fw-bold text-white small" id="vis-algorithm-name">Bubble Sort</span>
+                    <span class="badge bg-primary rounded-pill small" id="vis-category-badge">Sorting</span>
+                </div>
+                <div class="text-truncate text-muted small" style="max-width: 220px;" id="vis-step-desc">
+                    Ready to execute
+                </div>
+            </div>
+
+            <div class="vis-viewport">
+                <!-- Visualizer Canvas Container (Dynamically rendered) -->
+                <div id="vis-canvas-container" class="vis-canvas-container">
+                    <div class="text-center text-muted-custom py-5">
+                        <i class="bi bi-play-circle display-4 mb-2 d-block"></i>
+                        <span>Click <strong>Run Code</strong> or <strong>Debug</strong> to start visualization</span>
+                    </div>
+                </div>
+
+                <!-- Visualizer Legend & Hints -->
+                <div class="d-flex align-items-center justify-content-between px-2 pt-3 border-top border-secondary border-opacity-25 small">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="d-flex align-items-center gap-1 text-muted" style="font-size:0.75rem;">
+                            <span class="d-inline-block rounded-circle bg-warning" style="width:8px; height:8px;"></span> Compare
+                        </span>
+                        <span class="d-flex align-items-center gap-1 text-muted" style="font-size:0.75rem;">
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:#a855f7;"></span> Swap
+                        </span>
+                        <span class="d-flex align-items-center gap-1 text-muted" style="font-size:0.75rem;">
+                            <span class="d-inline-block rounded-circle bg-success" style="width:8px; height:8px;"></span> Sorted
+                        </span>
+                    </div>
+                    <span class="text-muted" style="font-size:0.72rem;">
+                        <i class="bi bi-info-circle me-1"></i> Synchronized with real memory
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             RIGHT PANEL: Debugger Inspector Deck
+             ========================================== -->
+        <aside class="codelab-panel codelab-panel-right" aria-label="Debugger State Deck">
+            <!-- Deck Tabs -->
+            <nav class="codelab-tabs-nav" role="tablist">
+                <button type="button" class="codelab-tab-btn active" data-target="vars">
+                    <i class="bi bi-braces"></i> Variables
+                </button>
+                <button type="button" class="codelab-tab-btn" data-target="stack">
+                    <i class="bi bi-layers-fill"></i> Call Stack
+                </button>
+                <button type="button" class="codelab-tab-btn" data-target="watch">
+                    <i class="bi bi-eye-fill"></i> Watch
+                </button>
+                <button type="button" class="codelab-tab-btn" data-target="console">
+                    <i class="bi bi-terminal-fill"></i> Console
+                </button>
+            </nav>
+
+            <!-- 1. Variables Tab Content -->
+            <div id="deck-section-vars" class="codelab-tab-content">
+                <table class="variables-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="variables-body">
+                        <tr>
+                            <td colspan="3" class="text-muted text-center py-3">No active variables</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 2. Call Stack Tab Content -->
+            <div id="deck-section-stack" class="codelab-tab-content d-none">
+                <ul class="call-stack-list" id="call-stack-list">
+                    <li class="call-stack-item active">
+                        <div><i class="bi bi-layers-fill text-sky-600 me-2"></i><strong>global</strong></div>
+                        <span class="badge bg-secondary">depth 0</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 3. Watch Expressions Tab Content -->
+            <div id="deck-section-watch" class="codelab-tab-content d-none">
+                <form id="add-watch-form" class="watch-input-wrap">
+                    <input type="text" id="watch-expr-input" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Add variable or expression..." />
+                    <button type="submit" class="btn btn-sky btn-sm px-2"><i class="bi bi-plus-lg"></i></button>
+                </form>
+                <div id="watch-list"></div>
+            </div>
+
+            <!-- 4. Console Tab Content -->
+            <div id="deck-section-console" class="codelab-tab-content d-none d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="small text-muted">Standard Output</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" id="btn-clear-console" style="font-size:0.7rem;">Clear</button>
+                </div>
+                <div id="console-output-box" class="console-output-box flex-grow-1"></div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- ==========================================
+         BOTTOM EXECUTION TOOLBAR
+         ========================================== -->
+    <footer class="codelab-bottom-bar">
+        <!-- Playback Controls -->
+        <div class="exec-btn-group">
+            <button type="button" id="btn-run" class="btn-ide btn-run" title="Run code continuously">
+                <i class="bi bi-play-fill fs-6"></i> <span>Run Code</span>
+            </button>
+            <button type="button" id="btn-pause" class="btn-ide btn-run d-none" title="Pause execution">
+                <i class="bi bi-pause-fill fs-6"></i> <span>Pause</span>
+            </button>
+            <button type="button" id="btn-debug" class="btn-ide btn-debug" title="Start step-by-step debugger">
+                <i class="bi bi-bug-fill fs-6"></i> <span>Debug</span>
+            </button>
+            <button type="button" id="btn-step-over" class="btn-ide" disabled title="Step Over (F10)">
+                <i class="bi bi-arrow-right-circle"></i> <span>Step Over</span>
+            </button>
+            <button type="button" id="btn-step-into" class="btn-ide" disabled title="Step Into">
+                <i class="bi bi-arrow-down-circle"></i> <span>Step Into</span>
+            </button>
+            <button type="button" id="btn-step-out" class="btn-ide" disabled title="Step Out">
+                <i class="bi bi-arrow-up-circle"></i> <span>Step Out</span>
+            </button>
+            <button type="button" id="btn-continue" class="btn-ide" disabled title="Continue to next breakpoint (F8)">
+                <i class="bi bi-fast-forward-fill"></i> <span>Continue</span>
+            </button>
+            <button type="button" id="btn-stop" class="btn-ide text-danger" disabled title="Stop execution">
+                <i class="bi bi-stop-fill"></i> <span>Stop</span>
+            </button>
+            <button type="button" id="btn-reset" class="btn-ide" title="Reset to initial state">
+                <i class="bi bi-arrow-counterclockwise"></i> <span>Reset</span>
+            </button>
+        </div>
+
+        <!-- Center: Status & Step Count -->
+        <div class="d-none d-md-flex align-items-center gap-3">
+            <span id="exec-status-badge" class="badge bg-secondary">Ready</span>
+            <span id="step-counter" class="font-monospace text-muted small">Step 0 / 0</span>
+        </div>
+
+        <!-- Right: Execution Speed Slider -->
+        <div class="speed-control-wrap">
+            <i class="bi bi-speedometer2 text-sky-400"></i>
+            <span>Speed:</span>
+            <input type="range" id="exec-speed-slider" class="speed-slider" min="50" max="1500" step="50" value="350" />
+            <span id="speed-ms-label" class="font-monospace text-white small" style="min-width: 44px;">350ms</span>
+        </div>
+    </footer>
+
+    <!-- Scripts: Monaco Loader & Project Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.js"></script>
+    <script src="theme-engine.js"></script>
+    <script src="nav-panel.js"></script>
+    <script src="codelab-templates.js"></script>
+    <script src="codelab-tracer.js"></script>
+    <script src="codelab.js"></script>
+
+    <!-- Tab switcher for Right Deck -->
+    <script>
+        document.querySelectorAll('.codelab-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.codelab-tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const target = btn.getAttribute('data-target');
+                document.querySelectorAll('.codelab-tab-content').forEach(sec => sec.classList.add('d-none'));
+                document.getElementById(`deck-section-${target}`)?.classList.remove('d-none');
+            });
+        });
+    </script>
+</body>
+
+</html>

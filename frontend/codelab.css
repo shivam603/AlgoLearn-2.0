@@ -1,0 +1,545 @@
+/* ==========================================================================
+   AlgoLearn CodeLab — Live Coding & Interactive Debugging Studio Stylesheet
+   ========================================================================== */
+
+:root {
+    --ide-bg: #0b0f19;
+    --ide-surface: #111827;
+    --ide-surface-2: #1e293b;
+    --ide-border: #334155;
+    --ide-border-active: #0ea5e9;
+    --ide-text-primary: #f8fafc;
+    --ide-text-muted: #94a3b8;
+    --ide-accent: #0284c7;
+    --ide-accent-glow: rgba(14, 165, 233, 0.25);
+    --ide-warning: #f59e0b;
+    --ide-danger: #ef4444;
+    --ide-success: #10b981;
+    --ide-purple: #a855f7;
+    --ide-bar-color: #0284c7;
+    --ide-bar-comparing: #f59e0b;
+    --ide-bar-swapping: #a855f7;
+    --ide-bar-sorted: #10b981;
+}
+
+body.codelab-body {
+    background-color: var(--ide-bg);
+    color: var(--ide-text-primary);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================
+   Header Navbar Customization for Studio
+   ========================================== */
+.codelab-navbar {
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--ide-border);
+    padding: 0.5rem 1rem;
+    z-index: 100;
+}
+
+.codelab-brand-badge {
+    background: linear-gradient(135deg, #0284c7, #38bdf8);
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================
+   3-Panel IDE Main Workspace Grid
+   ========================================== */
+.codelab-workspace {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 38% 37% 25%;
+    gap: 1px;
+    background-color: var(--ide-border);
+    height: calc(100vh - 110px);
+    overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+    .codelab-workspace {
+        grid-template-columns: 45% 55%;
+    }
+    .codelab-panel-right {
+        display: none;
+    }
+}
+
+@media (max-width: 850px) {
+    .codelab-workspace {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+    }
+}
+
+/* Panel Containers */
+.codelab-panel {
+    background-color: var(--ide-surface);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.panel-header {
+    background-color: #0f172a;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--ide-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+}
+
+.panel-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ide-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ==========================================
+   Left Panel: Monaco Code Editor
+   ========================================== */
+.codelab-editor-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #1e1e1e;
+}
+
+/* Monaco Custom Breakpoints & Highlights */
+.monaco-glyph-breakpoint {
+    background: #ef4444;
+    border-radius: 50%;
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: 5px;
+    box-shadow: 0 0 8px #ef4444;
+}
+
+.monaco-executing-line {
+    background: rgba(14, 165, 233, 0.28) !important;
+    border-left: 3px solid #38bdf8 !important;
+}
+
+.monaco-executing-glyph {
+    background: #38bdf8;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: 5px;
+    animation: pulse-arrow 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse-arrow {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+/* ==========================================
+   Center Panel: Visualizer Viewport
+   ========================================== */
+.vis-viewport {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
+    overflow: hidden;
+    padding: 1.5rem 1rem;
+}
+
+.vis-canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    min-height: 260px;
+    width: 100%;
+    padding-bottom: 2.5rem;
+}
+
+/* Array Bar Visualizer Styles */
+.vis-bars-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.vis-bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.vis-bar {
+    width: 36px;
+    background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
+    border-radius: 6px 6px 0 0;
+    transition: height 0.3s ease, background 0.25s ease, transform 0.3s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    position: relative;
+}
+
+.vis-bar-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.vis-bar-idx {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ide-text-muted);
+    margin-top: 6px;
+}
+
+/* Pointer Markers (i, j, mid, low, high) */
+.vis-pointer-marker {
+    position: absolute;
+    top: -28px;
+    background: #f59e0b;
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    animation: bounce 0.6s infinite alternate;
+}
+
+.vis-pointer-marker::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px 4px 0;
+    border-style: solid;
+    border-color: #f59e0b transparent transparent;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-3px); }
+}
+
+/* Bar States */
+.vis-bar.comparing {
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%) !important;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.6) !important;
+    transform: translateY(-8px);
+}
+
+.vis-bar.swapping {
+    background: linear-gradient(180deg, #c084fc 0%, #a855f7 100%) !important;
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.7) !important;
+    transform: scale(1.08);
+}
+
+.vis-bar.sorted {
+    background: linear-gradient(180deg, #34d399 0%, #10b981 100%) !important;
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.5) !important;
+}
+
+/* Linked List / Stack / Queue Viewers */
+.vis-nodes-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 2rem 1rem;
+}
+
+.vis-node-box {
+    background: var(--ide-surface-2);
+    border: 2px solid var(--ide-accent);
+    color: #fff;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.vis-node-arrow {
+    color: var(--ide-border-active);
+    font-size: 1.4rem;
+}
+
+/* Tree & Graph SVG Container */
+.vis-svg-canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* ==========================================
+   Right Panel: Debugger Deck
+   ========================================== */
+.codelab-tabs-nav {
+    display: flex;
+    background-color: #0f172a;
+    border-bottom: 1px solid var(--ide-border);
+}
+
+.codelab-tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--ide-text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.55rem 0.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.codelab-tab-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.codelab-tab-btn.active {
+    color: #38bdf8;
+    border-bottom-color: #38bdf8;
+    background: rgba(14, 165, 233, 0.08);
+}
+
+.codelab-tab-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+}
+
+/* Variables Table */
+.variables-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+}
+
+.variables-table th {
+    color: var(--ide-text-muted);
+    text-align: left;
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid var(--ide-border);
+    font-weight: 600;
+}
+
+.variables-table td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.3s ease;
+}
+
+.var-type-badge {
+    font-size: 0.65rem;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: rgba(14, 165, 233, 0.15);
+    color: #38bdf8;
+}
+
+.var-updated {
+    background-color: rgba(14, 165, 233, 0.25) !important;
+    color: #38bdf8 !important;
+    animation: flash-row 1s ease-out;
+}
+
+@keyframes flash-row {
+    0% { background-color: rgba(56, 189, 248, 0.45); }
+    100% { background-color: transparent; }
+}
+
+/* Call Stack */
+.call-stack-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.call-stack-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 3px solid var(--ide-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.call-stack-item.active {
+    background: rgba(14, 165, 233, 0.12);
+    border-left-color: #38bdf8;
+    color: #fff;
+}
+
+/* Watch Panel */
+.watch-input-wrap {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0.75rem;
+}
+
+.watch-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+}
+
+/* Console Deck */
+.console-output-box {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    background: #0b0f19;
+    border-radius: 6px;
+    padding: 0.6rem;
+    min-height: 100%;
+    color: #e2e8f0;
+}
+
+.console-msg {
+    margin-bottom: 3px;
+    word-break: break-all;
+}
+
+.console-msg.error {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border-left: 3px solid #ef4444;
+}
+
+/* ==========================================
+   Bottom Execution Toolbar
+   ========================================== */
+.codelab-bottom-bar {
+    background-color: #0f172a;
+    border-top: 1px solid var(--ide-border);
+    padding: 0.55rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    z-index: 100;
+}
+
+.exec-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-ide {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.38rem 0.85rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--ide-border);
+    background: var(--ide-surface-2);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-ide:hover:not(:disabled) {
+    background: #334155;
+    border-color: #475569;
+}
+
+.btn-ide.btn-run {
+    background: #0284c7;
+    border-color: #0ea5e9;
+    color: #fff;
+}
+
+.btn-ide.btn-run:hover:not(:disabled) {
+    background: #0369a1;
+}
+
+.btn-ide.btn-debug {
+    background: #7c3aed;
+    border-color: #8b5cf6;
+    color: #fff;
+}
+
+.btn-ide:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Speed Slider Control */
+.speed-control-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--ide-text-muted);
+}
+
+.speed-slider {
+    width: 110px;
+    accent-color: #0ea5e9;
+    cursor: pointer;
+}

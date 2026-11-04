@@ -104,6 +104,13 @@
                             </div>
                             <i class="bi bi-chevron-right text-muted-custom small"></i>
                         </a>
+                        <a href="codelab.html" class="drawer-list-item" data-search="codelab live code editor debugger studio monaco execution tracing ide">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-code-slash text-sky-600"></i></span>
+                                <span class="fw-bold" style="font-size:0.88rem;">CodeLab (Live IDE & Debugger)</span>
+                            </div>
+                            <span class="badge bg-success text-white fw-bold">NEW</span>
+                        </a>
                         <a href="duel.html" class="drawer-list-item" data-search="duel race head to head arena multi algorithm comparison">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-fire text-warning"></i></span>

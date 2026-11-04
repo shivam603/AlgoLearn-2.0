@@ -137,6 +137,10 @@ app.delete('/api/history', async (req, res) => {
     }
 });
 
+app.get('/codelab', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/codelab.html'));
+});
+
 app.get('/visualize', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/visualize.html'));
 });
