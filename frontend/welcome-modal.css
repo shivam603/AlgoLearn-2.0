@@ -70,8 +70,30 @@
     transform: rotate(90deg);
 }
 
+.welcome-modal-card .welcome-container {
+    max-width: 100%;
+    margin: 0;
+    gap: 3.5rem;
+}
+
+@keyframes welcome-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+.shake-it {
+    animation: welcome-shake 0.4s ease-in-out;
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.35) !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+}
+
 @media (max-width: 900px) {
     .welcome-modal-card {
-        padding: 2rem 1.5rem;
+        padding: 2rem 1.25rem;
+    }
+    .welcome-modal-card .welcome-container {
+        gap: 2rem;
     }
 }

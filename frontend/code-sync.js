@@ -347,8 +347,14 @@ const CodeSync = {
             const isMatch = line.getAttribute('data-key') === lineKey;
             line.classList.toggle('active-code-line', isMatch);
             if (isMatch) {
-                // Ensure line is visible in code view
-                line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // Scroll ONLY inside the code snippet container without affecting window / page scroll
+                const lineTop = line.offsetTop - container.offsetTop;
+                const lineHeight = line.offsetHeight || 24;
+                if (lineTop < container.scrollTop) {
+                    container.scrollTop = lineTop;
+                } else if (lineTop + lineHeight > container.scrollTop + container.clientHeight) {
+                    container.scrollTop = lineTop + lineHeight - container.clientHeight;
+                }
             }
         });
     },

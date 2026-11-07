@@ -28,9 +28,9 @@
                     </button>
                     <a class="navbar-brand mb-0" href="index.html">
                         <span class="navbar-brand-icon">
-                        <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
-                    </span>
-                        <span>AlgoLearn</span>
+                            <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
+                        </span>
+                        <span class="brand-text"><span class="brand-algo">Algo</span><span class="brand-learn">Learn</span></span>
                     </a>
                 </div>
 
@@ -43,21 +43,8 @@
                     </form>
                 </div>
 
-                <!-- Right: Visitor Bar & All Functions -->
+                <!-- Right: Visitor Bar, All Functions & FAR RIGHT UPPER CORNER (Notification Bell + Profile Bar) -->
                 <div class="top-navbar-right">
-                    <a href="login.html" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 nav-login-btn" title="Sign In to Your Workspace">
-                        <i class="bi bi-box-arrow-in-right"></i>
-                        <span>Sign In</span>
-                    </a>
-                    <a href="welcome.html" class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex align-items-center gap-1 welcome-trigger-btn" title="Open AlgoLearn Welcome & Onboarding Guide">
-                        <i class="bi bi-stars text-info"></i>
-                        <span>Welcome</span>
-                    </a>
-                    <a href="codelab.html" class="btn btn-sky btn-sm d-none d-md-inline-flex align-items-center gap-1 text-white shadow-sm" title="Launch CodeLab Live IDE & Debugger">
-                        <i class="bi bi-code-slash"></i>
-                        <span class="fw-bold">CodeLab</span>
-                        <span class="badge bg-white text-sky-800 rounded-pill ms-1" style="font-size:0.68rem; padding: 0.2em 0.5em;">Studio</span>
-                    </a>
                     <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
                         <span class="visitor-live-dot"></span>
                         <i class="bi bi-people-fill text-sky-600"></i>
@@ -67,6 +54,17 @@
                         <i class="bi bi-grid-fill"></i>
                         <span>All Functions</span>
                     </button>
+
+                    <!-- FAR RIGHT UPPER CORNER: Notification Center Bell -->
+                    <button type="button" class="btn btn-sm btn-outline-secondary position-relative btn-open-notifications nav-circle-btn" id="nav-btn-notifications" title="Notifications & System Alerts (Shift+N)">
+                        <i class="bi bi-bell-fill text-sky-400"></i>
+                        <span class="notification-badge-dot d-none"></span>
+                    </button>
+
+                    <!-- FAR RIGHT UPPER CORNER: Universal Profile Bar & Dropdown Hub -->
+                    <div class="navbar-profile-wrap position-relative" id="navbar-profile-root">
+                        <!-- Populated and dynamically managed by AlgoProfile in settings-notifications.js -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,13 +74,15 @@
     <header class="hero-section">
         <div class="container">
             <div class="row align-items-center gy-5">
-                <div class="col-lg-6 text-center text-lg-start">
+                <div class="col-lg-6 text-center text-lg-start position-relative">
+                    <div class="hero-ambient-glow"></div>
                     <div class="hero-badge">
-                        <i class="bi bi-stars text-sky-600"></i>
+                        <span class="hero-badge-sparkle"><i class="bi bi-stars"></i></span>
                         <span>Full-Stack Interactive DSA Platform</span>
                     </div>
-                    <h1 class="display-5 fw-bold mb-3">
-                        Master Algorithms <span class="text-gradient-sky">Visually & Interactively</span>.
+                    <h1 class="hero-main-title display-5 fw-bold mb-3">
+                        <span class="hero-title-lead">Master Algorithms</span>
+                        <span class="hero-title-highlight text-gradient-sky">Visually &amp; Interactively.</span>
                     </h1>
                     <p class="lead mb-4">
                         Step beyond static code. Write real code in our interactive <strong>CodeLab Studio</strong>, debug step-by-step with real-time memory inspection, and explore 12+ algorithm engines with live visualizers.
@@ -156,40 +156,48 @@
 
             <div class="row g-4">
                 <div class="col-md-6 col-lg-3">
-                    <div class="card card-custom card-feature">
-                        <div class="card-feature-icon">
-                            <i class="bi bi-bar-chart-line-fill"></i>
+                    <a href="visualize.html" class="text-decoration-none card-link-wrapper h-100">
+                        <div class="card card-custom card-feature">
+                            <div class="card-feature-icon">
+                                <i class="bi bi-bar-chart-line-fill"></i>
+                            </div>
+                            <h3 class="h5 fw-bold mb-2">9+ Visualizer Engines</h3>
+                            <p class="text-muted-custom small mb-0">Sorting, Pathfinding (A* & Dijkstra), Trees & BST, DP (Knapsack), Backtracking (N-Queens), Graphs & Data Structures.</p>
                         </div>
-                        <h3 class="h5 fw-bold mb-2">3 Interactive Visualizers</h3>
-                        <p class="text-muted-custom small mb-0">Customizable bar heights, speed throttles, target lookups, and SVG graph traversal animations.</p>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="card card-custom card-feature">
-                        <div class="card-feature-icon">
-                            <i class="bi bi-diagram-3-fill"></i>
+                    <a href="codelab.html" class="text-decoration-none card-link-wrapper h-100">
+                        <div class="card card-custom card-feature">
+                            <div class="card-feature-icon">
+                                <i class="bi bi-cpu-fill"></i>
+                            </div>
+                            <h3 class="h5 fw-bold mb-2">CodeLab Studio Debugger</h3>
+                            <p class="text-muted-custom small mb-0">Write and debug custom code in Java, Python, C, C++, and JS inside isolated Docker containers with live memory tracing.</p>
                         </div>
-                        <h3 class="h5 fw-bold mb-2">Dry-Run Step Walkthroughs</h3>
-                        <p class="text-muted-custom small mb-0">Detailed visual snapshots explaining variable changes, swaps, and recursive splits at every pass.</p>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="card card-custom card-feature">
-                        <div class="card-feature-icon">
-                            <i class="bi bi-layout-sidebar-inset-reverse"></i>
+                    <a href="duel.html" class="text-decoration-none card-link-wrapper h-100">
+                        <div class="card card-custom card-feature">
+                            <div class="card-feature-icon">
+                                <i class="bi bi-fire"></i>
+                            </div>
+                            <h3 class="h5 fw-bold mb-2">Algorithm Duel & Race</h3>
+                            <p class="text-muted-custom small mb-0">Head-to-head live algorithm racing! Watch algorithms battle in real-time or test your intuition in Guess Step challenges.</p>
                         </div>
-                        <h3 class="h5 fw-bold mb-2">Instant Slide Panel</h3>
-                        <p class="text-muted-custom small mb-0">Unified drawer containing all 12 algorithms, 3 engines, practice topics, and complexity cheat sheets.</p>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-md-6 col-lg-3">
-                    <div class="card card-custom card-feature">
-                        <div class="card-feature-icon">
-                            <i class="bi bi-pencil-square"></i>
+                    <a href="practice.html" class="text-decoration-none card-link-wrapper h-100">
+                        <div class="card card-custom card-feature">
+                            <div class="card-feature-icon">
+                                <i class="bi bi-mortarboard-fill"></i>
+                            </div>
+                            <h3 class="h5 fw-bold mb-2">Practice & Quiz Arena</h3>
+                            <p class="text-muted-custom small mb-0">12+ curated interactive quiz challenge sets reinforcing algorithmic thinking, edge cases, and Big-O runtime analysis.</p>
                         </div>
-                        <h3 class="h5 fw-bold mb-2">Practice & Quiz Arena</h3>
-                        <p class="text-muted-custom small mb-0">Curated conceptual prompts designed to reinforce algorithmic thinking, edge cases, and runtime analysis.</p>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -546,7 +554,7 @@
                         <div class="team-avatar">S</div>
                         <div class="flex-grow-1">
                             <div class="team-name">Shivam</div>
-                            <div class="team-role">Full-Stack Development & Architecture</div>
+                            <div class="team-role">Full-Stack Development, CodeLab Debugger & Architecture</div>
                             <div class="team-social-links">
                                 <a href="https://github.com/shivam603" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Shivam's GitHub">
                                     <i class="bi bi-github"></i> <span>GitHub</span>
@@ -565,7 +573,7 @@
                         <div class="team-avatar">S</div>
                         <div class="flex-grow-1">
                             <div class="team-name">Siddharth</div>
-                            <div class="team-role">Algorithm Visualizers & Frontend Design</div>
+                            <div class="team-role">9+ Algorithm Visualizers, Animation Canvas & UI Design</div>
                             <div class="team-social-links">
                                 <a href="https://github.com/siddharth0348-gif" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Siddharth's GitHub">
                                     <i class="bi bi-github"></i> <span>GitHub</span>
@@ -584,7 +592,7 @@
                         <div class="team-avatar">A</div>
                         <div class="flex-grow-1">
                             <div class="team-name">Amrit</div>
-                            <div class="team-role">Database Integration & Logic Verification</div>
+                            <div class="team-role">Database Integration, Practice Quizzes & Verification</div>
                             <div class="team-social-links">
                                 <a href="https://github.com/AmritRai07" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Amrit's GitHub">
                                     <i class="bi bi-github"></i> <span>GitHub</span>
@@ -604,54 +612,106 @@
     <footer class="footer-custom">
         <div class="container">
             <div class="row g-4 mb-4">
-                <div class="col-lg-4">
+                <!-- Col 1: Brand & Overview -->
+                <div class="col-lg-3">
                     <a class="navbar-brand mb-2 d-inline-flex" href="index.html">
                         <span class="navbar-brand-icon">
-                        <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
-                    </span>
-                        <span>AlgoLearn</span>
+                            <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
+                        </span>
+                        <span class="brand-text"><span class="brand-algo">Algo</span><span class="brand-learn">Learn</span></span>
                     </a>
                     <div class="visitor-counter-box" title="Live Total Website Visitors">
                         <span class="visitor-live-dot"></span>
                         <i class="bi bi-people-fill text-sky-600"></i>
-                        <span>Total Visitors: <strong class="visitor-count-value visitor-number">1,428</strong></span>
+                        <span>Total Visitors: <strong class="visitor-count-value visitor-number">1,722</strong></span>
                     </div>
-                    <p class="text-muted-custom small">
-                        A full-stack web platform created by <strong>Team ANT-X</strong> (Shivam, Siddharth, and Amrit) for mastering Data Structures and Algorithms through interactive visualization and guided practice.
+                    <p class="text-muted-custom small mt-2">
+                        A full-stack interactive computer science platform by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit). Featuring universal code execution in isolated Docker sandboxes, live memory tracing, 9+ visualizer engines, and head-to-head algorithm battles.
                     </p>
-                    <div class="d-flex gap-2 text-muted-custom small mt-2">
-                        <span class="badge-sky"><i class="bi bi-cpu-fill"></i> Interactive DSA Platform</span>
+                    <div class="d-flex flex-wrap gap-1 text-muted-custom small mt-2">
+                        <span class="badge-sky" style="font-size:0.7rem;"><i class="bi bi-cpu-fill"></i> CodeLab 2.0</span>
+                        <span class="badge-sky" style="font-size:0.7rem;"><i class="bi bi-bar-chart-steps"></i> 9+ Engines</span>
+                        <span class="badge-sky" style="font-size:0.7rem;"><i class="bi bi-fire"></i> Duel & Arenas</span>
                     </div>
                 </div>
-                <div class="col-6 col-lg-2">
-                    <h5>Visualizers</h5>
-                    <ul>
-                        <li><a href="visualize-sorting.html">Sorting Visualizer</a></li>
-                        <li><a href="visualize-search.html">Search Visualizer</a></li>
-                        <li><a href="visualize-graph.html">Graph Visualizer</a></li>
-                        <li><a href="visualize.html">All Engines</a></li>
+
+                <!-- Col 2: 9+ Visualizer Engines -->
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h5 class="fw-bold">Visualizers</h5>
+                    <ul class="list-unstyled text-muted-custom small">
+                        <li class="mb-1"><a href="visualize-sorting.html">Sorting Visualizer</a></li>
+                        <li class="mb-1"><a href="visualize-pathfinding.html">Pathfinding (A* & Dijkstra)</a></li>
+                        <li class="mb-1"><a href="visualize-tree.html">Tree & BST Visualizer</a></li>
+                        <li class="mb-1"><a href="visualize-dp.html">Dynamic Programming</a></li>
+                        <li class="mb-1"><a href="visualize-backtracking.html">Backtracking (N-Queens)</a></li>
+                        <li class="mb-1"><a href="visualize-ds.html">Data Structures (Stack/Queue)</a></li>
+                        <li class="mb-1"><a href="visualize-graph.html">Graph Visualizer</a></li>
+                        <li class="mb-1"><a href="visualize-search.html">Search Visualizer</a></li>
+                        <li class="mt-2"><a href="visualize.html" class="fw-bold text-sky-400">All 9+ Engines &rarr;</a></li>
                     </ul>
                 </div>
-                <div class="col-6 col-lg-3">
-                    <h5>Algorithm Guides</h5>
-                    <ul>
-                        <li><a href="algorithm-details.html?algo=quick">Quick Sort</a></li>
-                        <li><a href="algorithm-details.html?algo=merge">Merge Sort</a></li>
-                        <li><a href="algorithm-details.html?algo=binary">Binary Search</a></li>
-                        <li><a href="algorithm-details.html?algo=dijkstra">Dijkstra's Algorithm</a></li>
+
+                <!-- Col 3: CodeLab & Interactive Arenas -->
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h5 class="fw-bold">CodeLab & Arenas</h5>
+                    <ul class="list-unstyled text-muted-custom small">
+                        <li class="mb-1"><a href="codelab.html" class="fw-bold text-info"><i class="bi bi-code-slash text-info"></i> CodeLab Studio</a></li>
+                        <li class="mb-1"><a href="duel.html"><i class="bi bi-fire text-warning"></i> Algorithm Duel / Race</a></li>
+                        <li class="mb-1"><a href="challenge.html"><i class="bi bi-controller text-primary"></i> Guess Step Challenge</a></li>
+                        <li class="mb-1"><a href="practice.html"><i class="bi bi-mortarboard-fill text-success"></i> Practice Arena</a></li>
+                        <li class="mb-1"><a href="search.html"><i class="bi bi-search text-sky-400"></i> Universal Search</a></li>
+                        <li class="mb-1"><a href="javascript:void(0)" class="btn-open-settings"><i class="bi bi-gear-fill text-secondary"></i> Studio Settings</a></li>
+                        <li class="mb-1"><a href="javascript:void(0)" class="btn-open-notifications"><i class="bi bi-bell-fill text-warning"></i> Notifications</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3">
-                    <h5>Team ANT-X</h5>
+
+                <!-- Col 4: Algorithm Guides -->
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h5 class="fw-bold">Algorithm Guides</h5>
+                    <ul class="list-unstyled text-muted-custom small">
+                        <li class="mb-1"><a href="algorithm-details.html?algo=quick">Quick Sort</a></li>
+                        <li class="mb-1"><a href="algorithm-details.html?algo=merge">Merge Sort</a></li>
+                        <li class="mb-1"><a href="algorithm-details.html?algo=binary">Binary Search</a></li>
+                        <li class="mb-1"><a href="algorithm-details.html?algo=dijkstra">Dijkstra's Algorithm</a></li>
+                        <li class="mb-1"><a href="algorithm-details.html?algo=bfs">Breadth-First Search</a></li>
+                        <li class="mb-1"><a href="algorithm-details.html?algo=dfs">Depth-First Search</a></li>
+                        <li class="mt-2"><a href="#complexity-matrix" class="fw-semibold text-sky-400">Big-O Matrix &rarr;</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 5: Team ANT-X -->
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h5 class="fw-bold">Team ANT-X</h5>
                     <ul class="text-muted-custom small list-unstyled">
-                        <li class="mb-1"><i class="bi bi-person-fill text-sky-600 me-1"></i> <a href="https://github.com/shivam603" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-sky-900 fw-semibold">Shivam</a></li>
-                        <li class="mb-1"><i class="bi bi-person-fill text-sky-600 me-1"></i> <a href="https://github.com/siddharth0348-gif" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-sky-900 fw-semibold">Siddharth</a></li>
-                        <li class="mb-1"><i class="bi bi-person-fill text-sky-600 me-1"></i> <a href="https://github.com/AmritRai07" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-sky-900 fw-semibold">Amrit</a></li>
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="bi bi-person-fill text-sky-600"></i>
+                                <a href="https://github.com/shivam603" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold text-sky">Shivam</a>
+                                <a href="https://www.linkedin.com/in/shivam-ray-a38b73326/" target="_blank" rel="noopener noreferrer" class="ms-1 text-muted" title="LinkedIn"><i class="bi bi-linkedin" style="font-size:0.75rem;"></i></a>
+                            </div>
+                            <div class="text-muted-custom ps-3" style="font-size:0.75rem;">Full-Stack & Debugger Engine</div>
+                        </li>
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="bi bi-person-fill text-sky-600"></i>
+                                <a href="https://github.com/siddharth0348-gif" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold text-sky">Siddharth</a>
+                                <a href="https://www.linkedin.com/in/siddharth-pandey-b64721306/" target="_blank" rel="noopener noreferrer" class="ms-1 text-muted" title="LinkedIn"><i class="bi bi-linkedin" style="font-size:0.75rem;"></i></a>
+                            </div>
+                            <div class="text-muted-custom ps-3" style="font-size:0.75rem;">Visualizers & Frontend Design</div>
+                        </li>
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="bi bi-person-fill text-sky-600"></i>
+                                <a href="https://github.com/AmritRai07" target="_blank" rel="noopener noreferrer" class="text-decoration-none fw-semibold text-sky">Amrit</a>
+                                <a href="https://www.linkedin.com/in/amrit-kumar-rai-048120325/" target="_blank" rel="noopener noreferrer" class="ms-1 text-muted" title="LinkedIn"><i class="bi bi-linkedin" style="font-size:0.75rem;"></i></a>
+                            </div>
+                            <div class="text-muted-custom ps-3" style="font-size:0.75rem;">Database & Logic Verification</div>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="text-center pt-3 border-top text-muted-custom small">
-                AlgoLearn &copy; 2026. Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
+                AlgoLearn &copy; 2026. Designed & Developed by <strong>Team ANT-X</strong> (Shivam, Siddharth & Amrit).
             </div>
         </div>
     </footer>
@@ -661,6 +721,7 @@
     <script src="theme-engine.js"></script>
     <script src="audio-synth.js"></script>
     <script src="nav-panel.js?v=3.0"></script>
+    <script src="settings-notifications.js"></script>
     <script src="welcome-modal.js"></script>
     <script>
         // Mini Interactive Hero Sandbox
@@ -733,6 +794,170 @@
             if (sortBtn) sortBtn.addEventListener('click', heroSort);
 
             generateHeroArray();
+        })();
+    </script>
+
+    <!-- Profile State Synced via AlgoProfile in settings-notifications.js -->
+    <script>
+        (function() {
+            if (window.AlgoProfile) {
+                window.AlgoProfile.loadUser();
+            }
+        })();
+    </script>
+
+    <!-- ==========================================================================
+         Mandatory Welcome & Onboarding Modal (Shown on visit; required to proceed)
+         ========================================================================== -->
+    <div id="mandatory-welcome-overlay" class="welcome-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-welcome-title">
+        <div class="welcome-modal-card">
+            <main class="welcome-container" role="main">
+                
+                <!-- LEFT COLUMN: Content & Agreement Form -->
+                <section class="welcome-content-col" aria-label="Welcome Introduction">
+                    <div class="welcome-brand-badge">
+                        <img src="algolearn-icon.png" alt="AlgoLearn Emblem" class="welcome-brand-badge-icon" />
+                        <span class="welcome-brand-badge-text">AlgoLearn Studio</span>
+                    </div>
+                    <h1 class="welcome-title" id="modal-welcome-title">Welcome to AlgoLearn Studio</h1>
+                    <p class="welcome-subtitle">The modern way to code, debug & master algorithms visually.</p>
+
+                    <p class="welcome-description">
+                        AlgoLearn 2.0 combines interactive visualizers with <strong>CodeLab Studio</strong>—a live Monaco IDE with real-time memory synchronization and step-by-step execution tracing. Code runs safely in a browser-isolated sandbox.
+                    </p>
+
+                    <form id="welcome-modal-form" onsubmit="return false;">
+                        <div class="welcome-checkbox-group">
+                            <!-- Checkbox 1 (Required - Must be selected to move forward) -->
+                            <label class="custom-checkbox-row" id="welcome-modal-row-ack" for="welcome-modal-chk-ack">
+                                <input type="checkbox" id="welcome-modal-chk-ack" required />
+                                <span class="custom-checkbox-box">
+                                    <i class="bi bi-check-lg"></i>
+                                </span>
+                                <span class="checkbox-label-text">
+                                    <span class="checkbox-required-star">*</span> I acknowledge that I am using AlgoLearn for educational, competitive programming, and technical interview preparation.
+                                </span>
+                            </label>
+
+                            <!-- Checkbox 2 (Optional - Audio Synth) -->
+                            <label class="custom-checkbox-row" for="welcome-modal-chk-audio">
+                                <input type="checkbox" id="welcome-modal-chk-audio" checked />
+                                <span class="custom-checkbox-box">
+                                    <i class="bi bi-check-lg"></i>
+                                </span>
+                                <span class="checkbox-label-text">
+                                    Enable real-time Web Audio Synthesizer (auditory pitch feedback during array comparisons, swaps, and graph traversals).
+                                </span>
+                            </label>
+
+                            <!-- Checkbox 3 (Optional - CodeLab Studio Tour Hints) -->
+                            <label class="custom-checkbox-row" for="welcome-modal-chk-hints">
+                                <input type="checkbox" id="welcome-modal-chk-hints" checked />
+                                <span class="custom-checkbox-box">
+                                    <i class="bi bi-check-lg"></i>
+                                </span>
+                                <span class="checkbox-label-text">
+                                    Enable interactive debugging tooltips, keyboard shortcuts (F10 Step Over, F8 Continue), and memory change highlights.
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Validation Error Notice -->
+                        <div id="welcome-modal-alert" class="d-none mt-3" style="border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.12); color: #fca5a5; padding: 0.65rem 1rem; border-radius: 12px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                            <span>You must select the required acknowledgment checkbox above to move forward.</span>
+                        </div>
+
+                        <p class="welcome-terms-note mt-3">
+                            You must accept the required educational terms above to proceed into the <strong>AlgoLearn Login & Authentication Gateway</strong>.
+                        </p>
+
+                        <div class="welcome-btn-row mt-3">
+                            <button type="button" class="btn-welcome-continue w-100" id="welcome-modal-btn-continue" style="justify-content: center;">
+                                <span>Continue to Sign In</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- RIGHT COLUMN: Official AlgoLearn Dark Theme Logo -->
+                <section class="welcome-graphic-col" aria-label="AlgoLearn Dark Theme Logo">
+                    <div class="welcome-glow-emblem-wrap">
+                        <div class="ambient-glow-layer glow-blue"></div>
+                        <div class="ambient-glow-layer glow-teal"></div>
+                        <div class="welcome-logo-card">
+                            <img src="algolearn-logo-dark.jpg" alt="AlgoLearn Official Logo - Black Theme" class="welcome-logo-img" />
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mandatory Welcome Modal Controller -->
+    <script>
+        (function() {
+            const welcomeOverlay = document.getElementById('mandatory-welcome-overlay');
+            const chkAck = document.getElementById('welcome-modal-chk-ack');
+            const rowAck = document.getElementById('welcome-modal-row-ack');
+            const chkAudio = document.getElementById('welcome-modal-chk-audio');
+            const chkHints = document.getElementById('welcome-modal-chk-hints');
+            const btnContinue = document.getElementById('welcome-modal-btn-continue');
+            const alertBox = document.getElementById('welcome-modal-alert');
+
+            // Determine if client is already signed in
+            const token = localStorage.getItem('algolearn_token');
+            const hasWelcomed = localStorage.getItem('algolearn_welcomed') === 'true';
+
+            // Show welcome modal whenever client visits the site if unauthenticated or not yet completed
+            if (!token || !hasWelcomed) {
+                if (welcomeOverlay) {
+                    welcomeOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            // Real-time error clearance on selecting acknowledgment
+            if (chkAck) {
+                chkAck.addEventListener('change', () => {
+                    if (chkAck.checked) {
+                        if (alertBox) alertBox.classList.add('d-none');
+                        if (rowAck) rowAck.classList.remove('shake-it');
+                    }
+                });
+            }
+
+            // Continue button logic: enforce selection before moving forward
+            if (btnContinue) {
+                btnContinue.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    if (!chkAck || !chkAck.checked) {
+                        // Progression blocked without selecting it!
+                        if (alertBox) alertBox.classList.remove('d-none');
+                        if (rowAck) {
+                            rowAck.classList.add('shake-it');
+                            setTimeout(() => rowAck.classList.remove('shake-it'), 500);
+                        }
+                        if (chkAck) chkAck.focus();
+                        return;
+                    }
+
+                    // Save user selection preferences
+                    localStorage.setItem('algolearn_welcomed', 'true');
+                    if (chkAudio) localStorage.setItem('algolearn_sound_enabled', chkAudio.checked ? 'true' : 'false');
+                    if (chkHints) localStorage.setItem('algolearn_hints_enabled', chkHints.checked ? 'true' : 'false');
+
+                    // Start login process immediately
+                    btnContinue.disabled = true;
+                    btnContinue.innerHTML = '<span>Entering Login Gateway...</span> <span class="spinner-border spinner-border-sm ms-2"></span>';
+
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 250);
+                });
+            }
         })();
     </script>
 </body>

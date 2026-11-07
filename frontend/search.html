@@ -20,15 +20,17 @@
             <div class="top-navbar-content">
                 <!-- Left: Left-Panel Toggle & Brand -->
                 <div class="top-navbar-left">
-                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger"
+                        title="Open Left Navigation Panel (Press [)">
                         <i class="bi bi-list"></i>
                         <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
                     </button>
                     <a class="navbar-brand mb-0" href="index.html">
                         <span class="navbar-brand-icon">
-                        <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
-                    </span>
-                        <span>AlgoLearn</span>
+                            <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
+                        </span>
+                        <span class="brand-text"><span class="brand-algo">Algo</span><span
+                                class="brand-learn">Learn</span></span>
                     </a>
                 </div>
 
@@ -36,22 +38,33 @@
                 <div class="top-nav-search-wrap">
                     <form action="search.html" method="GET" class="top-nav-search-form">
                         <i class="bi bi-search top-nav-search-icon"></i>
-                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <input type="search" name="q" class="top-nav-search-input"
+                            placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
                         <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
                     </form>
                 </div>
 
-                <!-- Right: Visitor Bar & All Functions -->
+                <!-- Right: Visitor Bar, All Functions, Notification Bell & Profile Bar (Far Right Upper Corner) -->
                 <div class="top-navbar-right">
                     <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
                         <span class="visitor-live-dot"></span>
                         <i class="bi bi-people-fill text-sky-600"></i>
-                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong
+                            class="visitor-count-value visitor-number">1,428</strong>
                     </div>
                     <button type="button" class="btn-panel-trigger btn-sm">
                         <i class="bi bi-grid-fill"></i>
                         <span>All Functions</span>
                     </button>
+                    <!-- FAR RIGHT UPPER CORNER: Notification Bell -->
+                    <button type="button" class="btn btn-sm btn-outline-secondary position-relative btn-open-notifications nav-circle-btn" id="nav-btn-notifications" title="Notifications & System Alerts (Shift+N)">
+                        <i class="bi bi-bell-fill text-sky-400"></i>
+                        <span class="notification-badge-dot d-none"></span>
+                    </button>
+                    <!-- FAR RIGHT UPPER CORNER: Universal Profile Bar -->
+                    <div class="navbar-profile-wrap position-relative" id="navbar-profile-root">
+                        <!-- Populated by AlgoProfile -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,14 +78,16 @@
             </span>
             <h1 class="display-6 fw-bold mt-2 text-sky-900">Instant Algorithm Search & Lookup</h1>
             <p class="lead text-muted-custom mx-auto" style="max-width: 680px;">
-                Find algorithms by name, keyword, complexity, or use-case. Click any result to view instant summaries, Big-O metrics, and full code tutorials.
+                Find algorithms by name, keyword, complexity, or use-case. Click any result to view instant summaries,
+                Big-O metrics, and full code tutorials.
             </p>
             <div class="card card-custom p-2 mx-auto mt-4 border-sky" style="max-width: 680px;">
                 <div class="input-group">
                     <span class="input-group-text bg-white border-0 text-muted">
                         <i class="bi bi-search"></i>
                     </span>
-                    <input id="header_search_input" class="form-control border-0 shadow-none" type="search" placeholder="Type to search (e.g. quick, binary, shortest path, O(n log n))..." />
+                    <input id="header_search_input" class="form-control border-0 shadow-none" type="search"
+                        placeholder="Type to search (e.g. quick, binary, shortest path, O(n log n))..." />
                 </div>
             </div>
         </div>
@@ -90,11 +105,14 @@
                     </div>
 
                     <div class="mb-3">
-                        <input id="search_query" type="text" class="form-control form-control-sm" placeholder="Filter list by keyword..." />
+                        <input id="search_query" type="text" class="form-control form-control-sm"
+                            placeholder="Filter list by keyword..." />
                     </div>
 
-                    <div id="search-results" class="d-flex flex-column gap-2" style="max-height: 520px; overflow-y: auto;"></div>
-                    <p id="no-results" class="text-muted-custom small mt-3 d-none">No algorithms matched your query. Try searching for "sort", "graph", "tree", or "search".</p>
+                    <div id="search-results" class="d-flex flex-column gap-2"
+                        style="max-height: 520px; overflow-y: auto;"></div>
+                    <p id="no-results" class="text-muted-custom small mt-3 d-none">No algorithms matched your query. Try
+                        searching for "sort", "graph", "tree", or "search".</p>
                 </div>
             </div>
 
@@ -102,12 +120,13 @@
             <div class="col-lg-7">
                 <div class="card card-custom p-4 h-100 d-flex flex-column">
                     <h2 class="h5 fw-bold mb-3 text-sky-900">Algorithm Quick Preview</h2>
-                    
+
                     <div id="preview-target" class="text-muted-custom small my-auto text-center py-5">
                         <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--sky-500);">
                             <i class="bi bi-binoculars"></i>
                         </div>
-                        <p class="mb-0">Select an algorithm on the left to inspect its summary, Big-O complexity, and use cases.</p>
+                        <p class="mb-0">Select an algorithm on the left to inspect its summary, Big-O complexity, and
+                            use cases.</p>
                     </div>
 
                     <div id="algo-preview" class="d-none d-flex flex-column h-100">
@@ -116,7 +135,7 @@
                             <span class="badge-sky" id="preview-category"></span>
                         </div>
                         <p class="text-muted-custom mb-3" id="preview-summary"></p>
-                        
+
                         <div class="mb-3">
                             <span class="badge-tag" id="preview-keywords"></span>
                         </div>
@@ -160,6 +179,7 @@
     <script src="theme-engine.js"></script>
     <script src="audio-synth.js"></script>
     <script src="nav-panel.js?v=3.0"></script>
+    <script src="settings-notifications.js"></script>
     <script src="algorithm-search.js"></script>
 </body>
 

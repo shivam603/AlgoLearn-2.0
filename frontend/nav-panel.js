@@ -74,7 +74,7 @@
                     <span class="navbar-brand-icon" style="width:34px; height:34px;">
                         <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
                     </span>
-                    <span class="fw-bold text-sky-900" style="font-size:1.15rem;">AlgoLearn</span>
+                    <span class="brand-text fw-bold" style="font-size:1.15rem;"><span class="brand-algo">Algo</span><span class="brand-learn">Learn</span></span>
                 </a>
                 <button type="button" class="drawer-close-btn" id="drawer-close-btn" aria-label="Close Left Panel">
                     <i class="bi bi-x-lg"></i>
@@ -111,12 +111,19 @@
                             </div>
                             <span class="badge bg-primary text-white fw-bold">Gateway</span>
                         </a>
-                        <a href="welcome.html" class="drawer-list-item" data-search="welcome onboarding guide about tour">
+                        <a href="#" class="drawer-list-item nav-settings-trigger" data-search="settings theme studio preferences font audio hints login logout hub">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-stars text-info"></i></span>
-                                <span class="fw-bold" style="font-size:0.88rem;">Welcome Guide</span>
+                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-gear-fill text-sky-400"></i></span>
+                                <span class="fw-bold" style="font-size:0.88rem;">Studio Settings & Theme</span>
                             </div>
-                            <span class="badge bg-info text-dark fw-bold">Studio</span>
+                            <span class="badge bg-info text-dark fw-bold">Hub</span>
+                        </a>
+                        <a href="#" class="drawer-list-item nav-notification-trigger" data-search="notifications alerts system updates challenges bell">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-bell-fill text-warning"></i></span>
+                                <span class="fw-bold" style="font-size:0.88rem;">Notification Center</span>
+                            </div>
+                            <span class="badge bg-primary text-white fw-bold notification-badge-count d-none">0</span>
                         </a>
                         <a href="codelab.html" class="drawer-list-item" data-search="codelab live code editor debugger studio monaco execution tracing ide">
                             <div class="d-flex align-items-center gap-2">
@@ -317,6 +324,22 @@
 
         // Global delegated click listener for any open button
         document.addEventListener('click', (e) => {
+            const settingsTrigger = e.target.closest('.nav-settings-trigger');
+            if (settingsTrigger) {
+                e.preventDefault();
+                closeDrawer();
+                if (window.AlgoSettings) window.AlgoSettings.open();
+                return;
+            }
+
+            const notifTrigger = e.target.closest('.nav-notification-trigger');
+            if (notifTrigger) {
+                e.preventDefault();
+                closeDrawer();
+                if (window.AlgoNotifications) window.AlgoNotifications.open();
+                return;
+            }
+
             const trigger = e.target.closest('.btn-panel-trigger, .nav-sidebar-toggle-btn, .open-slide-panel-btn, #floating-panel-toggle, #open-panel-nav-btn');
             if (trigger) {
                 e.preventDefault();
@@ -436,14 +459,45 @@
         }
     }
 
+    function formatBrandLogos() {
+        document.querySelectorAll('.navbar-brand').forEach(brand => {
+            if (!brand.querySelector('.brand-algo')) {
+                const spans = brand.querySelectorAll('span');
+                let found = false;
+                spans.forEach(s => {
+                    if (s.textContent.trim() === 'AlgoLearn' && !s.classList.contains('navbar-brand-icon')) {
+                        s.innerHTML = '<span class="brand-algo">Algo</span><span class="brand-learn">Learn</span>';
+                        s.classList.add('brand-text');
+                        found = true;
+                    }
+                });
+                if (!found && brand.textContent.includes('AlgoLearn')) {
+                    const walker = document.createTreeWalker(brand, NodeFilter.SHOW_TEXT, null);
+                    let node;
+                    while ((node = walker.nextNode())) {
+                        if (node.nodeValue.includes('AlgoLearn')) {
+                            const span = document.createElement('span');
+                            span.className = 'brand-text';
+                            span.innerHTML = '<span class="brand-algo">Algo</span><span class="brand-learn">Learn</span>';
+                            node.parentNode.replaceChild(span, node);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
+            formatBrandLogos();
             createSlidePanel();
             initDynamicClickEffects();
             initVisitorCounter();
         });
     } else {
+        formatBrandLogos();
         createSlidePanel();
         initDynamicClickEffects();
         initVisitorCounter();

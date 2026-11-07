@@ -6,6 +6,8 @@
 :root {
     --login-bg: #f8fafc;
     --login-card-bg: #ffffff;
+    --login-card-border: #38bdf8; /* The prominent Icy Blue Line */
+    --login-card-glow: rgba(56, 189, 248, 0.28);
     --login-text-primary: #0f172a;
     --login-text-secondary: #64748b;
     --login-text-muted: #94a3b8;
@@ -17,7 +19,7 @@
     --login-pill-bg: #f1f5f9;
     --login-devpick-bg: #e0f2fe;
     --login-devpick-text: #0284c7;
-    --login-radius-card: 20px;
+    --login-radius-card: 22px;
     --login-radius-input: 10px;
 }
 
@@ -25,6 +27,8 @@
 body.theme-dark {
     --login-bg: #0d0e12;
     --login-card-bg: #14161d;
+    --login-card-border: #38bdf8; /* The prominent Icy Blue Line */
+    --login-card-glow: rgba(56, 189, 248, 0.35);
     --login-text-primary: #f8fafc;
     --login-text-secondary: #94a3b8;
     --login-text-muted: #64748b;
@@ -42,6 +46,8 @@ body.theme-dark {
 body.theme-neon {
     --login-bg: #07090e;
     --login-card-bg: #0c101c;
+    --login-card-border: #00f0ff; /* Electric Icy Cyan Line */
+    --login-card-glow: rgba(0, 240, 255, 0.45);
     --login-text-primary: #ffffff;
     --login-text-secondary: #a5b4fc;
     --login-text-muted: #6366f1;
@@ -176,24 +182,26 @@ body.login-body {
     perspective: 1000px;
 }
 
-/* The Exact Reference Card */
+/* The Exact Reference Card with Icy Blue Line */
 .login-card {
     background: var(--login-card-bg);
-    border: 1px solid var(--login-border);
+    border: 2.5px solid var(--login-card-border);
     border-radius: var(--login-radius-card);
     padding: 2.5rem 2.25rem 2rem 2.25rem;
-    box-shadow: 0 20px 50px -10px rgba(14, 165, 233, 0.16), 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 25px var(--login-card-glow), 0 20px 50px -10px rgba(14, 165, 233, 0.16), 0 10px 25px -5px rgba(0, 0, 0, 0.05);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 }
 
 body.theme-dark .login-card {
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(14, 165, 233, 0.12);
+    border: 2.5px solid var(--login-card-border);
+    box-shadow: 0 0 30px var(--login-card-glow), 0 20px 60px rgba(0, 0, 0, 0.7);
 }
 
 body.theme-neon .login-card {
-    box-shadow: 0 0 40px rgba(0, 240, 255, 0.25), 0 20px 60px rgba(0, 0, 0, 0.85);
+    border: 2.5px solid var(--login-card-border);
+    box-shadow: 0 0 40px var(--login-card-glow), 0 20px 60px rgba(0, 0, 0, 0.85);
 }
 
 /* Brand Header */
@@ -224,10 +232,72 @@ body.theme-neon .login-card {
 }
 
 .login-brand-text {
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     font-weight: 800;
-    color: var(--login-text-primary);
     letter-spacing: -0.025em;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Default & Light Theme (Sky): Algo = Sky Blue (#0284c7), Learn = Deep Slate (#0f172a) */
+.brand-algo,
+.login-brand-text .brand-algo,
+[data-theme="sky"] .brand-algo,
+[data-theme="sky"] .login-brand-text .brand-algo,
+[data-theme="light"] .brand-algo,
+[data-theme="light"] .login-brand-text .brand-algo,
+body.theme-light .brand-algo,
+body.theme-light .login-brand-text .brand-algo {
+    color: #0284c7 !important;
+    text-shadow: none !important;
+    transition: all 0.3s ease;
+}
+
+.brand-learn,
+.login-brand-text .brand-learn,
+[data-theme="sky"] .brand-learn,
+[data-theme="sky"] .login-brand-text .brand-learn,
+[data-theme="light"] .brand-learn,
+[data-theme="light"] .login-brand-text .brand-learn,
+body.theme-light .brand-learn,
+body.theme-light .login-brand-text .brand-learn {
+    color: #0f172a !important;
+    text-shadow: none !important;
+    transition: all 0.3s ease;
+}
+
+/* Dark Theme: Algo = Sky Cyan, Learn = Pure White */
+[data-theme="dark"] .brand-algo,
+[data-theme="dark"] .login-brand-text .brand-algo,
+body.theme-dark .brand-algo,
+body.theme-dark .login-brand-text .brand-algo {
+    color: #38bdf8 !important;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+}
+
+[data-theme="dark"] .brand-learn,
+[data-theme="dark"] .login-brand-text .brand-learn,
+body.theme-dark .brand-learn,
+body.theme-dark .login-brand-text .brand-learn {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Cyberpunk Neon Theme: Algo = Electric Green (#00ffaa), Learn = Pure White (#ffffff) */
+[data-theme="cyberpunk"] .brand-algo,
+[data-theme="cyberpunk"] .login-brand-text .brand-algo,
+body.theme-neon .brand-algo,
+body.theme-neon .login-brand-text .brand-algo {
+    color: #00ffaa !important;
+    text-shadow: 0 0 12px rgba(0, 255, 170, 0.95), 0 0 24px rgba(0, 255, 170, 0.5) !important;
+}
+
+[data-theme="cyberpunk"] .brand-learn,
+[data-theme="cyberpunk"] .login-brand-text .brand-learn,
+body.theme-neon .brand-learn,
+body.theme-neon .login-brand-text .brand-learn {
+    color: #ffffff !important;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.95), 0 0 24px rgba(0, 240, 255, 0.5) !important;
 }
 
 /* Authenticated Gateway Pill */
@@ -446,7 +516,7 @@ body.theme-dark .login-alert-box.alert-success {
     height: 48px;
     padding: 0 2.5rem 0 2.75rem;
     border-radius: var(--login-radius-input);
-    border: 1px solid var(--login-input-border);
+    border: 1.5px solid var(--login-input-border);
     background-color: var(--login-card-bg);
     color: var(--login-text-primary);
     font-family: inherit;
@@ -459,10 +529,14 @@ body.theme-dark .login-alert-box.alert-success {
     font-weight: 400;
 }
 
+.login-input:hover {
+    border-color: #38bdf8;
+}
+
 .login-input:focus {
     outline: none;
-    border-color: var(--login-primary);
-    box-shadow: 0 0 0 3px var(--login-primary-glow);
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3.5px rgba(56, 189, 248, 0.25);
 }
 
 .btn-input-trailing {

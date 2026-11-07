@@ -46,57 +46,142 @@ document.addEventListener('DOMContentLoaded', () => {
     const redirectUrl = urlParams.get('redirect') || 'codelab.html';
 
     // -------------------------------------------------------------
-    // 1. Theme Initialization & Sync
+    // Enforce Welcome Agreement: Must complete Welcome before login
+    // -------------------------------------------------------------
+    const hasCompletedWelcome = localStorage.getItem('algolearn_welcomed') === 'true';
+    if (!hasCompletedWelcome && !urlParams.get('token') && !urlParams.get('error') && !urlParams.get('message')) {
+        window.location.replace('index.html');
+        return;
+    }
+
+    // -------------------------------------------------------------
+    // 1. Theme Initialization & Sync (Fully synced with AlgoTheme)
     // -------------------------------------------------------------
     function initTheme() {
-        const savedTheme = localStorage.getItem('algolearn-theme') || 'light';
-        applyTheme(savedTheme);
+        const globalTheme = localStorage.getItem('algolearn_theme') || localStorage.getItem('algolearn-theme') || 'sky';
+        const normalized = (globalTheme === 'cyberpunk' || globalTheme === 'neon') ? 'neon' : (globalTheme === 'dark' ? 'dark' : 'light');
+        applyTheme(normalized);
     }
 
     function applyTheme(theme) {
-        document.body.classList.remove('theme-dark', 'theme-neon');
+        document.body.classList.remove('theme-dark', 'theme-neon', 'theme-light');
         if (theme === 'dark') {
             document.body.classList.add('theme-dark');
-            themeToggleIcon.className = 'bi bi-moon-stars-fill';
-        } else if (theme === 'neon') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-moon-stars-fill text-info';
+            localStorage.setItem('algolearn_theme', 'dark');
+            localStorage.setItem('algolearn-theme', 'dark');
+        } else if (theme === 'neon' || theme === 'cyberpunk') {
             document.body.classList.add('theme-neon');
-            themeToggleIcon.className = 'bi bi-lightning-charge-fill';
+            document.documentElement.setAttribute('data-theme', 'cyberpunk');
+            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-cpu-fill text-success';
+            localStorage.setItem('algolearn_theme', 'cyberpunk');
+            localStorage.setItem('algolearn-theme', 'neon');
         } else {
-            themeToggleIcon.className = 'bi bi-sun-fill';
+            document.body.classList.add('theme-light');
+            document.documentElement.setAttribute('data-theme', 'sky');
+            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-sun-fill text-warning';
+            localStorage.setItem('algolearn_theme', 'sky');
+            localStorage.setItem('algolearn-theme', 'light');
         }
-        localStorage.setItem('algolearn-theme', theme);
     }
 
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = localStorage.getItem('algolearn-theme') || 'light';
-        const nextTheme = currentTheme === 'light' ? 'dark' : (currentTheme === 'dark' ? 'neon' : 'light');
-        applyTheme(nextTheme);
-    });
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentTheme = localStorage.getItem('algolearn_theme') || 'sky';
+            const nextTheme = currentTheme === 'sky' ? 'dark' : (currentTheme === 'dark' ? 'neon' : 'light');
+            applyTheme(nextTheme);
+        });
+    }
 
     initTheme();
 
     // -------------------------------------------------------------
-    // 2. Already Logged In Session Check
+    // 2. Query Parameters Handling (OAuth Callback & Error Notices)
     // -------------------------------------------------------------
-    const existingToken = localStorage.getItem('algolearn_token');
-    if (existingToken) {
+    const callbackToken = urlParams.get('token');
+    const authSuccess = urlParams.get('auth_success');
+    const authError = urlParams.get('error');
+    const authMessage = urlParams.get('message');
+
+    if (callbackToken && authSuccess) {
+        // Successful OAuth callback redirect from backend
+        localStorage.setItem('algolearn_token', callbackToken);
+        const providerName = authSuccess === 'google' ? 'Google' : (authSuccess === 'github' ? 'GitHub' : 'OAuth');
+        showAlert(`Authenticated successfully with ${providerName}! Loading your workspace...`, 'success');
+
         fetch('/api/auth/me', {
-            headers: { 'Authorization': `Bearer ${existingToken}` }
+            headers: { 'Authorization': `Bearer ${callbackToken}` }
         })
         .then(r => r.json())
         .then(data => {
             if (data && data.success && data.user) {
-                showAlert(`Welcome back, ${data.user.fullName}! Redirecting to your workspace...`, 'success');
-                setTimeout(() => {
-                    window.location.href = redirectUrl;
-                }, 800);
+                localStorage.setItem('algolearn_user', JSON.stringify(data.user));
             }
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 700);
         })
         .catch(() => {
-            // Token invalid or expired, continue showing login form
-            localStorage.removeItem('algolearn_token');
-            localStorage.removeItem('algolearn_user');
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 800);
         });
+    } else if (authError) {
+        let errorDesc = '';
+        switch (authError) {
+            case 'google_unconfigured':
+                errorDesc = 'Google OAuth is not configured yet. Please configure GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env to enable Google Sign-In.';
+                break;
+            case 'github_unconfigured':
+                errorDesc = 'GitHub OAuth is not configured yet. Please configure GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET in .env.';
+                break;
+            case 'access_denied':
+                errorDesc = 'Sign-in cancelled or access denied by provider.';
+                break;
+            case 'invalid_state':
+                errorDesc = 'OAuth session state validation failed. Please try signing in again.';
+                break;
+            case 'auth_required':
+                errorDesc = 'Authentication required. Please sign in or register to access CodeLab Studio.';
+                break;
+            case 'session_expired':
+                errorDesc = 'Your session has expired. Please sign in again to continue.';
+                break;
+            case 'token_exchange_failed':
+                errorDesc = authMessage ? decodeURIComponent(authMessage) : 'Failed to exchange authorization token with provider.';
+                break;
+            default:
+                errorDesc = authMessage ? decodeURIComponent(authMessage) : `Authentication notice: ${authError}`;
+        }
+        showAlert(errorDesc, 'error');
+        shakeCard();
+    } else if (authMessage === 'logged_out') {
+        showAlert('You have been signed out successfully.', 'success');
+    } else {
+        // -------------------------------------------------------------
+        // 3. Already Logged In Session Check (only if no errors pending)
+        // -------------------------------------------------------------
+        const existingToken = localStorage.getItem('algolearn_token');
+        if (existingToken) {
+            fetch('/api/auth/me', {
+                headers: { 'Authorization': `Bearer ${existingToken}` }
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.success && data.user) {
+                    showAlert(`Welcome back, ${data.user.fullName}! Redirecting to your workspace...`, 'success');
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 800);
+                }
+            })
+            .catch(() => {
+                localStorage.removeItem('algolearn_token');
+                localStorage.removeItem('algolearn_user');
+            });
+        }
     }
 
     // -------------------------------------------------------------
@@ -220,43 +305,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------
-    // 7. Social OAuth Authentication (GitHub & Google)
+    // 7. Social OAuth Authentication (Google & GitHub)
     // -------------------------------------------------------------
-    async function handleOAuth(provider) {
+    function initiateOAuth(provider) {
         hideAlert();
         setLoading(true);
-
-        try {
-            const response = await fetch('/api/auth/oauth-mock', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ provider })
-            });
-
-            const data = await response.json();
-            if (!response.ok || !data.success) {
-                throw new Error(data.error || 'OAuth authentication failed');
-            }
-
-            localStorage.setItem('algolearn_token', data.token);
-            localStorage.setItem('algolearn_user', JSON.stringify(data.user));
-
-            showAlert(data.message || 'Signed in via OAuth! Redirecting...', 'success');
-
-            setTimeout(() => {
-                window.location.href = redirectUrl;
-            }, 550);
-
-        } catch (err) {
-            showAlert(err.message, 'error');
-            shakeCard();
-        } finally {
-            setLoading(false);
-        }
+        const endpoint = provider === 'google' ? '/api/auth/google' : '/api/auth/github';
+        window.location.href = `${endpoint}?redirect=${encodeURIComponent(redirectUrl)}`;
     }
 
-    btnOauthGithub.addEventListener('click', () => handleOAuth('github'));
-    btnOauthGoogle.addEventListener('click', () => handleOAuth('google'));
+    btnOauthGoogle.addEventListener('click', () => initiateOAuth('google'));
+    btnOauthGithub.addEventListener('click', () => initiateOAuth('github'));
 
     // -------------------------------------------------------------
     // 8. Forgot Password Dialog

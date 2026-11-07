@@ -40,7 +40,8 @@ body.codelab-body {
 .codelab-navbar {
     background: rgba(17, 24, 39, 0.95);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--ide-border);
+    border-bottom: 1.5px solid #38bdf8 !important; /* Thin Icy Blue Line */
+    box-shadow: 0 1px 0 0 rgba(56, 189, 248, 0.45), 0 4px 18px rgba(56, 189, 248, 0.2) !important;
     padding: 0.5rem 1rem;
     z-index: 100;
 }
@@ -54,6 +55,40 @@ body.codelab-body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+/* Dual-Tone Brand Typography (Algo = Theme Accent, Learn = Pure White) */
+.brand-text {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.brand-algo,
+.navbar-brand .brand-algo {
+    color: #38bdf8 !important;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.brand-learn,
+.navbar-brand .brand-learn {
+    color: #ffffff !important;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+[data-theme="cyberpunk"] .brand-algo,
+[data-theme="cyberpunk"] .navbar-brand .brand-algo {
+    color: #00ffaa !important;
+    text-shadow: 0 0 14px rgba(0, 255, 170, 0.95), 0 0 28px rgba(0, 255, 170, 0.55) !important;
+}
+
+[data-theme="cyberpunk"] .brand-learn,
+[data-theme="cyberpunk"] .navbar-brand .brand-learn {
+    color: #ffffff !important;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.95), 0 0 25px rgba(0, 240, 255, 0.5) !important;
 }
 
 /* ==========================================
@@ -119,12 +154,86 @@ body.codelab-body {
 /* ==========================================
    Left Panel: Monaco Code Editor
    ========================================== */
+.editor-mode-toggle .btn {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border-color: rgba(56, 189, 248, 0.4);
+    transition: all 0.2s ease;
+}
+
+.editor-mode-toggle .btn.active {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
+}
+
+.editor-subtoolbar {
+    background-color: #0c1222;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    min-height: 34px;
+    font-size: 0.75rem;
+    position: relative;
+    z-index: 10;
+}
+
 .codelab-editor-container {
     flex: 1;
     width: 100%;
     height: 100%;
     position: relative;
     background-color: #1e1e1e;
+}
+
+/* ==========================================
+   Prominent Error Notification Card
+   ========================================== */
+.vis-error-card {
+    background: rgba(26, 15, 23, 0.95);
+    border: 1px solid rgba(239, 68, 68, 0.65);
+    border-radius: 10px;
+    padding: 1.15rem 1.25rem;
+    box-shadow: 0 0 24px rgba(239, 68, 68, 0.22);
+    animation: fadeInDownError 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 100%;
+}
+
+.vis-error-icon-pulse {
+    display: inline-flex;
+    animation: errorPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes errorPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.85; }
+}
+
+.vis-error-box {
+    background: #070a12;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.vis-error-pre {
+    color: #fca5a5;
+    background: transparent;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    max-height: 220px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+@keyframes fadeInDownError {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Monaco Custom Breakpoints & Highlights */
@@ -151,6 +260,19 @@ body.codelab-body {
     animation: pulse-arrow 1.2s infinite ease-in-out;
 }
 
+.monaco-error-line {
+    background: rgba(239, 68, 68, 0.25) !important;
+    border-left: 3px solid #ef4444 !important;
+}
+
+.monaco-error-glyph {
+    background: #ef4444;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    width: 10px !important;
+    height: 10px !important;
+    margin-left: 5px;
+}
+
 @keyframes pulse-arrow {
     0%, 100% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.2); opacity: 0.8; }
@@ -165,8 +287,15 @@ body.codelab-body {
     display: flex;
     flex-direction: column;
     background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
-    overflow: hidden;
-    padding: 1.5rem 1rem;
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
+}
+
+.vis-live-state-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .vis-canvas-container {

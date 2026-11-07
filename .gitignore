@@ -17,6 +17,9 @@ yarn-error.log*
 logs
 *.log
 
+# Build & Binary Artifacts
+*.class
+
 # OS & Editor files
 .DS_Store
 Thumbs.db

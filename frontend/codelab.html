@@ -15,6 +15,16 @@
     <link rel="stylesheet" href="codelab.css">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="algolearn-icon.png">
+
+    <!-- Immediate Authentication Route Guard -->
+    <script>
+        (function() {
+            const token = localStorage.getItem('algolearn_token');
+            if (!token) {
+                window.location.replace('login.html?redirect=codelab.html&error=auth_required');
+            }
+        })();
+    </script>
 </head>
 
 <body class="codelab-body">
@@ -30,32 +40,32 @@
                     <span class="navbar-brand-icon">
                         <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
                     </span>
-                    <span class="fw-bold">AlgoLearn</span>
+                    <span class="brand-text fw-bold"><span class="brand-algo">Algo</span><span class="brand-learn">Learn</span></span>
                 </a>
                 <span class="codelab-brand-badge d-none d-sm-inline">CodeLab Studio</span>
                 <span class="badge bg-secondary-subtle text-secondary small d-none d-md-inline">Live Execution Tracing & Debugger</span>
             </div>
 
-            <!-- Right: Links & Controls -->
+            <!-- Right: Links, Notifications & Universal Profile Hub -->
             <div class="d-flex align-items-center gap-2">
-                <a href="login.html" class="btn btn-outline-info btn-sm text-light d-inline-flex align-items-center gap-1" title="Sign In to Your Workspace">
-                    <i class="bi bi-box-arrow-in-right"></i> Sign In
-                </a>
-                <a href="welcome.html" class="btn btn-outline-secondary btn-sm text-light d-none d-lg-inline-flex align-items-center gap-1" title="Welcome & Onboarding Guide">
-                    <i class="bi bi-stars text-info"></i> Welcome
-                </a>
                 <a href="visualize.html" class="btn btn-outline-secondary btn-sm text-light d-none d-md-inline-flex align-items-center gap-1">
                     <i class="bi bi-bar-chart-fill"></i> Visualizers
                 </a>
                 <a href="practice.html" class="btn btn-outline-secondary btn-sm text-light d-none d-md-inline-flex align-items-center gap-1">
                     <i class="bi bi-mortarboard-fill"></i> Practice
                 </a>
-                <button type="button" class="btn btn-sm btn-outline-info theme-toggle-btn d-flex align-items-center gap-1">
-                    <i class="bi bi-moon-stars-fill"></i>
-                </button>
                 <button type="button" class="btn btn-sky btn-sm btn-panel-trigger">
                     <i class="bi bi-grid-fill"></i> <span class="d-none d-sm-inline">All Functions</span>
                 </button>
+                <!-- FAR RIGHT UPPER CORNER: Notification Bell -->
+                <button type="button" class="btn btn-sm btn-outline-secondary position-relative btn-open-notifications nav-circle-btn" id="nav-btn-notifications" title="Notifications & Updates (Shift+N)">
+                    <i class="bi bi-bell-fill text-sky-400"></i>
+                    <span class="notification-badge-dot d-none"></span>
+                </button>
+                <!-- FAR RIGHT UPPER CORNER: Universal Profile Bar & Dropdown Hub -->
+                <div class="navbar-profile-wrap position-relative" id="navbar-profile-root">
+                    <!-- Populated and dynamically managed by AlgoProfile -->
+                </div>
             </div>
         </div>
     </header>
@@ -67,28 +77,70 @@
              LEFT PANEL: Monaco Code Editor
              ========================================== -->
         <section class="codelab-panel codelab-panel-left" aria-label="Code Editor Panel">
-            <div class="panel-header">
-                <div class="panel-title">
-                    <i class="bi bi-code-slash text-sky-400"></i>
-                    <span>Editor</span>
+            <div class="panel-header d-flex align-items-center justify-content-between flex-nowrap px-3 py-1" style="height: 42px; min-height: 42px;">
+                <div class="d-flex align-items-center gap-2 flex-nowrap">
+                    <span class="panel-title me-1 mb-0" style="font-size: 0.8rem; white-space: nowrap;">
+                        <i class="bi bi-code-slash text-sky-400"></i>
+                        <span>Editor</span>
+                    </span>
+                    <!-- Two Distinct Modes: Write Custom Code vs Predefined Written Code -->
+                    <div class="btn-group btn-group-sm editor-mode-toggle flex-nowrap" role="group" aria-label="Editor Mode Selection">
+                        <button type="button" class="btn btn-xs btn-sky active px-2 py-1" id="btn-mode-write" title="Write or paste your own custom code in any language" style="font-size: 0.74rem; white-space: nowrap;">
+                            <i class="bi bi-pencil-square me-1"></i> Write Code
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-secondary text-white px-2 py-1" id="btn-mode-predefined" title="Choose from predefined algorithms and data structures" style="font-size: 0.74rem; white-space: nowrap;">
+                            <i class="bi bi-collection-play me-1"></i> Predefined
+                        </button>
+                    </div>
                 </div>
-                <!-- Language & Template Selectors -->
-                <div class="d-flex align-items-center gap-2">
-                    <select id="language-select" class="form-select form-select-sm bg-dark text-white border-secondary py-1" style="font-size: 0.75rem; width: 110px;">
-                        <option value="javascript" selected>JavaScript</option>
-                        <option value="python">Python</option>
+
+                <!-- Programming Language Selector & Word Wrap Toggle -->
+                <div class="d-flex align-items-center gap-1 flex-nowrap">
+                    <select id="language-select" class="form-select form-select-sm bg-dark text-white border-info py-0 px-2 fw-semibold" style="font-size: 0.75rem; width: 105px; height: 28px;" title="Select Programming Language">
+                        <option value="python" selected>Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="c">C</option>
                         <option value="cpp">C++</option>
                         <option value="java">Java</option>
                     </select>
-                    <select id="template-select" class="form-select form-select-sm bg-dark text-white border-secondary py-1" style="font-size: 0.75rem; width: 160px;">
-                        <optgroup label="Sorting">
+                    <button type="button" class="btn btn-xs btn-outline-info text-info py-0 px-2 d-flex align-items-center" id="btn-toggle-wrap" title="Toggle Word Wrap (ON by default)" style="height: 28px; font-size: 0.72rem; white-space: nowrap;">
+                        <i class="bi bi-text-wrap me-1"></i> Wrap
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sub-Toolbar for Mode-Specific Controls -->
+            <div class="editor-subtoolbar px-3 py-0 d-flex align-items-center justify-content-between flex-nowrap" id="editor-subtoolbar" style="height: 32px; min-height: 32px;">
+                <!-- 1. Controls when in 'Write Custom Code' mode -->
+                <div id="subtoolbar-write-mode" class="d-flex align-items-center gap-2 w-100 flex-nowrap">
+                    <span class="badge bg-dark border border-secondary text-info small py-1 px-2" style="font-size: 0.68rem; white-space: nowrap;">
+                        <i class="bi bi-cpu me-1"></i> Custom Code
+                    </span>
+                    <button type="button" class="btn btn-xs btn-outline-secondary text-light py-0 px-2" id="btn-editor-starter" title="Reset to standard starter template for the selected language" style="font-size: 0.7rem; height: 22px; white-space: nowrap;">
+                        <i class="bi bi-arrow-clockwise me-1"></i> Starter
+                    </button>
+                    <button type="button" class="btn btn-xs btn-outline-secondary text-light py-0 px-2" id="btn-editor-clear" title="Clear editor to write from scratch" style="font-size: 0.7rem; height: 22px; white-space: nowrap;">
+                        <i class="bi bi-trash3 me-1"></i> Clear
+                    </button>
+                    <span class="text-muted small ms-auto d-none d-sm-inline" style="font-size: 0.68rem; white-space: nowrap;">
+                        <i class="bi bi-shield-check text-success me-1"></i> Isolated Container
+                    </span>
+                </div>
+
+                <!-- 2. Controls when in 'Predefined Code' mode (hidden by default) -->
+                <div id="subtoolbar-predefined-mode" class="d-none align-items-center gap-2 w-100">
+                    <span class="badge bg-dark border border-warning text-warning small py-1 px-2">
+                        <i class="bi bi-journal-code me-1"></i> Algorithm:
+                    </span>
+                    <select id="predefined-algo-select" class="form-select form-select-sm bg-dark text-white border-warning py-0 px-2 flex-grow-1" style="font-size: 0.78rem; max-width: 250px;" title="Select Predefined Algorithm">
+                        <optgroup label="Sorting Algorithms">
                             <option value="bubble" selected>Bubble Sort</option>
                             <option value="selection">Selection Sort</option>
                             <option value="insertion">Insertion Sort</option>
                             <option value="quick">Quick Sort</option>
                             <option value="merge">Merge Sort</option>
                         </optgroup>
-                        <optgroup label="Searching">
+                        <optgroup label="Searching Algorithms">
                             <option value="binary_search">Binary Search</option>
                             <option value="linear_search">Linear Search</option>
                         </optgroup>
@@ -98,12 +150,15 @@
                             <option value="linkedlist">Linked List</option>
                             <option value="binary_tree">Binary Tree</option>
                         </optgroup>
-                        <optgroup label="Graphs">
+                        <optgroup label="Graph Algorithms">
                             <option value="bfs">Breadth-First Search</option>
                             <option value="dfs">Depth-First Search</option>
                             <option value="dijkstra">Dijkstra Shortest Path</option>
                         </optgroup>
                     </select>
+                    <span class="badge bg-secondary rounded-pill small ms-auto d-none d-lg-inline" id="predefined-lang-pill" style="font-size: 0.7rem;">
+                        Python Code
+                    </span>
                 </div>
             </div>
 
@@ -112,23 +167,109 @@
         </section>
 
         <!-- ==========================================
-             CENTER PANEL: Live Visualizer Viewport
+             CENTER PANEL: Live Visualizer & Debugger Viewport
              ========================================== -->
         <section class="codelab-panel codelab-panel-center" aria-label="Algorithm Visualizer Viewport">
             <div class="panel-header">
                 <div class="d-flex align-items-center gap-2">
-                    <i class="bi bi-bar-chart-steps text-warning"></i>
-                    <span class="fw-bold text-white small" id="vis-algorithm-name">Bubble Sort</span>
-                    <span class="badge bg-primary rounded-pill small" id="vis-category-badge">Sorting</span>
+                    <i class="bi bi-cpu-fill text-info" id="vis-header-icon"></i>
+                    <span class="fw-bold text-white small" id="vis-algorithm-name">Custom Code Studio</span>
+                    <span class="badge bg-primary rounded-pill small" id="vis-category-badge">Live Debugger</span>
                 </div>
-                <div class="text-truncate text-muted small" style="max-width: 220px;" id="vis-step-desc">
-                    Ready to execute
+                <!-- Dual Mode Toggle: Live State vs Algorithm Visualizer -->
+                <div class="d-flex align-items-center gap-2">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Viewport Mode">
+                        <button type="button" class="btn btn-sm btn-outline-info active py-0 px-2" id="btn-view-state" style="font-size:0.75rem;" title="Live Execution & State Inspector">
+                            <i class="bi bi-cpu me-1"></i> Live State
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 text-white" id="btn-view-visualizer" style="font-size:0.75rem;" title="Data Structure & Algorithm Visualizer">
+                            <i class="bi bi-bar-chart-fill me-1"></i> Visualizer
+                        </button>
+                    </div>
+                    <div class="text-truncate text-muted small d-none d-lg-inline" style="max-width: 140px;" id="vis-step-desc">
+                        Ready to execute
+                    </div>
                 </div>
             </div>
 
             <div class="vis-viewport">
-                <!-- Visualizer Canvas Container (Dynamically rendered) -->
-                <div id="vis-canvas-container" class="vis-canvas-container">
+                <!-- Prominent Error Notification Card (Displays compilation & runtime errors clearly) -->
+                <div id="vis-error-container" class="vis-error-card d-none mb-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2 pb-2 border-bottom border-danger border-opacity-50">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="vis-error-icon-pulse text-danger">
+                                <i class="bi bi-exclamation-octagon-fill fs-4"></i>
+                            </span>
+                            <div>
+                                <h6 class="mb-0 text-danger fw-bold" id="error-card-title">Compilation Error</h6>
+                                <span class="small text-muted" id="error-card-subtitle">Failed to build or run program</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger text-white font-monospace" id="error-card-type-badge">COMPILATION_ERROR</span>
+                            <span class="badge bg-dark border border-danger text-danger font-monospace" id="error-card-line-badge">Line -</span>
+                        </div>
+                    </div>
+
+                    <!-- Error Diagnostic Box -->
+                    <div class="vis-error-box mb-3 rounded overflow-hidden">
+                        <div class="d-flex align-items-center justify-content-between px-3 py-1 bg-black bg-opacity-60 border-bottom border-secondary border-opacity-25 small font-monospace">
+                            <span class="text-danger"><i class="bi bi-terminal me-1"></i> Compiler / Runtime Diagnostics</span>
+                            <span class="badge bg-secondary" id="error-card-lang-tag">Java</span>
+                        </div>
+                        <pre id="error-card-message" class="vis-error-pre p-3 mb-0 font-monospace text-danger"></pre>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pt-2 border-top border-secondary border-opacity-25">
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1 shadow-sm" id="btn-jump-error-line">
+                                <i class="bi bi-cursor-fill"></i> Jump to Line in Editor
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary text-white d-inline-flex align-items-center gap-1" id="btn-view-console-error">
+                                <i class="bi bi-terminal"></i> View Full Console
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1" id="btn-dismiss-error">
+                            <i class="bi bi-pencil me-1"></i> Edit Code & Retry
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. Live State Inspector View (Default) -->
+                <div id="vis-live-state-container" class="vis-live-state-wrap">
+                    <div class="live-state-header-card mb-3 p-3 rounded" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(56, 189, 248, 0.25);">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-info text-dark font-monospace" id="state-event-badge">IDLE</span>
+                                <span class="fw-bold text-white small" id="state-func-label">Scope: <span class="text-sky-400 font-monospace" id="state-func-name">None</span></span>
+                            </div>
+                            <span class="badge bg-dark border border-secondary font-monospace" id="state-line-badge">Line -</span>
+                        </div>
+                        <div class="text-muted small text-truncate font-monospace" id="state-current-desc">
+                            Click <strong>Run Code</strong> or <strong>Debug</strong> to start live execution tracing.
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Memory / Data Structures Visualizer -->
+                    <div class="live-memory-card p-3 rounded flex-grow-1 d-flex flex-column" style="background: rgba(15, 23, 42, 0.65); border: 1px solid rgba(51, 65, 85, 0.5);">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="small fw-bold text-muted text-uppercase" style="letter-spacing:0.5px;">
+                                <i class="bi bi-memory me-1 text-warning"></i> Active Memory View
+                            </span>
+                            <span class="small text-muted" id="memory-items-count">0 items</span>
+                        </div>
+                        <div id="live-memory-display" class="d-flex align-items-end justify-content-center flex-grow-1 py-3" style="min-height: 180px;">
+                            <div class="text-center text-muted-custom py-4">
+                                <i class="bi bi-play-circle display-5 mb-2 d-block opacity-50"></i>
+                                <span>Variables and memory states will visualize here in real-time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Algorithm Visualizer Canvas Container (Preserved) -->
+                <div id="vis-canvas-container" class="vis-canvas-container d-none">
                     <div class="text-center text-muted-custom py-5">
                         <i class="bi bi-play-circle display-4 mb-2 d-block"></i>
                         <span>Click <strong>Run Code</strong> or <strong>Debug</strong> to start visualization</span>
@@ -136,20 +277,20 @@
                 </div>
 
                 <!-- Visualizer Legend & Hints -->
-                <div class="d-flex align-items-center justify-content-between px-2 pt-3 border-top border-secondary border-opacity-25 small">
+                <div class="d-flex align-items-center justify-content-between px-2 pt-3 border-top border-secondary border-opacity-25 small mt-auto">
                     <div class="d-flex align-items-center gap-3">
                         <span class="d-flex align-items-center gap-1 vis-legend-item" style="font-size:0.75rem;">
                             <span class="d-inline-block rounded-circle bg-warning" style="width:8px; height:8px;"></span> Compare
                         </span>
                         <span class="d-flex align-items-center gap-1 vis-legend-item" style="font-size:0.75rem;">
-                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:#a855f7;"></span> Swap
+                            <span class="d-inline-block rounded-circle" style="width:8px; height:8px; background:#a855f7;"></span> Swap / Mutate
                         </span>
                         <span class="d-flex align-items-center gap-1 vis-legend-item" style="font-size:0.75rem;">
-                            <span class="d-inline-block rounded-circle bg-success" style="width:8px; height:8px;"></span> Sorted
+                            <span class="d-inline-block rounded-circle bg-success" style="width:8px; height:8px;"></span> Sorted / State
                         </span>
                     </div>
                     <span class="codelab-sync-note" style="font-size:0.75rem;">
-                        <i class="bi bi-info-circle me-1"></i> Synchronized with real memory
+                        <i class="bi bi-shield-check text-success me-1"></i> Isolated Container Execution
                     </span>
                 </div>
             </div>
@@ -277,6 +418,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.js"></script>
     <script src="theme-engine.js"></script>
     <script src="nav-panel.js"></script>
+    <script src="settings-notifications.js"></script>
     <script src="codelab-templates.js"></script>
     <script src="codelab-tracer.js"></script>
     <script src="codelab.js"></script>
@@ -293,6 +435,73 @@
                 document.getElementById(`deck-section-${target}`)?.classList.remove('d-none');
             });
         });
+    </script>
+
+    <!-- Client Session Validator & Logout Handler -->
+    <script>
+        (function() {
+            const token = localStorage.getItem('algolearn_token');
+            if (!token) {
+                window.location.replace('login.html?redirect=codelab.html&error=auth_required');
+                return;
+            }
+
+            // Populate cached user details immediately if available
+            try {
+                const cachedUser = JSON.parse(localStorage.getItem('algolearn_user') || '{}');
+                if (cachedUser && (cachedUser.fullName || cachedUser.username)) {
+                    const nameEl = document.getElementById('codelab-user-name');
+                    const avatarEl = document.getElementById('codelab-user-avatar');
+                    if (nameEl) nameEl.textContent = cachedUser.fullName || cachedUser.username;
+                    if (avatarEl && cachedUser.avatarUrl) avatarEl.src = cachedUser.avatarUrl;
+                }
+            } catch (e) {}
+
+            // Validate live session with backend
+            fetch('/api/auth/me', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(r => {
+                if (!r.ok) throw new Error('Session invalid');
+                return r.json();
+            })
+            .then(data => {
+                if (!data || !data.success || !data.user) {
+                    throw new Error('Not authenticated');
+                }
+                localStorage.setItem('algolearn_user', JSON.stringify(data.user));
+                const nameEl = document.getElementById('codelab-user-name');
+                const avatarEl = document.getElementById('codelab-user-avatar');
+                if (nameEl) nameEl.textContent = data.user.fullName || data.user.username;
+                if (avatarEl && data.user.avatarUrl) avatarEl.src = data.user.avatarUrl;
+            })
+            .catch(() => {
+                localStorage.removeItem('algolearn_token');
+                localStorage.removeItem('algolearn_user');
+                window.location.replace('login.html?redirect=codelab.html&error=session_expired');
+            });
+
+            // Logout handler
+            const btnLogout = document.getElementById('codelab-btn-logout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', () => {
+                    btnLogout.disabled = true;
+                    btnLogout.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Signing Out...';
+                    fetch('/api/auth/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ token })
+                    }).finally(() => {
+                        localStorage.removeItem('algolearn_token');
+                        localStorage.removeItem('algolearn_user');
+                        window.location.href = 'login.html?message=logged_out';
+                    });
+                });
+            }
+        })();
     </script>
 </body>
 

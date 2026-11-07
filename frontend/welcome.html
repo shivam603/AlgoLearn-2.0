@@ -42,9 +42,9 @@
 
             <form id="welcome-form" onsubmit="return false;">
                 <div class="welcome-checkbox-group">
-                    <!-- Checkbox 1 (Required) -->
+                    <!-- Checkbox 1 (Required - Must be selected to move forward) -->
                     <label class="custom-checkbox-row" id="row-acknowledge" for="chk-acknowledge">
-                        <input type="checkbox" id="chk-acknowledge" checked required />
+                        <input type="checkbox" id="chk-acknowledge" required />
                         <span class="custom-checkbox-box">
                             <i class="bi bi-check-lg"></i>
                         </span>
@@ -76,22 +76,21 @@
                     </label>
                 </div>
 
-                <p class="welcome-terms-note">
-                    By clicking "Continue" you agree to explore the <a href="index.html">AlgoLearn Platform</a>. You can toggle between <strong>Light</strong>, <strong>Midnight Dark</strong>, and <strong>Cyberpunk Neon</strong> themes anytime from the navigation bar.
+                <!-- Validation Error Notice -->
+                <div id="welcome-page-alert" class="d-none mt-3" style="border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.12); color: #fca5a5; padding: 0.65rem 1rem; border-radius: 12px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                    <span>You must select the required acknowledgment checkbox above to move forward.</span>
+                </div>
+
+                <p class="welcome-terms-note mt-3">
+                    By clicking "Continue to Sign In" you agree to explore the <a href="index.html">AlgoLearn Platform</a>. You will now be directed to the authentication gateway.
                 </p>
 
                 <div class="welcome-btn-row">
-                    <button type="button" class="btn-welcome-continue" id="btn-continue">
-                        <span>Continue</span>
+                    <button type="button" class="btn-welcome-continue w-100" id="btn-continue" style="justify-content: center;">
+                        <span>Continue to Sign In</span>
                         <i class="bi bi-arrow-right"></i>
                     </button>
-                    <a href="login.html" class="welcome-secondary-btn" id="btn-login-workspace" title="Sign In to Authenticated Workspace">
-                        <i class="bi bi-box-arrow-in-right"></i>
-                        <span>Sign In</span>
-                    </a>
-                    <a href="codelab.html" class="welcome-secondary-btn" id="btn-open-codelab">
-                        <span>Direct to CodeLab</span>
-                    </a>
                 </div>
             </form>
         </section>
@@ -121,7 +120,14 @@
             const chkHints = document.getElementById('chk-hints');
             const btnContinue = document.getElementById('btn-continue');
             const rowAcknowledge = document.getElementById('row-acknowledge');
-            const btnOpenCodelab = document.getElementById('btn-open-codelab');
+            const alertBox = document.getElementById('welcome-page-alert');
+
+            chkAcknowledge.addEventListener('change', () => {
+                if (chkAcknowledge.checked) {
+                    alertBox.classList.add('d-none');
+                    rowAcknowledge.classList.remove('shake-it');
+                }
+            });
 
             // Handle Continue button click
             btnContinue.addEventListener('click', (e) => {
@@ -129,6 +135,7 @@
 
                 if (!chkAcknowledge.checked) {
                     // Visual feedback: shake and focus required row
+                    alertBox.classList.remove('d-none');
                     rowAcknowledge.classList.add('shake-it');
                     chkAcknowledge.focus();
                     setTimeout(() => rowAcknowledge.classList.remove('shake-it'), 500);
@@ -140,22 +147,13 @@
                 localStorage.setItem('algolearn_sound_enabled', chkAudio.checked ? 'true' : 'false');
                 localStorage.setItem('algolearn_hints_enabled', chkHints.checked ? 'true' : 'false');
 
-                // Smooth exit animation
-                document.body.style.transition = 'opacity 0.4s ease';
+                // Smooth exit animation into Login Process
+                document.body.style.transition = 'opacity 0.3s ease';
                 document.body.style.opacity = '0';
 
                 setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 350);
-            });
-
-            // Handle direct CodeLab button
-            btnOpenCodelab.addEventListener('click', (e) => {
-                e.preventDefault();
-                localStorage.setItem('algolearn_welcomed', 'true');
-                localStorage.setItem('algolearn_sound_enabled', chkAudio.checked ? 'true' : 'false');
-                localStorage.setItem('algolearn_hints_enabled', chkHints.checked ? 'true' : 'false');
-                window.location.href = 'codelab.html';
+                    window.location.href = 'login.html';
+                }, 250);
             });
         });
     </script>

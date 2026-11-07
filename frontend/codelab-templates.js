@@ -4,6 +4,103 @@
  */
 
 const CodeLabTemplates = {
+    custom: {
+        id: 'custom',
+        name: 'Custom Code Studio',
+        category: 'Custom Workspace',
+        dsType: 'custom',
+        description: 'Universal live debugging workspace. Write, paste, or modify arbitrary programs in Python, JavaScript, C, C++, or Java.',
+        code: {
+            javascript: `// AlgoLearn Universal Debugger (JavaScript)
+// Write or paste any custom code here to debug!
+
+function findPrimes(limit) {
+    let primes = [];
+    for (let num = 2; num <= limit; num++) {
+        let isPrime = true;
+        for (let i = 2; i * i <= num; i++) {
+            if (num % i === 0) {
+                isPrime = false;
+                break;
+            }
+        }
+        if (isPrime) primes.push(num);
+    }
+    return primes;
+}
+
+let result = findPrimes(20);
+console.log("Found primes:", result);`,
+            python: `# AlgoLearn Universal Debugger (Python)
+# Write or paste any custom code here to debug!
+
+def calculate_stats(numbers):
+    total = 0
+    squares = []
+    for num in numbers:
+        total += num
+        squares.append(num * num)
+    average = total / len(numbers)
+    return total, average, squares
+
+data = [12, 5, 8, 19, 3]
+total, avg, sq = calculate_stats(data)
+print(f"Total: {total}, Average: {avg}")
+print("Squared items:", sq)`,
+            c: `// AlgoLearn Universal Debugger (C)
+// Write or paste any custom code here to debug!
+#include <stdio.h>
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int x = 42;
+    int y = 99;
+    printf("Before swap: x=%d, y=%d\\n", x, y);
+    swap(&x, &y);
+    printf("After swap:  x=%d, y=%d\\n", x, y);
+    return 0;
+}`,
+            cpp: `// AlgoLearn Universal Debugger (C++)
+// Write or paste any custom code here to debug!
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> nums = {4, 7, 2, 9, 5};
+    int sum = 0;
+    for (int val : nums) {
+        sum += val;
+        std::cout << "Added " << val << ", sum = " << sum << std::endl;
+    }
+    std::cout << "Final sum: " << sum << std::endl;
+    return 0;
+}`,
+            java: `// AlgoLearn Universal Debugger (Java)
+// Write or paste any custom code here to debug!
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        int[] numbers = {8, 3, 12, 1, 6};
+        int maxVal = numbers[0];
+        
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] > maxVal) {
+                maxVal = numbers[i];
+            }
+        }
+        
+        System.out.println("Numbers: " + Arrays.toString(numbers));
+        System.out.println("Max value: " + maxVal);
+    }
+}`
+        }
+    },
     bubble: {
         id: 'bubble',
         name: 'Bubble Sort',
@@ -48,6 +145,28 @@ def bubble_sort(arr):
 numbers = [45, 12, 85, 32, 89, 39, 69, 22]
 bubble_sort(numbers)
 print("Sorted array:", numbers)`,
+            c: `// CodeLab: Bubble Sort (C)
+#include <stdio.h>
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int numbers[] = {45, 12, 85, 32, 89, 39, 69, 22};
+    int n = sizeof(numbers) / sizeof(numbers[0]);
+    bubbleSort(numbers, n);
+    printf("Bubble Sort Complete\\n");
+    return 0;
+}`,
             cpp: `// CodeLab: Bubble Sort (C++)
 #include <iostream>
 #include <vector>
@@ -139,6 +258,30 @@ console.log("Sorted:", numbers);`,
 numbers = [64, 25, 12, 22, 11, 90, 48]
 selection_sort(numbers)
 print("Sorted:", numbers)`,
+            c: `// Selection Sort (C)
+#include <stdio.h>
+
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIdx]) minIdx = j;
+        }
+        if (minIdx != i) {
+            int temp = arr[i];
+            arr[i] = arr[minIdx];
+            arr[minIdx] = temp;
+        }
+    }
+}
+
+int main() {
+    int numbers[] = {64, 25, 12, 22, 11, 90, 48};
+    int n = sizeof(numbers) / sizeof(numbers[0]);
+    selectionSort(numbers, n);
+    printf("Selection Sort complete\\n");
+    return 0;
+}`,
             cpp: `// Selection Sort C++
 #include <vector>
 #include <algorithm>
@@ -222,6 +365,28 @@ console.log("Sorted:", numbers);`,
 numbers = [50, 20, 60, 10, 30, 40]
 insertion_sort(numbers)
 print("Sorted:", numbers)`,
+            c: `// Insertion Sort (C)
+#include <stdio.h>
+
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    int numbers[] = {50, 20, 60, 10, 30, 40};
+    int n = sizeof(numbers) / sizeof(numbers[0]);
+    insertionSort(numbers, n);
+    printf("Insertion Sort complete\\n");
+    return 0;
+}`,
             cpp: `// Insertion Sort C++
 #include <vector>
 #include <iostream>
@@ -314,6 +479,27 @@ let result = binarySearch(sortedNumbers, 55);`,
 sorted_nums = [11, 22, 33, 44, 55, 66, 77, 88, 99]
 res = binary_search(sorted_nums, 55)
 print("Found at:", res)`,
+            c: `// Binary Search (C)
+#include <stdio.h>
+
+int binarySearch(int arr[], int n, int target) {
+    int low = 0, high = n - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] < target) low = mid + 1;
+        else high = mid - 1;
+    }
+    return -1;
+}
+
+int main() {
+    int sortedNumbers[] = {11, 22, 33, 44, 55, 66, 77, 88, 99};
+    int n = sizeof(sortedNumbers) / sizeof(sortedNumbers[0]);
+    int result = binarySearch(sortedNumbers, n, 55);
+    printf("Result index: %d\\n", result);
+    return 0;
+}`,
             cpp: `// Binary Search C++
 #include <vector>
 #include <iostream>
@@ -385,6 +571,23 @@ linearSearch(list, 78);`,
 
 lst = [23, 45, 12, 78, 90, 56, 34]
 print("Index:", linear_search(lst, 78))`,
+            c: `// Linear Search (C)
+#include <stdio.h>
+
+int linearSearch(int arr[], int n, int target) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}
+
+int main() {
+    int list[] = {23, 45, 12, 78, 90, 56, 34};
+    int n = sizeof(list) / sizeof(list[0]);
+    int result = linearSearch(list, n, 78);
+    printf("Found at index: %d\\n", result);
+    return 0;
+}`,
             cpp: `// Linear Search C++
 #include <vector>
 #include <iostream>

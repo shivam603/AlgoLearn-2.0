@@ -115,19 +115,25 @@ const AlgoTheme = {
                 btn.style.borderColor = '';
             }
         });
+
+        // Update Profile dropdown theme pills if active
+        document.querySelectorAll('.profile-theme-btn').forEach(btn => {
+            const target = btn.getAttribute('data-theme-target');
+            if (target === this.currentTheme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        const profileThemeLabel = document.getElementById('profile-current-theme-label');
+        if (profileThemeLabel) {
+            profileThemeLabel.textContent = labels[this.currentTheme] || this.currentTheme;
+        }
     },
 
     renderNavbarThemeToggle() {
-        const navRights = document.querySelectorAll('.top-navbar-right');
-        navRights.forEach(right => {
-            if (right.querySelector('.theme-toggle-btn')) return;
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'btn btn-sm btn-outline-secondary theme-toggle-btn d-flex align-items-center gap-1';
-            btn.style.cssText = 'border-radius:20px; padding: 4px 10px; font-size: 0.8rem; border-color: rgba(14,165,233,0.3);';
-            btn.innerHTML = `<i class="bi bi-sun-fill text-warning"></i> <span class="theme-label d-none d-md-inline">Light Mode</span>`;
-            right.insertBefore(btn, right.lastElementChild);
-        });
+        // Standalone navbar theme toggle disabled in favor of unified Profile Bar & Settings Hub.
+        // We still bind any explicitly placed theme-toggle-btn elements and update states.
         this.bindToggleEvents();
         this.updateToggleButtons();
     }

@@ -26,9 +26,9 @@
                     </button>
                     <a class="navbar-brand mb-0" href="index.html">
                         <span class="navbar-brand-icon">
-                        <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
-                    </span>
-                        <span>AlgoLearn</span>
+                            <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
+                        </span>
+                        <span class="brand-text"><span class="brand-algo">Algo</span><span class="brand-learn">Learn</span></span>
                     </a>
                 </div>
 
@@ -52,6 +52,15 @@
                         <i class="bi bi-grid-fill"></i>
                         <span>All Functions</span>
                     </button>
+                    <!-- FAR RIGHT UPPER CORNER: Notification Bell -->
+                    <button type="button" class="btn btn-sm btn-outline-secondary position-relative btn-open-notifications nav-circle-btn" id="nav-btn-notifications" title="Notifications & System Alerts (Shift+N)">
+                        <i class="bi bi-bell-fill text-sky-400"></i>
+                        <span class="notification-badge-dot d-none"></span>
+                    </button>
+                    <!-- FAR RIGHT UPPER CORNER: Universal Profile Bar -->
+                    <div class="navbar-profile-wrap position-relative" id="navbar-profile-root">
+                        <!-- Populated by AlgoProfile -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -369,6 +378,7 @@
     <script src="code-sync.js"></script>
     <script src="time-travel.js"></script>
     <script src="nav-panel.js?v=3.0"></script>
+    <script src="settings-notifications.js"></script>
     <script src="sorting.js"></script>
     <script src="bubble.js"></script>
     <script src="insertion.js"></script>
