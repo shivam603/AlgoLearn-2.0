@@ -835,10 +835,61 @@ function setCustomArray(values) {
 let delay = 260;
 let array = [];
 
+window.AlgoVisualizerBridge = {
+    runSorting(algo, values) {
+        if (Array.isArray(values) && values.length > 0) {
+            const valid = values.map(Number).filter(n => !Number.isNaN(n) && n > 0).slice(0, 100);
+            if (valid.length > 0) {
+                if (arrayInput) arrayInput.value = valid.join(', ');
+                setCustomArray(valid);
+            }
+        }
+        const btnMap = {
+            bubble: '.bubbleSort',
+            selection: '.selectionSort',
+            insertion: '.insertionSort',
+            quick: '.quickSort',
+            merge: '.mergeSort',
+            heap: '.heapSort'
+        };
+        const selector = algo ? btnMap[String(algo).toLowerCase()] : null;
+        if (selector) {
+            const btn = document.querySelector(selector);
+            if (btn && !btn.disabled) {
+                setTimeout(() => btn.click(), 200);
+            }
+        }
+    }
+};
+
 window.addEventListener('DOMContentLoaded', () => {
     initializeSortingPage();
-    const count = arraySize ? parseInt(arraySize.value) : 35;
-    createNewArray(isNaN(count) ? 35 : count);
+
+    const params = new URLSearchParams(window.location.search);
+    const paramArr = params.get('array');
+    const paramAlgo = params.get('algo');
+    let pendingAction = null;
+    try {
+        const stored = localStorage.getItem('algolearn_visualizer_action');
+        if (stored) {
+            localStorage.removeItem('algolearn_visualizer_action');
+            pendingAction = JSON.parse(stored);
+        }
+    } catch (e) {}
+
+    const initialArr = paramArr ? parseUserArray(paramArr) : (pendingAction?.array && Array.isArray(pendingAction.array) ? pendingAction.array : null);
+    const initialAlgo = paramAlgo || pendingAction?.algo || null;
+
+    if (initialArr && initialArr.length > 0) {
+        if (arrayInput) arrayInput.value = initialArr.join(', ');
+        setCustomArray(initialArr);
+        if (initialAlgo) {
+            setTimeout(() => window.AlgoVisualizerBridge.runSorting(initialAlgo, initialArr), 450);
+        }
+    } else {
+        const count = arraySize ? parseInt(arraySize.value) : 35;
+        createNewArray(isNaN(count) ? 35 : count);
+    }
     fetchHistory();
 });
 

@@ -25,6 +25,7 @@
             }
         })();
     </script>
+    <link rel="stylesheet" href="algoai.css">
 </head>
 
 <body class="codelab-body">
@@ -53,6 +54,9 @@
                 </a>
                 <a href="practice.html" class="btn btn-outline-secondary btn-sm text-light d-none d-md-inline-flex align-items-center gap-1">
                     <i class="bi bi-mortarboard-fill"></i> Practice
+                </a>
+                <a href="dashboard.html" class="btn btn-outline-secondary btn-sm text-light d-none d-lg-inline-flex align-items-center gap-1" title="XP, Badges &amp; Leaderboard">
+                    <i class="bi bi-trophy-fill text-warning"></i> Progress
                 </a>
                 <button type="button" class="btn btn-sky btn-sm btn-panel-trigger">
                     <i class="bi bi-grid-fill"></i> <span class="d-none d-sm-inline">All Functions</span>
@@ -83,13 +87,16 @@
                         <i class="bi bi-code-slash text-sky-400"></i>
                         <span>Editor</span>
                     </span>
-                    <!-- Two Distinct Modes: Write Custom Code vs Predefined Written Code -->
+                    <!-- Three Distinct Modes: Write Custom Code, Predefined Algorithms, or Coding Problems -->
                     <div class="btn-group btn-group-sm editor-mode-toggle flex-nowrap" role="group" aria-label="Editor Mode Selection">
-                        <button type="button" class="btn btn-xs btn-sky active px-2 py-1" id="btn-mode-write" title="Write or paste your own custom code in any language" style="font-size: 0.74rem; white-space: nowrap;">
-                            <i class="bi bi-pencil-square me-1"></i> Write Code
+                        <button type="button" class="btn btn-xs btn-sky active px-2 py-1" id="btn-mode-write" title="Write or paste your own custom code in any language" style="font-size: 0.72rem; white-space: nowrap;">
+                            <i class="bi bi-pencil-square me-1"></i> Write
                         </button>
-                        <button type="button" class="btn btn-xs btn-outline-secondary text-white px-2 py-1" id="btn-mode-predefined" title="Choose from predefined algorithms and data structures" style="font-size: 0.74rem; white-space: nowrap;">
-                            <i class="bi bi-collection-play me-1"></i> Predefined
+                        <button type="button" class="btn btn-xs btn-outline-secondary text-white px-2 py-1" id="btn-mode-predefined" title="Choose from predefined algorithms and data structures" style="font-size: 0.72rem; white-space: nowrap;">
+                            <i class="bi bi-collection-play me-1"></i> Algos
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-secondary text-white px-2 py-1" id="btn-mode-problems" title="Solve DSA coding problems with automated Judge &amp; Big-O Profiler" style="font-size: 0.72rem; white-space: nowrap;">
+                            <i class="bi bi-trophy me-1 text-warning"></i> Problems
                         </button>
                     </div>
                 </div>
@@ -160,6 +167,27 @@
                         Python Code
                     </span>
                 </div>
+
+                <!-- 3. Controls when in 'Problems Judge' mode (hidden by default) -->
+                <div id="subtoolbar-problems-mode" class="d-none align-items-center gap-1 w-100 flex-nowrap" style="overflow-x:auto;">
+                    <select id="problem-diff-filter" class="form-select form-select-sm bg-dark text-info border-info py-0 px-1" style="font-size: 0.7rem; width: 78px; height: 24px; flex-shrink: 0;" title="Filter by Difficulty">
+                        <option value="All" selected>All (100)</option>
+                        <option value="Easy">Easy (30)</option>
+                        <option value="Medium">Med (40)</option>
+                        <option value="Hard">Hard (30)</option>
+                    </select>
+                    <select id="problem-select" class="form-select form-select-sm bg-dark text-white border-success py-0 px-2 flex-grow-1" style="font-size: 0.72rem; min-width: 115px; max-width: 195px; height: 24px;" title="Select Coding Challenge">
+                        <option value="two_sum">Loading problems...</option>
+                    </select>
+                    <span class="badge bg-success text-white small flex-shrink-0" id="problem-difficulty-badge" style="font-size: 0.64rem;">Easy</span>
+                    <span class="badge bg-warning text-dark small d-none d-xl-inline-block flex-shrink-0" id="problem-xp-badge" style="font-size: 0.64rem;">+50 XP</span>
+                    <button type="button" class="btn btn-xs btn-outline-info py-0 px-2 ms-auto flex-shrink-0" id="btn-problem-skeleton" title="Load blank practice skeleton (hide reference solution)" style="font-size: 0.68rem; height: 22px; white-space: nowrap;">
+                        <i class="bi bi-code"></i> Skeleton
+                    </button>
+                    <button type="button" class="btn btn-xs btn-outline-secondary text-light py-0 px-2 flex-shrink-0" id="btn-problem-reset" title="Reset problem to reference starter template" style="font-size: 0.68rem; height: 22px; white-space: nowrap;">
+                        <i class="bi bi-arrow-clockwise"></i> Reset
+                    </button>
+                </div>
             </div>
 
             <!-- Monaco Container -->
@@ -225,6 +253,9 @@
                         <div class="d-flex align-items-center gap-2">
                             <button type="button" class="btn btn-sm btn-danger d-inline-flex align-items-center gap-1 shadow-sm" id="btn-jump-error-line">
                                 <i class="bi bi-cursor-fill"></i> Jump to Line in Editor
+                            </button>
+                            <button type="button" class="btn btn-sm btn-info text-dark fw-bold d-inline-flex align-items-center gap-1 shadow-sm" id="btn-algoai-fix-error" title="Send code and diagnostics to AlgoAI Mentor for 1-click fix">
+                                <i class="bi bi-stars"></i> Ask AlgoAI to Fix
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary text-white d-inline-flex align-items-center gap-1" id="btn-view-console-error">
                                 <i class="bi bi-terminal"></i> View Full Console
@@ -302,11 +333,17 @@
         <aside class="codelab-panel codelab-panel-right" aria-label="Debugger State Deck">
             <!-- Deck Tabs -->
             <nav class="codelab-tabs-nav" role="tablist">
+                <button type="button" class="codelab-tab-btn" data-target="problem" title="Problem Statement &amp; Examples">
+                    <i class="bi bi-journal-text"></i> Prompt
+                </button>
+                <button type="button" class="codelab-tab-btn" data-target="judge" title="Automated Test Judge &amp; Empirical Big-O Profiler">
+                    <i class="bi bi-check2-circle"></i> Judge
+                </button>
                 <button type="button" class="codelab-tab-btn active" data-target="vars">
-                    <i class="bi bi-braces"></i> Variables
+                    <i class="bi bi-braces"></i> Vars
                 </button>
                 <button type="button" class="codelab-tab-btn" data-target="stack">
-                    <i class="bi bi-layers-fill"></i> Call Stack
+                    <i class="bi bi-layers-fill"></i> Stack
                 </button>
                 <button type="button" class="codelab-tab-btn" data-target="watch">
                     <i class="bi bi-eye-fill"></i> Watch
@@ -315,6 +352,26 @@
                     <i class="bi bi-terminal-fill"></i> Console
                 </button>
             </nav>
+
+            <!-- 0A. Problem Prompt Tab Content -->
+            <div id="deck-section-problem" class="codelab-tab-content d-none">
+                <div id="problem-prompt-body">
+                    <div class="text-center text-muted py-4 small">
+                        <i class="bi bi-trophy fs-3 d-block mb-2 text-warning"></i>
+                        Switch editor mode to <strong>Problems</strong> to view challenge descriptions, constraints, and examples.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 0B. Judge & Empirical Big-O Profiler Tab Content -->
+            <div id="deck-section-judge" class="codelab-tab-content d-none">
+                <div id="judge-results-body">
+                    <div class="text-center text-muted py-4 small">
+                        <i class="bi bi-check2-square fs-3 d-block mb-2 text-info"></i>
+                        Click <strong>Submit &amp; Judge</strong> or <strong>Big-O Profile</strong> in the bottom bar to test &amp; benchmark your solution.
+                    </div>
+                </div>
+            </div>
 
             <!-- 1. Variables Tab Content -->
             <div id="deck-section-vars" class="codelab-tab-content">
@@ -397,6 +454,12 @@
             <button type="button" id="btn-reset" class="btn-ide" title="Reset to initial state">
                 <i class="bi bi-arrow-counterclockwise"></i> <span>Reset</span>
             </button>
+            <button type="button" id="btn-judge-submit" class="btn-ide btn-judge d-none" title="Run code against all visible &amp; hidden test cases">
+                <i class="bi bi-check2-all"></i> <span>Submit &amp; Judge</span>
+            </button>
+            <button type="button" id="btn-profile-bigo" class="btn-ide btn-profile-bigo" title="Empirically measure time complexity scaling curve">
+                <i class="bi bi-graph-up-arrow"></i> <span>Big-O Profile</span>
+            </button>
         </div>
 
         <!-- Center: Status & Step Count -->
@@ -421,6 +484,7 @@
     <script src="settings-notifications.js"></script>
     <script src="codelab-templates.js"></script>
     <script src="codelab-tracer.js"></script>
+    <script src="problem-visualizer.js"></script>
     <script src="codelab.js"></script>
 
     <!-- Tab switcher for Right Deck -->
@@ -503,6 +567,7 @@
             }
         })();
     </script>
+    <script src="algoai.js" defer></script>
 </body>
 
 </html>

@@ -286,6 +286,22 @@ const DSAChallenge = {
         const nextBtn = document.getElementById('btn-next-question');
         const feedbackCard = document.getElementById('challenge-feedback-card');
 
+        const token = localStorage.getItem('algolearn_token');
+        if (token) {
+            fetch('/api/gamification/event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    type: 'challenge',
+                    topic: 'Sorting & Searching',
+                    amount: Math.max(15, Math.min(50, this.totalCorrect * 10))
+                })
+            }).catch(() => {});
+        }
+
         if (qText) qText.innerHTML = `🏆 Challenge Completed! Final Score: <strong>${this.score} pts</strong> (${this.totalCorrect}/${this.challenges.length} correct)`;
         if (container) {
             container.innerHTML = `
@@ -297,6 +313,9 @@ const DSAChallenge = {
                     </button>
                     <a href="duel.html" class="btn btn-warning btn-sm ms-2">
                         <i class="bi bi-fire"></i> Try Duel Arena
+                    </a>
+                    <a href="dashboard.html" class="btn btn-outline-success btn-sm ms-2">
+                        <i class="bi bi-trophy-fill"></i> Progress
                     </a>
                 </div>
             `;

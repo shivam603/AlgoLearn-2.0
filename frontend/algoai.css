@@ -1,0 +1,1602 @@
+/**
+ * AlgoAI — Senior Programming Mentor & Interactive Assistant
+ * Native AlgoLearn Design System:
+ * - Perfectly matches AlgoLearn's Sky Light default palette, typography, and card elevation
+ * - Full support for Midnight Dark and Cyberpunk Neon themes
+ * - Futuristic Draggable Companion Launcher (Muse Orb with rotating dashed orbit & online pill)
+ * - Draggable Glassmorphic Chat Studio with native-feeling header, controls & toolbar
+ * - Markdown parsing with bulletproof step numbering, syntax-highlighted code blocks, and math badges
+ */
+
+/* =========================================================================
+   1. Theme Variables & Base Scoping
+   ========================================================================= */
+:root {
+    --algoai-font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --algoai-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+    /* AlgoLearn Sky Light Theme (Default) */
+    --algoai-bg: #ffffff;
+    --algoai-bg-glass: rgba(255, 255, 255, 0.98);
+    --algoai-header-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    --algoai-border: #e2e8f0;
+    --algoai-border-hover: #38bdf8;
+    --algoai-border-glow: rgba(14, 165, 233, 0.18);
+    --algoai-primary: #0284c7;
+    --algoai-primary-hover: #0369a1;
+    --algoai-accent: #0ea5e9;
+    --algoai-accent-soft: #f0f9ff;
+    --algoai-accent-pill: #e0f2fe;
+    --algoai-cyan: #0284c7;
+    --algoai-magenta: #db2777;
+    --algoai-violet: #7c3aed;
+    --algoai-green: #10b981;
+    --algoai-text-primary: #0f172a;
+    --algoai-text-secondary: #334155;
+    --algoai-text-muted: #64748b;
+    --algoai-text-light: #94a3b8;
+    --algoai-user-bubble: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    --algoai-user-text: #ffffff;
+    --algoai-bot-bubble: #ffffff;
+    --algoai-bot-border: #e2e8f0;
+    --algoai-code-bg: #0f172a;
+    --algoai-code-header: #1e293b;
+    --algoai-input-bg: #ffffff;
+    --algoai-input-border: #cbd5e1;
+    --algoai-shadow-panel: 0 24px 50px -12px rgba(14, 165, 233, 0.22), 0 12px 24px -8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(14, 165, 233, 0.14);
+    --algoai-shadow-launcher: 0 12px 30px rgba(14, 165, 233, 0.35), 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Midnight Dark Theme Overrides */
+[data-theme="dark"] {
+    --algoai-bg: #131d31;
+    --algoai-bg-glass: rgba(19, 29, 49, 0.98);
+    --algoai-header-bg: #1a253c;
+    --algoai-border: #273553;
+    --algoai-border-hover: #38bdf8;
+    --algoai-border-glow: rgba(56, 189, 248, 0.25);
+    --algoai-primary: #38bdf8;
+    --algoai-primary-hover: #0284c7;
+    --algoai-accent-soft: rgba(56, 189, 248, 0.1);
+    --algoai-accent-pill: rgba(56, 189, 248, 0.18);
+    --algoai-cyan: #38bdf8;
+    --algoai-magenta: #ec4899;
+    --algoai-violet: #a855f7;
+    --algoai-green: #34d399;
+    --algoai-text-primary: #f1f5f9;
+    --algoai-text-secondary: #cbd5e1;
+    --algoai-text-muted: #94a3b8;
+    --algoai-user-bubble: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    --algoai-user-text: #ffffff;
+    --algoai-bot-bubble: rgba(26, 37, 60, 0.92);
+    --algoai-bot-border: #273553;
+    --algoai-code-bg: #0b1120;
+    --algoai-code-header: rgba(15, 23, 42, 0.9);
+    --algoai-input-bg: #131d31;
+    --algoai-input-border: #273553;
+    --algoai-shadow-panel: 0 25px 65px rgba(0, 0, 0, 0.75), 0 0 35px rgba(56, 189, 248, 0.18);
+    --algoai-shadow-launcher: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.4);
+}
+
+/* Cyberpunk Neon Theme Overrides */
+[data-theme="cyberpunk"],
+body.theme-neon {
+    --algoai-bg: #060c1c;
+    --algoai-bg-glass: rgba(6, 12, 28, 0.95);
+    --algoai-header-bg: rgba(11, 20, 44, 0.98);
+    --algoai-border: rgba(0, 240, 255, 0.35);
+    --algoai-border-hover: #00f0ff;
+    --algoai-border-glow: rgba(0, 240, 255, 0.28);
+    --algoai-primary: #00f0ff;
+    --algoai-primary-hover: #00ffaa;
+    --algoai-accent-soft: rgba(0, 240, 255, 0.1);
+    --algoai-accent-pill: rgba(0, 240, 255, 0.2);
+    --algoai-cyan: #00f0ff;
+    --algoai-magenta: #ff007f;
+    --algoai-violet: #8b5cf6;
+    --algoai-green: #00ffaa;
+    --algoai-text-primary: #f8fafc;
+    --algoai-text-secondary: #94a3b8;
+    --algoai-text-muted: #64748b;
+    --algoai-user-bubble: linear-gradient(135deg, rgba(0, 240, 255, 0.25) 0%, rgba(139, 92, 246, 0.25) 50%, rgba(255, 0, 127, 0.25) 100%);
+    --algoai-user-text: #ffffff;
+    --algoai-bot-bubble: rgba(14, 25, 52, 0.92);
+    --algoai-bot-border: rgba(0, 240, 255, 0.25);
+    --algoai-code-bg: #030712;
+    --algoai-code-header: rgba(15, 23, 42, 0.95);
+    --algoai-input-bg: rgba(11, 20, 44, 0.94);
+    --algoai-input-border: rgba(0, 240, 255, 0.4);
+    --algoai-shadow-panel: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 240, 255, 0.25);
+    --algoai-shadow-launcher: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 28px rgba(0, 240, 255, 0.45);
+}
+
+/* Smoothly hide floating panel toggle when chat panel is open */
+body.algoai-open #floating-panel-toggle,
+body.algoai-open .floating-panel-toggle {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.7) translateY(10px) !important;
+    transition: opacity 0.25s ease, transform 0.25s ease !important;
+}
+
+/* =========================================================================
+   2. Draggable Floating AI Companion Launcher (Muse Orb)
+   ========================================================================= */
+.algoai-launcher {
+    position: fixed;
+    bottom: 94px;
+    right: 26px;
+    width: 60px;
+    height: 60px;
+    z-index: 1045;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.algoai-launcher *,
+.algoai-launcher {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-user-drag: none !important;
+}
+
+.algoai-launcher:active,
+.algoai-launcher.algoai-dragging {
+    cursor: grabbing;
+    transform: scale(1.08);
+    transition: none;
+}
+
+/* Hidden state when chat panel is open */
+.algoai-launcher.algoai-launcher-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.4) translateY(20px) !important;
+}
+
+/* Ambient Radial Halo */
+.algoai-launcher-glow {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--algoai-border-glow) 0%, transparent 70%);
+    animation: algoaiHaloPulse 3.5s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes algoaiHaloPulse {
+    0%, 100% { transform: scale(0.95); opacity: 0.55; }
+    50% { transform: scale(1.2); opacity: 0.95; }
+}
+
+/* Dashed Rotating Orbit Ring (Matches User Muse Reference Image) */
+.algoai-launcher-ring {
+    position: absolute;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(14, 165, 233, 0.45);
+    animation: algoaiOrbitSpin 14s linear infinite;
+    pointer-events: none;
+    transition: border-color 0.3s ease;
+}
+
+[data-theme="dark"] .algoai-launcher-ring {
+    border-color: rgba(56, 189, 248, 0.5);
+}
+
+[data-theme="cyberpunk"] .algoai-launcher-ring {
+    border-color: rgba(0, 240, 255, 0.65);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+@keyframes algoaiOrbitSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.algoai-launcher:hover .algoai-launcher-ring {
+    border-color: var(--algoai-primary);
+    animation-duration: 6s;
+}
+
+/* The Glowing AI Companion Orb */
+.algoai-launcher-orb {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 60%, #e0f2fe 100%);
+    border: 2px solid rgba(14, 165, 233, 0.35);
+    box-shadow: var(--algoai-shadow-launcher);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
+    transition: all 0.25s ease;
+}
+
+[data-theme="dark"] .algoai-launcher-orb {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+[data-theme="cyberpunk"] .algoai-launcher-orb {
+    background: linear-gradient(135deg, #0b142c 0%, #170d38 100%);
+    border-color: rgba(0, 240, 255, 0.7);
+}
+
+.algoai-launcher:hover .algoai-launcher-orb {
+    transform: translateY(-2px);
+    border-color: var(--algoai-primary);
+    box-shadow: 0 16px 36px rgba(14, 165, 233, 0.45);
+}
+
+/* Floating Logo Inside Orb */
+.algoai-launcher-logo-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    animation: algoaiLogoFloat 4s ease-in-out infinite;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 2px 6px rgba(2, 132, 199, 0.3));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+}
+
+@keyframes algoaiLogoFloat {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-2.5px) scale(1.05);
+    }
+}
+
+.algoai-launcher:hover .algoai-launcher-logo-img {
+    transform: scale(1.12);
+    filter: drop-shadow(0 4px 12px rgba(2, 132, 199, 0.55));
+}
+
+/* Attached Floating Status Pill (Matches Image 6) */
+.algoai-launcher-pill {
+    position: absolute;
+    bottom: -16px;
+    background: #ffffff;
+    border: 1.5px solid var(--algoai-border);
+    color: var(--algoai-text-primary);
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme="dark"] .algoai-launcher-pill {
+    background: #1a253c;
+    border-color: #273553;
+    color: #f1f5f9;
+}
+
+[data-theme="cyberpunk"] .algoai-launcher-pill {
+    background: #0b142c;
+    border-color: rgba(0, 240, 255, 0.5);
+    color: #00f0ff;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+}
+
+.algoai-launcher:hover .algoai-launcher-pill {
+    transform: scale(1.05);
+    border-color: var(--algoai-primary);
+}
+
+.algoai-launcher-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--algoai-green);
+    box-shadow: 0 0 7px var(--algoai-green);
+    animation: algoaiDotBreathe 2s infinite ease-in-out;
+}
+
+@keyframes algoaiDotBreathe {
+    0%, 100% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Drag Anywhere Tooltip */
+.algoai-launcher-tip {
+    position: absolute;
+    top: -28px;
+    background: rgba(15, 23, 42, 0.9);
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(4px);
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.algoai-launcher:hover .algoai-launcher-tip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================================================================
+   3. Draggable Chat Studio Panel Window
+   ========================================================================= */
+.algoai-panel {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 440px;
+    height: 640px;
+    max-height: calc(100vh - 40px);
+    max-width: calc(100vw - 32px);
+    background: var(--algoai-bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    border-radius: 20px;
+    box-shadow: var(--algoai-shadow-panel);
+    display: flex;
+    flex-direction: column;
+    z-index: 1050;
+    overflow: hidden;
+    font-family: var(--algoai-font);
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease,
+                transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: bottom right;
+}
+
+.algoai-panel.algoai-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.92) translateY(20px);
+}
+
+.algoai-panel.algoai-panel-dragging {
+    opacity: 0.98;
+    box-shadow: 0 32px 75px rgba(0, 0, 0, 0.35), 0 0 35px var(--algoai-border-glow);
+    cursor: grabbing;
+}
+
+/* Widescreen Studio Mode (Maximized) */
+.algoai-panel.algoai-maximized {
+    width: 900px !important;
+    height: 84vh !important;
+    max-height: calc(100vh - 40px) !important;
+    max-width: calc(100vw - 40px) !important;
+}
+
+/* Minimized Docked State */
+.algoai-panel.algoai-minimized {
+    height: 58px !important;
+    width: 340px !important;
+    overflow: hidden !important;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.algoai-panel.algoai-minimized .algoai-context-strip,
+.algoai-panel.algoai-minimized .algoai-quick-bar,
+.algoai-panel.algoai-minimized .algoai-messages,
+.algoai-panel.algoai-minimized .algoai-footer {
+    display: none !important;
+}
+
+/* =========================================================================
+   4. Native Header & Window Controls
+   ========================================================================= */
+.algoai-header {
+    flex-shrink: 0;
+    min-height: 58px;
+    background: var(--algoai-header-bg);
+    border-bottom: 1px solid var(--algoai-border);
+    padding: 0.7rem 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+}
+
+.algoai-header:active {
+    cursor: grabbing;
+}
+
+.algoai-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    flex: 1;
+}
+
+/* Avatar Squircle */
+.algoai-header-icon-badge {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.algoai-header-logo-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Clean corner online dot with white ring */
+.algoai-header-online-dot {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--algoai-green);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+[data-theme="dark"] .algoai-header-online-dot {
+    border-color: #1a253c;
+}
+
+.algoai-header-title-wrap {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.algoai-header-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.algoai-header-brand {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--algoai-text-primary);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.algoai-brand-accent {
+    color: var(--algoai-primary);
+}
+
+[data-theme="cyberpunk"] .algoai-brand-accent {
+    background: linear-gradient(135deg, var(--algoai-cyan) 0%, var(--algoai-magenta) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Hero-styled DSA Mentor Badge */
+.algoai-header-badge {
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    color: var(--algoai-primary);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+
+.algoai-header-status {
+    font-size: 0.72rem;
+    color: var(--algoai-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-pulse-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--algoai-green);
+    box-shadow: 0 0 5px var(--algoai-green);
+}
+
+/* Window Control Buttons */
+.algoai-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.algoai-ctrl-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid var(--algoai-border);
+    color: var(--algoai-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.78rem;
+    transition: all 0.18s ease;
+}
+
+[data-theme="dark"] .algoai-ctrl-btn {
+    background: #131d31;
+    border-color: #273553;
+}
+
+.algoai-ctrl-btn:hover {
+    background: var(--algoai-accent-soft);
+    border-color: var(--algoai-border-hover);
+    color: var(--algoai-primary);
+    transform: translateY(-1px);
+}
+
+.algoai-ctrl-btn.btn-close-ai:hover {
+    background: #fee2e2 !important;
+    border-color: #fca5a5 !important;
+    color: #ef4444 !important;
+    transform: translateY(-1px);
+}
+
+/* =========================================================================
+   5. Context Strip & Action Bar
+   ========================================================================= */
+.algoai-context-strip {
+    flex-shrink: 0;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--algoai-border);
+    padding: 0.4rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.74rem;
+}
+
+[data-theme="dark"] .algoai-context-strip {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.algoai-context-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--algoai-primary);
+    font-weight: 600;
+    max-width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: var(--algoai-accent-pill);
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.algoai-context-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.algoai-action-chip {
+    background: #ffffff;
+    border: 1px solid var(--algoai-border);
+    color: var(--algoai-text-secondary);
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.15s ease;
+}
+
+[data-theme="dark"] .algoai-action-chip {
+    background: #131d31;
+    border-color: #273553;
+}
+
+.algoai-action-chip:hover {
+    background: var(--algoai-accent-soft);
+    border-color: var(--algoai-border-hover);
+    color: var(--algoai-primary);
+}
+
+.algoai-action-chip.active {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #b45309;
+}
+
+/* Quick Topic Starters Bar */
+.algoai-quick-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 1rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    background: #ffffff;
+    border-bottom: 1px solid var(--algoai-border);
+    scrollbar-width: none;
+}
+
+.algoai-quick-bar::-webkit-scrollbar {
+    display: none;
+}
+
+[data-theme="dark"] .algoai-quick-bar {
+    background: #131d31;
+}
+
+.algoai-quick-chip {
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    color: var(--algoai-primary);
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.18s ease;
+    flex-shrink: 0;
+}
+
+.algoai-quick-chip:hover {
+    background: var(--algoai-primary);
+    border-color: var(--algoai-primary);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
+}
+
+/* =========================================================================
+   6. Messages Area & Elegant Bubble Design
+   ========================================================================= */
+.algoai-messages {
+    flex: 1 1 0%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+    background: #ffffff;
+}
+
+[data-theme="dark"] .algoai-messages {
+    background: #0f172a;
+}
+
+/* Custom Scrollbar */
+.algoai-messages::-webkit-scrollbar {
+    width: 5px;
+}
+.algoai-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+.algoai-messages::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+.algoai-messages::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Welcome Card */
+.algoai-welcome-card {
+    background: #ffffff;
+    border: 1.5px solid var(--algoai-border);
+    border-radius: 16px;
+    padding: 1.1rem;
+    box-shadow: 0 4px 16px -2px rgba(14, 165, 233, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+    animation: algoaiFadeIn 0.3s ease;
+}
+
+[data-theme="dark"] .algoai-welcome-card {
+    background: #1a253c;
+    border-color: #273553;
+}
+
+@keyframes algoaiFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.algoai-welcome-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.algoai-welcome-logo-ring {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--algoai-accent-soft);
+    border: 1.5px solid rgba(14, 165, 233, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+}
+
+.algoai-welcome-logo-img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+.algoai-welcome-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--algoai-text-primary);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.algoai-welcome-sub {
+    font-size: 0.76rem;
+    color: var(--algoai-text-muted);
+    margin: 2px 0 0 0;
+}
+
+.algoai-welcome-intro {
+    font-size: 0.86rem;
+    color: var(--algoai-text-secondary);
+    line-height: 1.55;
+    margin: 0 0 0.85rem 0;
+}
+
+.algoai-welcome-topics-section {
+    border-top: 1px solid var(--algoai-border);
+    padding-top: 0.75rem;
+}
+
+.algoai-welcome-topics-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--algoai-primary);
+    letter-spacing: 0.5px;
+    margin-bottom: 0.55rem;
+}
+
+.algoai-suggestions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+}
+
+@media (max-width: 400px) {
+    .algoai-suggestions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.algoai-suggestion-chip {
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    border-radius: 10px;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--algoai-text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.algoai-suggestion-chip i {
+    color: var(--algoai-primary);
+    font-size: 0.85rem;
+}
+
+.algoai-suggestion-chip:hover {
+    background: #ffffff;
+    border-color: var(--algoai-primary);
+    color: var(--algoai-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.16);
+}
+
+[data-theme="dark"] .algoai-suggestion-chip {
+    background: #131d31;
+    border-color: #273553;
+}
+
+[data-theme="dark"] .algoai-suggestion-chip:hover {
+    background: #1a253c;
+    border-color: #38bdf8;
+    color: #38bdf8;
+}
+
+/* Message Bubble Rows */
+.algoai-msg-row {
+    display: flex;
+    gap: 0.65rem;
+    max-width: 100%;
+}
+
+.algoai-msg-row.user {
+    justify-content: flex-end;
+}
+
+.algoai-msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.algoai-msg-logo-img {
+    width: 19px;
+    height: 19px;
+    object-fit: contain;
+}
+
+.algoai-msg-row.user .algoai-msg-avatar {
+    display: none;
+}
+
+.algoai-bubble {
+    max-width: 86%;
+    border-radius: 18px;
+    padding: 0.85rem 1.05rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    word-break: break-word;
+    position: relative;
+}
+
+.algoai-msg-row.user .algoai-bubble {
+    background: var(--algoai-user-bubble);
+    color: var(--algoai-user-text);
+    border-top-right-radius: 4px;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+}
+
+.algoai-msg-row.assistant .algoai-bubble {
+    background: var(--algoai-bot-bubble);
+    border: 1.5px solid var(--algoai-bot-border);
+    color: var(--algoai-text-primary);
+    border-top-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Streaming Typing Cursor */
+.algoai-streaming-cursor {
+    display: inline-block;
+    width: 6px;
+    height: 14px;
+    background: var(--algoai-primary);
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: algoaiBlink 0.9s infinite;
+}
+
+@keyframes algoaiBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* =========================================================================
+   7. Typography, Mentor Step Cards & Numbered Lists (Fixed 1, 2, 3)
+   ========================================================================= */
+.algoai-bubble h1, .algoai-bubble h2, .algoai-bubble h3, .algoai-bubble h4 {
+    margin: 0.65rem 0 0.35rem 0;
+    font-weight: 750;
+    color: var(--algoai-text-primary);
+    line-height: 1.3;
+}
+
+.algoai-bubble h1 { font-size: 1.15rem; }
+.algoai-bubble h2 { font-size: 1.05rem; }
+.algoai-bubble h3 { font-size: 0.98rem; }
+.algoai-bubble h4 { font-size: 0.9rem; }
+
+.algoai-bubble p {
+    margin: 0 0 0.6rem 0;
+}
+.algoai-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+/* Step Headings: e.g. [1] The Core Intuition */
+.algoai-step-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0.4rem 0;
+}
+
+.algoai-step-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--algoai-accent-pill);
+    border: 1px solid rgba(14, 165, 233, 0.35);
+    color: var(--algoai-primary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.algoai-step-title {
+    margin: 0 !important;
+    font-size: 0.94rem !important;
+    font-weight: 750 !important;
+    color: var(--algoai-text-primary) !important;
+}
+
+/* Proper Lists (Fixed 1. 2. 3. Numbering via HTML5 value/start attributes) */
+.algoai-bubble ul, .algoai-bubble ol {
+    margin: 0.45rem 0 0.7rem 1.4rem;
+    padding: 0;
+}
+
+.algoai-bubble li {
+    margin-bottom: 0.35rem;
+    line-height: 1.55;
+}
+.algoai-bubble li:last-child {
+    margin-bottom: 0;
+}
+
+.algoai-bubble strong {
+    color: var(--algoai-text-primary);
+    font-weight: 700;
+}
+
+.algoai-bubble a {
+    color: var(--algoai-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+}
+
+.algoai-bubble blockquote {
+    margin: 0.65rem 0;
+    padding: 0.45rem 0.85rem;
+    background: var(--algoai-accent-soft);
+    border-left: 3px solid var(--algoai-primary);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.84rem;
+    color: var(--algoai-text-secondary);
+}
+
+.algoai-divider {
+    border: 0;
+    height: 1px;
+    background: var(--algoai-border);
+    margin: 0.85rem 0;
+}
+
+/* Big-O Mathematical Badges */
+.algoai-math-inline {
+    display: inline-block;
+    font-family: var(--algoai-mono);
+    font-size: 0.88em;
+    font-weight: 600;
+    color: #0369a1;
+    background: #f0f9ff;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    border-radius: 6px;
+    padding: 1px 6px;
+    margin: 0 2px;
+    white-space: nowrap;
+}
+
+[data-theme="dark"] .algoai-math-inline {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.25);
+    color: #38bdf8;
+}
+
+.algoai-math-block {
+    margin: 0.65rem 0;
+    padding: 0.65rem 0.95rem;
+    background: #f8fafc;
+    border: 1px solid var(--algoai-border);
+    border-radius: 10px;
+    text-align: center;
+    font-family: var(--algoai-mono);
+    font-size: 0.95rem;
+    color: var(--algoai-primary);
+    font-weight: 600;
+}
+
+/* Inline Code */
+.algoai-bubble code:not(pre code) {
+    background: var(--algoai-accent-soft);
+    color: #0369a1;
+    font-family: var(--algoai-mono);
+    font-size: 0.84em;
+    padding: 1px 5px;
+    border-radius: 5px;
+    border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+[data-theme="dark"] .algoai-bubble code:not(pre code) {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.25);
+}
+
+/* Markdown Tables */
+.algoai-table-wrap {
+    margin: 0.75rem 0;
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid var(--algoai-border);
+}
+
+.algoai-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    background: #ffffff;
+}
+
+[data-theme="dark"] .algoai-table {
+    background: #131d31;
+}
+
+.algoai-table th {
+    background: var(--algoai-accent-soft);
+    color: var(--algoai-primary);
+    font-weight: 700;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--algoai-border);
+}
+
+.algoai-table td {
+    padding: 0.45rem 0.75rem;
+    border-bottom: 1px solid var(--algoai-border);
+    color: var(--algoai-text-secondary);
+}
+
+.algoai-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Code Blocks with Copy & CodeLab Button */
+.algoai-code-wrapper {
+    margin: 0.75rem 0;
+    border-radius: 12px;
+    background: var(--algoai-code-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.algoai-code-header {
+    background: var(--algoai-code-header);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0.4rem 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.algoai-code-lang {
+    font-family: var(--algoai-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #38bdf8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.algoai-code-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.algoai-code-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.15s ease;
+}
+
+.algoai-code-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+}
+
+.algoai-code-btn.copied {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.algoai-code-pre {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    font-family: var(--algoai-mono);
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: #f1f5f9;
+}
+
+/* =========================================================================
+   8. Footer & Modern Input Dock
+   ========================================================================= */
+.algoai-footer {
+    flex-shrink: 0;
+    background: #ffffff;
+    border-top: 1px solid var(--algoai-border);
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+[data-theme="dark"] .algoai-footer {
+    background: #131d31;
+    border-color: #273553;
+}
+
+.algoai-input-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    background: #ffffff;
+    border: 1.5px solid var(--algoai-input-border);
+    border-radius: 16px;
+    padding: 0.4rem 0.65rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="dark"] .algoai-input-row {
+    background: #0f172a;
+    border-color: #273553;
+}
+
+.algoai-input-row:focus-within {
+    border-color: var(--algoai-primary);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
+}
+
+.algoai-textarea {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: var(--algoai-text-primary);
+    font-family: inherit;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    resize: none !important;
+    max-height: 120px;
+    min-height: 24px;
+    padding: 4px 2px;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+}
+
+.algoai-textarea::-webkit-scrollbar {
+    width: 4px;
+}
+.algoai-textarea::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+.algoai-textarea::placeholder {
+    color: var(--algoai-text-muted);
+}
+
+.algoai-send-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--algoai-primary), var(--algoai-primary-hover));
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+    transition: all 0.18s ease;
+}
+
+.algoai-send-btn:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 6px 14px rgba(2, 132, 199, 0.4);
+}
+
+.algoai-send-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.algoai-send-btn.stop-btn {
+    background: #ef4444 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3) !important;
+}
+
+.algoai-footer-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: var(--algoai-text-muted);
+    padding: 0 2px;
+}
+
+.algoai-context-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.algoai-context-toggle-label input[type="checkbox"] {
+    accent-color: var(--algoai-primary);
+    cursor: pointer;
+}
+
+.algoai-char-counter {
+    font-size: 0.7rem;
+    color: var(--algoai-text-light);
+}
+
+.algoai-kbd {
+    background: var(--algoai-accent-soft);
+    border: 1px solid var(--algoai-border);
+    border-radius: 4px;
+    padding: 1px 4px;
+    font-family: inherit;
+    font-size: 0.68rem;
+    color: var(--algoai-text-secondary);
+}
+
+/* =========================================================================
+   8.5 Agentic Actions, Multi-Thread History, Voice & Mock Interview
+   ========================================================================= */
+.algoai-action-chip.interview-active {
+    background: #ede9fe;
+    border-color: #c4b5fd;
+    color: #6d28d9;
+}
+
+[data-theme="dark"] .algoai-action-chip.interview-active {
+    background: rgba(139, 92, 246, 0.22);
+    border-color: rgba(167, 139, 250, 0.45);
+    color: #c4b5fd;
+}
+
+/* Multi-Session Threads Drawer */
+.algoai-threads-drawer {
+    flex-shrink: 0;
+    max-height: 210px;
+    overflow-y: auto;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--algoai-border);
+    padding: 0.55rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+}
+
+[data-theme="dark"] .algoai-threads-drawer {
+    background: #131d31;
+}
+
+.algoai-threads-drawer.d-none {
+    display: none !important;
+}
+
+.algoai-threads-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--algoai-text-muted);
+    margin-bottom: 2px;
+}
+
+.algoai-sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.66rem;
+    font-weight: 600;
+    text-transform: none;
+    color: var(--algoai-green);
+}
+
+.algoai-thread-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid var(--algoai-border);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+[data-theme="dark"] .algoai-thread-item {
+    background: #1a253c;
+}
+
+.algoai-thread-item:hover {
+    border-color: var(--algoai-primary);
+    background: var(--algoai-accent-soft);
+}
+
+.algoai-thread-item.active {
+    border-color: var(--algoai-primary);
+    background: var(--algoai-accent-pill);
+}
+
+.algoai-thread-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.algoai-thread-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--algoai-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.algoai-thread-sub {
+    font-size: 0.68rem;
+    color: var(--algoai-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.algoai-thread-del {
+    border: none;
+    background: transparent;
+    color: var(--algoai-text-muted);
+    font-size: 0.75rem;
+    padding: 2px 5px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.algoai-thread-del:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Agentic Visualizer Launcher Inside Bubbles */
+.algoai-agent-action-wrap {
+    margin-top: 0.7rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.algoai-agent-action-btn {
+    background: linear-gradient(135deg, var(--algoai-primary), var(--algoai-primary-hover));
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+    transition: all 0.2s ease;
+}
+
+.algoai-agent-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(2, 132, 199, 0.38);
+}
+
+/* Assistant Message Read-Aloud Toolbar */
+.algoai-msg-actions {
+    margin-top: 0.55rem;
+    padding-top: 0.4rem;
+    border-top: 1px dashed var(--algoai-border);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+}
+
+.algoai-msg-speak-btn {
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    color: var(--algoai-primary);
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s ease;
+}
+
+.algoai-msg-speak-btn:hover,
+.algoai-msg-speak-btn.speaking {
+    background: var(--algoai-primary);
+    border-color: var(--algoai-primary);
+    color: #ffffff;
+}
+
+/* Voice Mic Button in Input Dock */
+.algoai-mic-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--algoai-accent-soft);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    color: var(--algoai-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.92rem;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+}
+
+.algoai-mic-btn:hover {
+    background: var(--algoai-accent-pill);
+    border-color: var(--algoai-primary);
+}
+
+.algoai-mic-btn.recording {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #dc2626;
+    animation: algoaiMicPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes algoaiMicPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45); }
+    50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
+/* =========================================================================
+   9. Mobile & Responsive Styling
+   ========================================================================= */
+@media (max-width: 576px) {
+    .algoai-panel {
+        bottom: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
+    }
+
+    .algoai-launcher {
+        bottom: 84px;
+        right: 18px;
+    }
+
+    .algoai-bubble {
+        max-width: 90%;
+    }
+
+    .algoai-suggestions-grid {
+        grid-template-columns: 1fr;
+    }
+}

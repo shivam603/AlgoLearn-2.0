@@ -272,6 +272,42 @@ function renderPracticeQuestions(key) {
             window.location.href = `algorithm-details.html?algo=${key}`;
         };
     }
+
+    const drillFooter = document.createElement('div');
+    drillFooter.className = 'd-flex justify-content-end mt-2';
+    drillFooter.innerHTML = `
+        <button type="button" class="btn btn-success btn-sm fw-semibold" id="btn-claim-practice-xp">
+            <i class="bi bi-check2-circle me-1"></i> Mark Drill Complete (+20 XP)
+        </button>
+    `;
+    const claimBtn = drillFooter.querySelector('#btn-claim-practice-xp');
+    claimBtn.addEventListener('click', () => {
+        const token = localStorage.getItem('algolearn_token');
+        if (!token) {
+            window.location.href = 'login.html?redirect=practice.html';
+            return;
+        }
+        claimBtn.disabled = true;
+        fetch('/api/gamification/event', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ type: 'quiz', topic: key, amount: 20 })
+        })
+        .then(r => r.json())
+        .then(d => {
+            claimBtn.innerHTML = d && d.success
+                ? `<i class="bi bi-stars me-1"></i> +${d.gainedXp || 20} XP Saved! (View Dashboard)`
+                : '<i class="bi bi-check-lg me-1"></i> Recorded';
+            claimBtn.classList.replace('btn-success', 'btn-outline-success');
+        })
+        .catch(() => {
+            claimBtn.disabled = false;
+        });
+    });
+    questionsEl.appendChild(drillFooter);
 }
 
 window.addEventListener('DOMContentLoaded', () => {

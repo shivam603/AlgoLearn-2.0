@@ -8,6 +8,8 @@ import sys
 import os
 import json
 import io
+import math
+import types
 import inspect
 import traceback
 
@@ -28,44 +30,62 @@ class PythonTracer:
         self.is_truncated = False
         self.runtime_error = None
 
-    def serialize_value(self, val):
+    def serialize_value(self, val, seen=None, depth=0):
         """Converts any Python value into a clean, safe string and JSON-compatible representation."""
         tname = type(val).__name__
+        if seen is None:
+            seen = set()
         try:
             if val is None:
                 return None, "NoneType"
-            if isinstance(val, (bool, int, float, str)):
-                # Truncate strings if too long
-                if isinstance(val, str) and len(val) > 200:
+            if isinstance(val, bool):
+                return val, tname
+            if isinstance(val, int):
+                return val, tname
+            if isinstance(val, float):
+                if math.isnan(val):
+                    return "NaN", tname
+                if math.isinf(val):
+                    return "Infinity" if val > 0 else "-Infinity", tname
+                return val, tname
+            if isinstance(val, str):
+                if len(val) > 200:
                     return val[:200] + "...", f"str[{len(val)}]"
                 return val, tname
+            if depth > 6:
+                return f"<{tname} ...>", tname
+            obj_id = id(val)
+            if obj_id in seen:
+                return f"<circular {tname}>", tname
+            next_seen = seen | {obj_id}
             if isinstance(val, (list, tuple)):
-                # Safe serialization for lists/tuples
                 length = len(val)
                 type_label = f"{tname}[{length}]"
                 if length > 50:
-                    items = [self.serialize_value(x)[0] for x in val[:50]]
+                    items = [self.serialize_value(x, next_seen, depth + 1)[0] for x in val[:50]]
                     items.append(f"... +{length - 50} more")
                     return items, type_label
-                items = [self.serialize_value(x)[0] for x in val]
+                items = [self.serialize_value(x, next_seen, depth + 1)[0] for x in val]
                 return items, type_label
             if isinstance(val, dict):
                 length = len(val)
                 type_label = f"dict[{length}]"
                 if length > 50:
-                    d = {str(k): self.serialize_value(v)[0] for i, (k, v) in enumerate(val.items()) if i < 50}
+                    d = {str(k): self.serialize_value(v, next_seen, depth + 1)[0] for i, (k, v) in enumerate(val.items()) if i < 50}
                     d["..."] = f"+{length - 50} more keys"
                     return d, type_label
-                return {str(k): self.serialize_value(v)[0] for k, v in val.items()}, type_label
+                return {str(k): self.serialize_value(v, next_seen, depth + 1)[0] for k, v in val.items()}, type_label
             if isinstance(val, set):
-                return [self.serialize_value(x)[0] for i, x in enumerate(val) if i < 30], f"set[{len(val)}]"
+                return [self.serialize_value(x, next_seen, depth + 1)[0] for i, x in enumerate(val) if i < 30], f"set[{len(val)}]"
+            if isinstance(val, types.ModuleType):
+                return f"<module '{getattr(val, '__name__', tname)}'>", "module"
             
             # General object / class instance (e.g. ListNode, TreeNode, custom classes)
             if hasattr(val, '__dict__') and not isinstance(val, type):
                 fields = {}
                 for k, v in list(val.__dict__.items())[:20]:
                     if not k.startswith('_'):
-                        fields[k] = self.serialize_value(v)[0]
+                        fields[k] = self.serialize_value(v, next_seen, depth + 1)[0]
                 if fields:
                     fields["__type__"] = tname
                     return fields, tname
@@ -264,5 +284,5 @@ if __name__ == "__main__":
 
     tracer = PythonTracer(source_path, breakpoints=bps)
     result = tracer.run(code)
-    print(json.dumps(result))
+    print(json.dumps(result, allow_nan=False))
 

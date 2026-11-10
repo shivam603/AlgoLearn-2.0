@@ -1,0 +1,40 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: algolearn-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - algolearn_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  algolearn:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: algolearn-web
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      NODE_ENV: "production"
+      MONGO_URI: "mongodb://mongodb:27017"
+      MONGO_DB_NAME: "sortingVisualizer"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID:-}"
+      GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET:-}"
+      GITHUB_CLIENT_ID: "${GITHUB_CLIENT_ID:-}"
+      GITHUB_CLIENT_SECRET: "${GITHUB_CLIENT_SECRET:-}"
+
+volumes:
+  algolearn_mongo_data:
+

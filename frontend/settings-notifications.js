@@ -1135,13 +1135,30 @@
                             <span class="badge bg-danger rounded-pill ms-auto notification-badge-count d-none">0</span>
                         </button>
 
+                        <a href="dashboard.html" class="profile-dropdown-item">
+                            <div class="profile-item-icon-box"><i class="bi bi-trophy-fill text-warning"></i></div>
+                            <div class="d-flex flex-column text-start">
+                                <span class="fw-semibold">Progress &amp; Leaderboard</span>
+                                <span class="small text-muted-custom">XP, Streaks, Skill Radar &amp; Ranks</span>
+                            </div>
+                            <span class="badge bg-warning text-dark rounded-pill ms-auto" style="font-size:0.68rem;">XP</span>
+                        </a>
+
                         <a href="codelab.html" class="profile-dropdown-item">
                             <div class="profile-item-icon-box"><i class="bi bi-code-slash text-success"></i></div>
                             <div class="d-flex flex-column text-start">
                                 <span class="fw-semibold">CodeLab Studio</span>
-                                <span class="small text-muted-custom">Live IDE & Debugger</span>
+                                <span class="small text-muted-custom">Live IDE, Judge &amp; Profiler</span>
                             </div>
                             <span class="badge bg-primary-subtle text-primary rounded-pill ms-auto" style="font-size:0.68rem;">Live</span>
+                        </a>
+
+                        <a href="duel.html" class="profile-dropdown-item">
+                            <div class="profile-item-icon-box"><i class="bi bi-lightning-charge-fill text-danger"></i></div>
+                            <div class="d-flex flex-column text-start">
+                                <span class="fw-semibold">1v1 Coding Duel</span>
+                                <span class="small text-muted-custom">Live Peer &amp; AlgoBot Battles</span>
+                            </div>
                         </a>
 
                         <a href="visualize.html" class="profile-dropdown-item">

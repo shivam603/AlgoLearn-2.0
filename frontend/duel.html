@@ -11,6 +11,100 @@
     <link rel="stylesheet" href="style.css?v=3.0">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="algolearn-icon.png">
+    <link rel="stylesheet" href="algoai.css">
+    <style>
+        .duel-mode-tabs {
+            display: inline-flex;
+            gap: 8px;
+            padding: 6px;
+            border-radius: 14px;
+            background: var(--bg-surface, #ffffff);
+            border: 1px solid var(--border-sky, rgba(14, 165, 233, 0.22));
+            box-shadow: var(--shadow-sm);
+        }
+
+        .duel-mode-tab-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-secondary, #334155);
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.5rem 1.05rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .duel-mode-tab-btn.active {
+            background: linear-gradient(135deg, #0284c7, #0ea5e9);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+        }
+
+        .live-duel-editor {
+            width: 100%;
+            min-height: 350px;
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 0.86rem;
+            line-height: 1.55;
+            background: #0b1120;
+            color: #e2e8f0;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            resize: vertical;
+            outline: none;
+            tab-size: 4;
+        }
+
+        .live-duel-editor:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        .live-player-telemetry {
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--border-sky, rgba(14, 165, 233, 0.25));
+            background: var(--bg-surface, #ffffff);
+        }
+
+        .duel-countdown-pill {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #0ea5e9;
+            text-shadow: 0 0 18px rgba(14, 165, 233, 0.45);
+        }
+
+        [data-theme="dark"] .duel-mode-tabs,
+        [data-theme="dark"] .live-player-telemetry {
+            background: #0f172a;
+            border-color: rgba(56, 189, 248, 0.28);
+            color: #e2e8f0;
+        }
+
+        [data-theme="dark"] .duel-mode-tab-btn {
+            color: #cbd5e1;
+        }
+
+        [data-theme="cyberpunk"] .duel-mode-tabs,
+        [data-theme="cyberpunk"] .live-player-telemetry {
+            background: #070e22;
+            border-color: rgba(0, 240, 255, 0.4);
+            color: #f0fdfa;
+        }
+
+        [data-theme="cyberpunk"] .duel-mode-tab-btn.active {
+            background: linear-gradient(135deg, #00f0ff, #0284c7);
+            color: #030712;
+        }
+
+        [data-theme="cyberpunk"] .live-duel-editor {
+            background: #030712;
+            border-color: rgba(0, 240, 255, 0.5);
+        }
+    </style>
 </head>
 
 <body>
@@ -20,7 +114,8 @@
             <div class="top-navbar-content">
                 <!-- Left: Left-Panel Toggle & Brand -->
                 <div class="top-navbar-left">
-                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger" title="Open Left Navigation Panel (Press [)">
+                    <button type="button" class="nav-sidebar-toggle-btn btn-panel-trigger"
+                        title="Open Left Navigation Panel (Press [)">
                         <i class="bi bi-list"></i>
                         <span class="d-none d-sm-inline fw-bold" style="font-size:0.85rem;">Menu</span>
                     </button>
@@ -28,7 +123,8 @@
                         <span class="navbar-brand-icon">
                             <img src="algolearn-icon.png" alt="AlgoLearn Logo" class="navbar-brand-logo-img" />
                         </span>
-                        <span class="brand-text"><span class="brand-algo">Algo</span><span class="brand-learn">Learn</span></span>
+                        <span class="brand-text"><span class="brand-algo">Algo</span><span
+                                class="brand-learn">Learn</span></span>
                     </a>
                 </div>
 
@@ -36,7 +132,8 @@
                 <div class="top-nav-search-wrap">
                     <form action="search.html" method="GET" class="top-nav-search-form">
                         <i class="bi bi-search top-nav-search-icon"></i>
-                        <input type="search" name="q" class="top-nav-search-input" placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
+                        <input type="search" name="q" class="top-nav-search-input"
+                            placeholder="Search algorithms, visualizers, practice..." autocomplete="off" />
                         <kbd class="search-kbd-shortcut">Ctrl+K</kbd>
                     </form>
                 </div>
@@ -46,7 +143,8 @@
                     <div class="visitor-counter-box nav-visitor-box" title="Live Total Website Visitors">
                         <span class="visitor-live-dot"></span>
                         <i class="bi bi-people-fill text-sky-600"></i>
-                        <span class="d-none d-sm-inline">Visitors:</span> <strong class="visitor-count-value visitor-number">1,428</strong>
+                        <span class="d-none d-sm-inline">Visitors:</span> <strong
+                            class="visitor-count-value visitor-number">1,428</strong>
                     </div>
                     <button type="button" class="btn-panel-trigger btn-sm">
                         <i class="bi bi-grid-fill"></i>
@@ -59,89 +157,336 @@
 
     <div class="container py-4">
         <!-- Header -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-sky">
+        <div
+            class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-3 border-bottom border-sky gap-3">
             <div>
                 <span class="badge-sky">
-                    <i class="bi bi-fire text-warning"></i> Multi-Algorithm Race Arena
+                    <i class="bi bi-lightning-charge-fill text-warning"></i> Real-Time Arena &amp; Algorithm Comparison
                 </span>
-                <h1 class="h3 fw-bold mt-1 mb-1">Algorithm Duel: Head-to-Head Comparison</h1>
-                <p class="text-muted-custom small mb-0">Run 2, 3, or 4 sorting algorithms simultaneously on the exact same randomized dataset to compare speed & efficiency.</p>
+                <h1 class="h3 fw-bold mt-1 mb-1">AlgoLearn Duel Arena</h1>
+                <p class="text-muted-custom small mb-0">Compete head-to-head in real-time 1v1 Socket.IO coding battles,
+                    spar vs AlgoBot, or race sorting algorithms visually.</p>
             </div>
-            <div class="d-flex gap-2 mt-2 mt-md-0">
+            <div class="d-flex flex-wrap gap-2">
+                <a href="dashboard.html" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-trophy-fill text-warning"></i> Leaderboard &amp; XP
+                </a>
+                <a href="codelab.html?mode=problems" class="btn btn-sky-subtle btn-sm">
+                    <i class="bi bi-code-slash"></i> CodeLab Judge
+                </a>
                 <a href="visualize-sorting.html" class="btn btn-sky-subtle btn-sm">
-                    <i class="bi bi-bar-chart-fill"></i> Single Visualizer
-                </a>
-                <a href="challenge.html" class="btn btn-sky-subtle btn-sm">
-                    <i class="bi bi-controller"></i> Challenge Mode
+                    <i class="bi bi-bar-chart-fill"></i> Visualizers
                 </a>
             </div>
         </div>
 
-        <!-- Controls Toolbar -->
-        <div class="card card-custom p-3 mb-4">
-            <div class="row g-3 align-items-center">
-                <div class="col-md-3 col-sm-6">
-                    <label class="form-label small fw-bold mb-1">Racer Grid Layout</label>
-                    <select id="duel-grid-count" class="form-select form-select-sm">
-                        <option value="2">2 Racers (Head-to-Head)</option>
-                        <option value="3">3 Racers (Triple Threat)</option>
-                        <option value="4" selected>4 Racers (Grand Prix)</option>
-                    </select>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <label class="form-label small fw-bold mb-1">Array Size (<span id="duel-size-val">30</span>)</label>
-                    <input type="range" id="duel-size-slider" class="form-range" min="10" max="60" value="30">
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <label class="form-label small fw-bold mb-1">Dataset Preset</label>
-                    <select id="duel-preset" class="form-select form-select-sm">
-                        <option value="random" selected>Uniform Random</option>
-                        <option value="nearly_sorted">Nearly Sorted (90%)</option>
-                        <option value="reversed">Reversed Sorted</option>
-                        <option value="few_unique">Few Unique (Duplicates)</option>
-                    </select>
-                </div>
-                <div class="col-md-3 col-sm-6 d-flex gap-2 align-items-end">
-                    <button type="button" id="btn-duel-start" class="btn btn-primary btn-sm flex-grow-1 fw-bold">
-                        <i class="bi bi-play-fill"></i> Start Duel!
-                    </button>
-                    <button type="button" id="btn-duel-reset" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-counterclockwise"></i> Reset
-                    </button>
-                </div>
+        <!-- Mode Switcher Tabs -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+            <div class="duel-mode-tabs" role="tablist">
+                <button type="button" class="duel-mode-tab-btn active" id="btn-duel-tab-live">
+                    <i class="bi bi-people-fill me-1"></i> Live 1v1 Coding Duel
+                </button>
+                <button type="button" class="duel-mode-tab-btn" id="btn-duel-tab-race">
+                    <i class="bi bi-speedometer2 me-1"></i> Multi-Algorithm Race
+                </button>
             </div>
+            <span class="small text-muted-custom" id="live-socket-status">
+                <span class="badge bg-secondary-subtle text-secondary">Connecting Arena...</span>
+            </span>
         </div>
 
-        <!-- Racers Grid -->
-        <div id="duel-racers-container" class="duel-grid-container mb-4">
-            <!-- Racer Cards generated dynamically via JavaScript -->
-        </div>
+        <!-- =======================================================
+             MODE 1: Real-Time 1v1 Multiplayer Coding Duel (Socket.IO)
+             ======================================================= -->
+        <section id="duel-section-live">
+            <!-- Lobby Setup Cards -->
+            <div id="live-duel-lobby" class="row g-4 mb-4">
+                <div class="col-lg-7">
+                    <div class="card card-custom p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h2 class="h5 fw-bold mb-0"><i
+                                    class="bi bi-rocket-takeoff-fill text-sky-600 me-2"></i>Launch a 1v1 Coding Match
+                            </h2>
+                            <span class="badge bg-success-subtle text-success">+120 XP Win Bonus</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <label class="form-label small fw-bold">Your Arena Alias</label>
+                                <input type="text" id="live-player-name" class="form-control form-control-sm"
+                                    placeholder="Enter your display name" maxlength="28" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold">Difficulty</label>
+                                <select id="live-diff-filter" class="form-select form-select-sm">
+                                    <option value="All" selected>All (100)</option>
+                                    <option value="Easy">Easy (30)</option>
+                                    <option value="Medium">Medium (40)</option>
+                                    <option value="Hard">Hard (30)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold d-flex justify-content-between">
+                                    <span>Challenge Problem</span>
+                                    <button type="button" id="btn-live-pick-random"
+                                        class="btn btn-link btn-sm p-0 text-decoration-none fw-bold"
+                                        style="font-size:0.74rem;">
+                                        <i class="bi bi-shuffle"></i> Random
+                                    </button>
+                                </label>
+                                <select id="live-problem-select" class="form-select form-select-sm">
+                                    <option value="random">Random Match (Auto-Pick)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <button type="button" id="btn-create-duel-room" class="btn btn-primary fw-bold flex-grow-1">
+                                <i class="bi bi-plus-circle-fill me-1"></i> Create 1v1 Peer Room
+                            </button>
+                            <button type="button" id="btn-spar-algobot"
+                                class="btn btn-outline-info fw-bold flex-grow-1">
+                                <i class="bi bi-robot me-1"></i> Instant Spar vs AlgoBot
+                            </button>
+                            <button type="button" id="btn-lobby-preview-vis" class="btn btn-outline-secondary fw-bold">
+                                <i class="bi bi-bar-chart-fill me-1"></i> Preview Visualizer
+                            </button>
+                        </div>
+                        <div id="live-lobby-vis-wrap" class="mt-3 d-none"></div>
+                        <p class="small text-muted-custom mt-3 mb-0">
+                            <i class="bi bi-shield-check text-success me-1"></i> Both players solve the exact same DSA
+                            problem. First solution verified <strong>Accepted</strong> across hidden tests wins the
+                            match!
+                        </p>
+                    </div>
+                </div>
 
-        <!-- Live Duel Leaderboard -->
-        <div class="duel-leaderboard shadow-sm">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h5 fw-bold mb-0 text-sky-900"><i class="bi bi-trophy-fill text-warning me-2"></i> Live Race Leaderboard</h2>
-                <span id="duel-status-badge" class="badge bg-secondary">Ready for Duel</span>
+                <div class="col-lg-5">
+                    <div class="card card-custom p-4 h-100">
+                        <h2 class="h5 fw-bold mb-3"><i class="bi bi-door-open-fill text-warning me-2"></i>Join a
+                            Friend's Room</h2>
+                        <label class="form-label small fw-bold">6-Character Room Code</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="live-room-code-input"
+                                class="form-control font-monospace text-uppercase fw-bold" placeholder="e.g. K7M9P2"
+                                maxlength="8" />
+                            <button type="button" id="btn-join-duel-room" class="btn btn-warning fw-bold text-dark">
+                                <i class="bi bi-lightning-fill"></i> Join Duel
+                            </button>
+                        </div>
+                        <div id="live-lobby-alert" class="alert alert-danger py-2 px-3 small d-none mb-2"></div>
+                        <div class="p-3 rounded bg-sky-50 border-sky small text-muted-custom mt-auto">
+                            Tip: Open this page in two browser windows or share your Room Invite URL with a friend to
+                            race live!
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Algorithm</th>
-                            <th>Status</th>
-                            <th>Time (ms)</th>
-                            <th>Comparisons</th>
-                            <th>Swaps / Writes</th>
-                            <th>Efficiency Score</th>
-                        </tr>
-                    </thead>
-                    <tbody id="duel-leaderboard-body">
-                        <!-- Populated by JS -->
-                    </tbody>
-                </table>
+
+            <!-- Waiting Room Banner -->
+            <div id="live-waiting-banner" class="card card-custom p-4 text-center mb-4 d-none">
+                <div class="spinner-grow text-info mb-2" style="width:2rem; height:2rem;" role="status"></div>
+                <h3 class="h5 fw-bold mb-1">Waiting for Challenger in Room <span id="live-waiting-code"
+                        class="badge bg-dark font-monospace fs-6 ms-1">------</span></h3>
+                <p class="small text-muted-custom mb-3">Share this code or invite link with a peer. Match begins
+                    automatically with a 3-second countdown once they join.</p>
+                <div class="d-flex justify-content-center flex-wrap gap-2">
+                    <button type="button" id="btn-copy-room-code" class="btn btn-sm btn-outline-primary fw-bold">
+                        <i class="bi bi-clipboard me-1"></i> Copy Code
+                    </button>
+                    <button type="button" id="btn-copy-room-link" class="btn btn-sm btn-outline-info fw-bold">
+                        <i class="bi bi-link-45deg me-1"></i> Copy Invite Link
+                    </button>
+                    <button type="button" id="btn-leave-duel-room" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-x-circle me-1"></i> Cancel Room
+                    </button>
+                </div>
             </div>
-        </div>
+
+            <!-- Countdown Banner -->
+            <div id="live-countdown-banner" class="card card-custom p-5 text-center mb-4 d-none">
+                <div class="small text-uppercase fw-bold text-muted-custom mb-1">Opponent Locked In — Get Ready</div>
+                <div class="duel-countdown-pill" id="live-countdown-number">3</div>
+            </div>
+
+            <!-- Active 1v1 Split Arena -->
+            <div id="live-duel-arena" class="d-none">
+                <!-- Live Opponent Telemetry Strip -->
+                <div class="row g-3 align-items-stretch mb-3">
+                    <div class="col-md-5">
+                        <div class="live-player-telemetry h-100" id="duel-p1-card">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong id="duel-p1-name">Player 1</strong>
+                                <span class="badge bg-primary" id="duel-p1-status">Ready</span>
+                            </div>
+                            <div class="progress mb-1" style="height: 8px;">
+                                <div class="progress-bar bg-info" id="duel-p1-bar" style="width: 0%;"></div>
+                            </div>
+                            <div class="small text-muted-custom d-flex justify-content-between">
+                                <span id="duel-p1-tests">0 / 6 tests passed</span>
+                                <span id="duel-p1-lang">PYTHON</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column align-items-center justify-content-center text-center">
+                        <span class="badge bg-dark border border-info font-monospace mb-1"
+                            id="live-arena-room-badge">ROOM</span>
+                        <div class="fs-4 fw-bold font-monospace text-sky-600" id="live-match-timer">00:00</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="live-player-telemetry h-100" id="duel-p2-card">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong id="duel-p2-name">Opponent</strong>
+                                <span class="badge bg-secondary" id="duel-p2-status">Waiting</span>
+                            </div>
+                            <div class="progress mb-1" style="height: 8px;">
+                                <div class="progress-bar bg-warning" id="duel-p2-bar" style="width: 0%;"></div>
+                            </div>
+                            <div class="small text-muted-custom d-flex justify-content-between">
+                                <span id="duel-p2-tests">0 / 6 tests passed</span>
+                                <span id="duel-p2-lang">PYTHON</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Match Result Banner -->
+                <div id="live-match-result-banner"
+                    class="alert alert-success d-none mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div id="live-match-result-text" class="fw-bold">Match Complete!</div>
+                    <div class="d-flex gap-2">
+                        <a href="dashboard.html" class="btn btn-sm btn-outline-success fw-bold">View XP &amp; Rank</a>
+                        <button type="button" id="btn-live-new-match" class="btn btn-sm btn-success fw-bold">Back to
+                            Lobby</button>
+                    </div>
+                </div>
+
+                <!-- Problem Description + Code Editor Split -->
+                <div class="row g-3">
+                    <div class="col-lg-5">
+                        <div class="card card-custom p-3 h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h3 class="h6 fw-bold mb-0" id="live-arena-problem-title">Problem</h3>
+                                <span class="badge bg-success" id="live-arena-diff-badge">Easy</span>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                                <div class="d-flex gap-2">
+                                    <span class="badge bg-secondary" id="live-arena-topic-badge">Topic</span>
+                                    <span class="badge bg-info text-dark" id="live-arena-optimal-badge">O(n)</span>
+                                </div>
+                                <button type="button" id="btn-arena-toggle-vis"
+                                    class="btn btn-xs btn-outline-primary py-0 px-2" style="font-size:0.74rem;">
+                                    <i class="bi bi-bar-chart-fill me-1"></i> Visualize Algorithm
+                                </button>
+                            </div>
+                            <div id="live-arena-vis-wrap" class="d-none mb-2"></div>
+                            <p class="small mb-2" id="live-arena-desc"></p>
+                            <div id="live-arena-examples" class="mb-2"></div>
+                            <div id="live-judge-feedback" class="mt-auto"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="card card-custom p-3 h-100 d-flex flex-column">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <label class="small fw-bold mb-0">Language:</label>
+                                    <select id="live-arena-lang" class="form-select form-select-sm"
+                                        style="width:130px;">
+                                        <option value="python" selected>Python</option>
+                                        <option value="javascript">JavaScript</option>
+                                        <option value="java">Java</option>
+                                        <option value="cpp">C++</option>
+                                        <option value="c">C</option>
+                                    </select>
+                                    <button type="button" id="btn-live-reset-starter"
+                                        class="btn btn-sm btn-outline-secondary">Starter</button>
+                                </div>
+                                <button type="button" id="btn-live-submit" class="btn btn-success btn-sm fw-bold px-3">
+                                    <i class="bi bi-check2-all me-1"></i> Submit Solution to Judge
+                                </button>
+                            </div>
+                            <textarea id="live-code-editor" class="live-duel-editor flex-grow-1"
+                                spellcheck="false"></textarea>
+                            <div class="d-flex justify-content-between align-items-center mt-2 small text-muted-custom">
+                                <span id="live-editor-status">Write your solution and submit to claim victory!</span>
+                                <span class="font-monospace" id="live-char-count">0 chars</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =======================================================
+             MODE 2: Multi-Algorithm Visual Race Arena (Preserved)
+             ======================================================= -->
+        <section id="duel-section-race" class="d-none">
+            <!-- Controls Toolbar -->
+            <div class="card card-custom p-3 mb-4">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-3 col-sm-6">
+                        <label class="form-label small fw-bold mb-1">Racer Grid Layout</label>
+                        <select id="duel-grid-count" class="form-select form-select-sm">
+                            <option value="2">2 Racers (Head-to-Head)</option>
+                            <option value="3">3 Racers (Triple Threat)</option>
+                            <option value="4" selected>4 Racers (Grand Prix)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label class="form-label small fw-bold mb-1">Array Size (<span
+                                id="duel-size-val">30</span>)</label>
+                        <input type="range" id="duel-size-slider" class="form-range" min="10" max="60" value="30">
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label class="form-label small fw-bold mb-1">Dataset Preset</label>
+                        <select id="duel-preset" class="form-select form-select-sm">
+                            <option value="random" selected>Uniform Random</option>
+                            <option value="nearly_sorted">Nearly Sorted (90%)</option>
+                            <option value="reversed">Reversed Sorted</option>
+                            <option value="few_unique">Few Unique (Duplicates)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-6 d-flex gap-2 align-items-end">
+                        <button type="button" id="btn-duel-start" class="btn btn-primary btn-sm flex-grow-1 fw-bold">
+                            <i class="bi bi-play-fill"></i> Start Duel!
+                        </button>
+                        <button type="button" id="btn-duel-reset" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Racers Grid -->
+            <div id="duel-racers-container" class="duel-grid-container mb-4">
+                <!-- Racer Cards generated dynamically via JavaScript -->
+            </div>
+
+            <!-- Live Duel Leaderboard -->
+            <div class="duel-leaderboard shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 fw-bold mb-0 text-sky-900"><i class="bi bi-trophy-fill text-warning me-2"></i> Live
+                        Race Leaderboard</h2>
+                    <span id="duel-status-badge" class="badge bg-secondary">Ready for Duel</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Algorithm</th>
+                                <th>Status</th>
+                                <th>Time (ms)</th>
+                                <th>Comparisons</th>
+                                <th>Swaps / Writes</th>
+                                <th>Efficiency Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="duel-leaderboard-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- Footer -->
@@ -157,7 +502,10 @@
     <script src="audio-synth.js"></script>
     <script src="nav-panel.js?v=3.0"></script>
     <script src="settings-notifications.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="problem-visualizer.js"></script>
     <script src="duel.js"></script>
+    <script src="algoai.js" defer></script>
 </body>
 
 </html>

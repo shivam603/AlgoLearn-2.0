@@ -6,6 +6,7 @@
   "main": "backend/server.js",
   "scripts": {
     "start": "node backend/server.js",
+    "test": "node tests/algoai.test.js && node tests/full-e2e.test.js",
     "build": "npm install && cd backend && npm install",
     "postinstall": "cd backend && npm install"
   },
@@ -16,7 +17,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.18.2",
-    "mongodb": "^6.3.0"
+    "mongodb": "^6.3.0",
+    "socket.io": "^4.8.4"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -30,5 +32,8 @@
     "dsa"
   ],
   "author": "Team ANT-X (Shivam, Siddharth, Amrit)",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "socket.io-client": "^4.8.4"
+  }
 }

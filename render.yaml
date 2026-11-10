@@ -1,12 +1,17 @@
 services:
   - type: web
     name: algolearn
-    runtime: node
+    runtime: docker
+    dockerfilePath: ./Dockerfile
     plan: free
-    buildCommand: npm install && cd backend && npm install
-    startCommand: node backend/server.js
+    healthCheckPath: /api/ai/status
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
+      # Optional secrets to configure in Render Dashboard -> Environment:
+      # - MONGO_URI (MongoDB Atlas free M0 connection string for persistent users/XP)
+      # - GEMINI_API_KEY (for AlgoAI Gemini responses)
+      # - GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET / GOOGLE_CALLBACK_URL
+      # - GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET / GITHUB_CALLBACK_URL

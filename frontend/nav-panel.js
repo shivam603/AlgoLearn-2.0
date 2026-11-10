@@ -125,19 +125,26 @@
                             </div>
                             <span class="badge bg-primary text-white fw-bold notification-badge-count d-none">0</span>
                         </a>
-                        <a href="codelab.html" class="drawer-list-item" data-search="codelab live code editor debugger studio monaco execution tracing ide">
+                        <a href="dashboard.html" class="drawer-list-item" data-search="dashboard progress xp leaderboard badges streak skill radar">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-trophy-fill text-warning"></i></span>
+                                <span class="fw-bold" style="font-size:0.88rem;">Progress &amp; Leaderboard</span>
+                            </div>
+                            <span class="badge bg-info text-dark fw-bold">XP</span>
+                        </a>
+                        <a href="codelab.html" class="drawer-list-item" data-search="codelab live code editor debugger studio monaco execution tracing judge profiler ide">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-code-slash text-sky-600"></i></span>
-                                <span class="fw-bold" style="font-size:0.88rem;">CodeLab (Live IDE & Debugger)</span>
+                                <span class="fw-bold" style="font-size:0.88rem;">CodeLab (Judge &amp; Debugger)</span>
                             </div>
-                            <span class="badge bg-success text-white fw-bold">NEW</span>
+                            <span class="badge bg-success text-white fw-bold">PRO</span>
                         </a>
-                        <a href="duel.html" class="drawer-list-item" data-search="duel race head to head arena multi algorithm comparison">
+                        <a href="duel.html" class="drawer-list-item" data-search="duel 1v1 multiplayer coding battle algobot race head to head arena multi algorithm comparison">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="category-icon-box" style="width:28px; height:28px; font-size:0.85rem;"><i class="bi bi-fire text-warning"></i></span>
-                                <span class="fw-bold" style="font-size:0.88rem;">Algorithm Duel / Race</span>
+                                <span class="fw-bold" style="font-size:0.88rem;">1v1 Coding Duel &amp; Race</span>
                             </div>
-                            <span class="badge bg-warning text-dark fw-bold">Multi-Race</span>
+                            <span class="badge bg-warning text-dark fw-bold">1v1 Live</span>
                         </a>
                         <a href="challenge.html" class="drawer-list-item" data-search="challenge guess next step gamified dsa quiz test">
                             <div class="d-flex align-items-center gap-2">

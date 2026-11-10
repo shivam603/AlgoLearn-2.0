@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+backend/.env
+*.log
+node_modules
+backend/node_modules
+.vscode
+.idea
+*.class
+

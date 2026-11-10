@@ -6,7 +6,14 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { exec, spawn } = require('child_process');
+const { exec, spawn, spawnSync } = require('child_process');
+
+const PYTHON_BIN = (() => {
+    try {
+        if (spawnSync('python', ['--version'], { stdio: 'ignore' }).status === 0) return 'python';
+    } catch (e) {}
+    return 'python3';
+})();
 
 class DebuggerRunner {
     constructor() {
@@ -175,23 +182,22 @@ class DebuggerRunner {
     runOnHost(sourcePath, lang, bpsJson) {
         return new Promise((resolve, reject) => {
             let cmd = '';
-            const pyScript = (adapter) => `python "${path.join(this.adaptersDir, adapter)}" "${sourcePath}" '${bpsJson}'`;
 
             switch (lang) {
                 case 'python':
-                    cmd = `python "${path.join(this.adaptersDir, 'python_adapter.py')}" "${sourcePath}" "${bpsJson.replace(/"/g, '\\"')}"`;
+                    cmd = `${PYTHON_BIN} "${path.join(this.adaptersDir, 'python_adapter.py')}" "${sourcePath}" "${bpsJson.replace(/"/g, '\\"')}"`;
                     break;
                 case 'javascript':
                     cmd = `node "${path.join(this.adaptersDir, 'javascript_adapter.js')}" "${sourcePath}" "${bpsJson.replace(/"/g, '\\"')}"`;
                     break;
                 case 'java':
-                    cmd = `python "${path.join(this.adaptersDir, 'java_adapter.py')}" "${sourcePath}" "${bpsJson.replace(/"/g, '\\"')}"`;
+                    cmd = `${PYTHON_BIN} "${path.join(this.adaptersDir, 'java_adapter.py')}" "${sourcePath}" "${bpsJson.replace(/"/g, '\\"')}"`;
                     break;
                 case 'c':
-                    cmd = `python "${path.join(this.adaptersDir, 'c_cpp_adapter.py')}" "${sourcePath}" c "${bpsJson.replace(/"/g, '\\"')}"`;
+                    cmd = `${PYTHON_BIN} "${path.join(this.adaptersDir, 'c_cpp_adapter.py')}" "${sourcePath}" c "${bpsJson.replace(/"/g, '\\"')}"`;
                     break;
                 case 'cpp':
-                    cmd = `python "${path.join(this.adaptersDir, 'c_cpp_adapter.py')}" "${sourcePath}" cpp "${bpsJson.replace(/"/g, '\\"')}"`;
+                    cmd = `${PYTHON_BIN} "${path.join(this.adaptersDir, 'c_cpp_adapter.py')}" "${sourcePath}" cpp "${bpsJson.replace(/"/g, '\\"')}"`;
                     break;
                 default:
                     return reject(new Error(`Unsupported language: ${lang}`));

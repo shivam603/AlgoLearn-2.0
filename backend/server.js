@@ -10,9 +10,13 @@ try {
 }
 
 const express = require('express');
+const http = require('http');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
 const crypto = require('crypto');
+const codelabJudge = require('./codelab-judge');
+const gamification = require('./gamification');
+const { attachDuelServer } = require('./duel-server');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,10 +43,12 @@ let historyCollection = null;
 let statsCollection = null;
 let usersCollection = null;
 let sessionsCollection = null;
+let aiChatsCollection = null;
 let visitorCount = 1428;
 const inMemoryHistory = [];
 const inMemoryUsers = new Map();
 const inMemorySessions = new Map();
+const inMemoryAiChats = new Map();
 
 async function saveSession(session) {
     inMemorySessions.set(session.token, session);
@@ -162,14 +168,17 @@ async function seedDefaultUsers() {
 }
 
 async function initDatabase() {
+    let connectedDb = null;
     try {
         const client = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 2000 });
         await client.connect();
         const db = client.db(DB_NAME);
+        connectedDb = db;
         historyCollection = db.collection(COLLECTION_NAME);
         statsCollection = db.collection('stats');
         usersCollection = db.collection('users');
         sessionsCollection = db.collection('sessions');
+        aiChatsCollection = db.collection('ai_chats');
 
         await historyCollection.createIndex({ created_at: -1 });
         await usersCollection.createIndex({ email: 1 });
@@ -177,6 +186,8 @@ async function initDatabase() {
         await usersCollection.createIndex({ googleId: 1 }, { sparse: true });
         await sessionsCollection.createIndex({ token: 1 }, { unique: true });
         await sessionsCollection.createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+        await aiChatsCollection.createIndex({ userId: 1, threadId: 1 }, { unique: true });
+        await aiChatsCollection.createIndex({ userId: 1, updatedAt: -1 });
         
         const metricDoc = await statsCollection.findOne({ _id: 'site_metrics' });
         if (metricDoc && typeof metricDoc.visitor_count === 'number') {
@@ -186,6 +197,7 @@ async function initDatabase() {
     } catch (err) {
         console.warn(`[AlgoLearn Warning] MongoDB not reachable at ${MONGO_URI}. Falling back to in-memory history storage.`);
     } finally {
+        await gamification.init(connectedDb);
         await seedDefaultUsers();
     }
 }
@@ -1078,6 +1090,290 @@ app.post('/api/debug/trace', async (req, res) => {
     }
 });
 
+// ==========================================
+// AlgoAI Mentor Service API Endpoints
+// ==========================================
+const algoAIService = require('./algoai-service');
+
+// 1. AlgoAI Status Endpoint
+app.get('/api/ai/status', (req, res) => {
+    res.json(algoAIService.getStatus());
+});
+
+// 2. AlgoAI Real-Time SSE Streaming Chat
+app.post('/api/ai/stream', async (req, res) => {
+    try {
+        const { messages, context } = req.body;
+        if (!Array.isArray(messages) || messages.length === 0) {
+            return res.status(400).json({ error: 'Missing or invalid messages array' });
+        }
+        await algoAIService.streamChat({ messages, context: context || {} }, res);
+    } catch (err) {
+        console.error('[API /api/ai/stream Error]:', err);
+        if (!res.headersSent) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+});
+
+// 3. AlgoAI Non-Streaming Chat Endpoint
+app.post('/api/ai/chat', async (req, res) => {
+    try {
+        const { messages, context } = req.body;
+        if (!Array.isArray(messages) || messages.length === 0) {
+            return res.status(400).json({ error: 'Missing or invalid messages array' });
+        }
+        const result = await algoAIService.chat({ messages, context: context || {} });
+        res.json(result);
+    } catch (err) {
+        console.error('[API /api/ai/chat Error]:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 4. AlgoAI Authorized Tool Execution Endpoint
+app.post('/api/ai/tools/execute', async (req, res) => {
+    try {
+        const { tool, args } = req.body;
+        if (!tool) {
+            return res.status(400).json({ success: false, error: 'Missing tool name' });
+        }
+
+        if (tool === 'run_code') {
+            const { code, language, input } = args || {};
+            const result = await algoAIService.executeToolRunCode(code, language, input);
+            return res.json({ success: true, result });
+        }
+
+        if (tool === 'get_algorithm') {
+            const { algorithm } = args || {};
+            const result = algoAIService.executeToolGetAlgorithm(algorithm);
+            return res.json({ success: true, result });
+        }
+
+        if (tool === 'get_hint') {
+            const { problem, level } = args || {};
+            const result = algoAIService.executeToolGetHint(problem, level);
+            return res.json({ success: true, result });
+        }
+
+        res.status(400).json({ success: false, error: `Unknown tool: ${tool}` });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 5. AlgoAI Multi-Session Thread Sync Endpoints (Authenticated Users)
+async function getRequestSession(req) {
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim() || req.query.token;
+    if (!token) return null;
+    return await getSession(token);
+}
+
+app.get('/api/ai/threads', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        if (!session) {
+            return res.status(401).json({ success: false, error: 'Authentication required' });
+        }
+
+        let threads = [];
+        if (aiChatsCollection) {
+            threads = await aiChatsCollection
+                .find({ userId: session.userId })
+                .sort({ updatedAt: -1 })
+                .limit(30)
+                .toArray();
+        } else {
+            const userMap = inMemoryAiChats.get(session.userId);
+            if (userMap) {
+                threads = Array.from(userMap.values()).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+            }
+        }
+
+        res.json({
+            success: true,
+            threads: threads.map(t => ({
+                id: t.threadId,
+                title: t.title || 'Untitled Chat',
+                updatedAt: t.updatedAt,
+                messageCount: Array.isArray(t.messages) ? t.messages.length : 0,
+                preview: Array.isArray(t.messages) && t.messages.length > 0
+                    ? String(t.messages[t.messages.length - 1].content || '').slice(0, 90)
+                    : '',
+                messages: t.messages || []
+            }))
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/ai/threads', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        if (!session) {
+            return res.status(401).json({ success: false, error: 'Authentication required' });
+        }
+
+        const { id, title, messages } = req.body || {};
+        if (!id || typeof id !== 'string') {
+            return res.status(400).json({ success: false, error: 'Missing thread id' });
+        }
+
+        const cleanMessages = Array.isArray(messages)
+            ? messages.slice(-40).map(m => ({
+                role: m.role === 'assistant' ? 'assistant' : 'user',
+                content: String(m.content || '').slice(0, 12000),
+                timestamp: m.timestamp || Date.now()
+            }))
+            : [];
+
+        const threadDoc = {
+            userId: session.userId,
+            threadId: id.slice(0, 80),
+            title: String(title || 'New AlgoAI Chat').slice(0, 100),
+            messages: cleanMessages,
+            updatedAt: new Date()
+        };
+
+        if (aiChatsCollection) {
+            await aiChatsCollection.updateOne(
+                { userId: session.userId, threadId: threadDoc.threadId },
+                { $set: threadDoc, $setOnInsert: { createdAt: new Date() } },
+                { upsert: true }
+            );
+        } else {
+            if (!inMemoryAiChats.has(session.userId)) {
+                inMemoryAiChats.set(session.userId, new Map());
+            }
+            inMemoryAiChats.get(session.userId).set(threadDoc.threadId, threadDoc);
+        }
+
+        res.json({ success: true, id: threadDoc.threadId, updatedAt: threadDoc.updatedAt });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.delete('/api/ai/threads/:id', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        if (!session) {
+            return res.status(401).json({ success: false, error: 'Authentication required' });
+        }
+
+        const threadId = req.params.id;
+        if (aiChatsCollection) {
+            await aiChatsCollection.deleteOne({ userId: session.userId, threadId });
+        } else {
+            const userMap = inMemoryAiChats.get(session.userId);
+            if (userMap) userMap.delete(threadId);
+        }
+
+        res.json({ success: true, deletedId: threadId });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ==========================================
+// CodeLab Problem Judge & Big-O Profiler API
+// ==========================================
+app.get('/api/codelab/problems', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        let solvedIds = [];
+        if (session) {
+            const prog = await gamification.getProgress(session);
+            solvedIds = prog.solvedProblems || [];
+        }
+        res.json({ success: true, counts: codelabJudge.COUNTS, problems: codelabJudge.getPublicProblems(solvedIds) });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/codelab/judge', async (req, res) => {
+    try {
+        const { problemId, language, code } = req.body || {};
+        if (!problemId || !code) {
+            return res.status(400).json({ success: false, error: 'Missing problemId or code' });
+        }
+        const result = await codelabJudge.judgeCode({ problemId, language, code });
+        if (result.verdict === 'Accepted') {
+            const session = await getRequestSession(req);
+            if (session) {
+                const problem = codelabJudge.getProblemById(problemId);
+                const gamRes = await gamification.recordProblemSolve(session, {
+                    problemId,
+                    topic: problem ? problem.topic : 'Arrays',
+                    language,
+                    xpReward: result.xpReward || 50
+                });
+                if (gamRes) result.gamification = gamRes;
+            }
+        }
+        res.json(result);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/codelab/profile', async (req, res) => {
+    try {
+        const { problemId, language, code } = req.body || {};
+        if (!code) {
+            return res.status(400).json({ success: false, error: 'Missing source code' });
+        }
+        const profileResult = await codelabJudge.profileCode({ problemId, language, code });
+        res.json(profileResult);
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// ==========================================
+// Gamification, Progress & Leaderboard API
+// ==========================================
+app.get('/api/gamification/me', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        if (!session) {
+            return res.status(401).json({ success: false, error: 'Authentication required' });
+        }
+        const profile = await gamification.getProgress(session);
+        res.json({ success: true, profile });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.post('/api/gamification/event', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        if (!session) {
+            return res.status(401).json({ success: false, error: 'Authentication required' });
+        }
+        const { type, topic, amount } = req.body || {};
+        const result = await gamification.recordLearningEvent(session, { type, topic, amount });
+        res.json({ success: true, ...result });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.get('/api/leaderboard', async (req, res) => {
+    try {
+        const session = await getRequestSession(req);
+        const leaderboard = await gamification.getLeaderboard(session ? session.userId : null, 25);
+        res.json({ success: true, leaderboard });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // Page routing
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/login.html'));
@@ -1088,7 +1384,7 @@ app.get('/login.html', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-    res.redirect('/codelab');
+    res.sendFile(path.join(__dirname, '../frontend/dashboard.html'));
 });
 
 app.get('/welcome', (req, res) => {
@@ -1107,8 +1403,11 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
+const server = http.createServer(app);
+attachDuelServer(server, { getSession });
+
 initDatabase().then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log(`AlgoLearn server running at http://localhost:${PORT}`);
     });
 });
