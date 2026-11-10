@@ -9,7 +9,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 10000
+        value: "10000"
       # Optional secrets to configure in Render Dashboard -> Environment:
       # - MONGO_URI (MongoDB Atlas free M0 connection string for persistent users/XP)
       # - GEMINI_API_KEY (for AlgoAI Gemini responses)
