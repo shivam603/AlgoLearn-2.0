@@ -69,8 +69,8 @@ def compile_and_trace(source_path, breakpoints=None):
 
     main_class = extract_class_name(code)
 
-    # Compile with -g (lightweight JVM flags for constrained cloud containers)
-    javac_cmd = ["javac", "-J-XX:TieredStopAtLevel=1", "-J-Xms16m", "-J-Xmx192m", "-g", source_path]
+    # Compile with -g (ultra-lean JVM flags for constrained 512MB cloud containers)
+    javac_cmd = ["javac", "-J-XX:+UseSerialGC", "-J-XX:TieredStopAtLevel=1", "-J-Xms8m", "-J-Xmx64m", "-J-Xss256k", "-g", source_path]
     comp_proc = subprocess.run(javac_cmd, capture_output=True, text=True, timeout=25)
 
     if comp_proc.returncode != 0:
@@ -94,9 +94,12 @@ def compile_and_trace(source_path, breakpoints=None):
     bp_str = ",".join(str(b) for b in (breakpoints or []))
     java_cmd = [
         "java",
-        "-Xms16m",
-        "-Xmx96m",
+        "-Xms8m",
+        "-Xmx48m",
+        "-XX:+UseSerialGC",
         "-XX:TieredStopAtLevel=1",
+        "-XX:ReservedCodeCacheSize=16m",
+        "-Xss256k",
         "-classpath",
         classpath,
         tracer_class,

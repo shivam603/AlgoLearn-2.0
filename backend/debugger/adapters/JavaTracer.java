@@ -59,9 +59,11 @@ public class JavaTracer {
             String listenAddr = lc.startListening(connArgs);
             ProcessBuilder pb = new ProcessBuilder(
                 "java",
-                "-Xms16m",
-                "-Xmx96m",
-                "-XX:TieredStopAtLevel=1",
+                "-Xms4m",
+                "-Xmx32m",
+                "-Xint",
+                "-XX:+UseSerialGC",
+                "-Xss256k",
                 "-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=" + listenAddr,
                 "-classpath",
                 classPath,
@@ -118,7 +120,7 @@ public class JavaTracer {
         while (isRunning && stepCount < maxSteps) {
             EventSet eventSet = null;
             try {
-                eventSet = queue.remove(2000);
+                eventSet = queue.remove(8000);
             } catch (Exception e) {
                 break;
             }
@@ -127,71 +129,74 @@ public class JavaTracer {
                 break;
             }
 
-            for (Event event : eventSet) {
-                if (event instanceof VMDeathEvent || event instanceof VMDisconnectEvent) {
-                    isRunning = false;
-                    break;
-                } else if (event instanceof ClassPrepareEvent) {
-                    ClassPrepareEvent cpe = (ClassPrepareEvent) event;
-                    ThreadReference thread = cpe.thread();
-
-                    // Create step request on thread
-                    activeStepReq = erm.createStepRequest(thread, StepRequest.STEP_LINE, StepRequest.STEP_INTO);
-                    activeStepReq.addClassFilter(mainClass);
-                    activeStepReq.enable();
-                } else if (event instanceof StepEvent) {
-                    StepEvent se = (StepEvent) event;
-                    Location loc = se.location();
-                    int line = loc.lineNumber();
-                    String method = loc.method().name();
-
-                    ThreadReference thread = se.thread();
-                    List<Map<String, Object>> stack = new ArrayList<>();
-                    Map<String, Object> variables = new LinkedHashMap<>();
-                    Map<String, String> variableTypes = new LinkedHashMap<>();
-
-                    try {
-                        List<StackFrame> frames = thread.frames();
-                        int depth = 0;
-                        for (StackFrame f : frames) {
-                            if (f.location().declaringType().name().equals(mainClass)) {
-                                Map<String, Object> fmap = new LinkedHashMap<>();
-                                fmap.put("name", f.location().method().name());
-                                fmap.put("line", f.location().lineNumber());
-                                fmap.put("depth", depth++);
-                                stack.add(fmap);
-                            }
-                        }
-
-                        if (!frames.isEmpty()) {
-                            StackFrame top = frames.get(0);
-                            for (LocalVariable var : top.visibleVariables()) {
-                                Value val = top.getValue(var);
-                                variables.put(var.name(), serializeValToObject(val));
-                                variableTypes.put(var.name(), var.typeName());
-                            }
-                        }
-                    } catch (Exception ignored) {}
-
-                    Map<String, Object> stepData = new LinkedHashMap<>();
-                    stepData.put("step", stepCount + 1);
-                    stepData.put("line", line);
-                    stepData.put("function", method);
-                    stepData.put("eventType", "step");
-                    stepData.put("isBreakpoint", breakpoints.contains(line));
-                    stepData.put("description", "Executing line " + line + " in " + method + "()");
-                    stepData.put("callStack", stack);
-                    stepData.put("variables", variables);
-                    stepData.put("variableTypes", variableTypes);
-                    stepData.put("output", "");
-
-                    steps.add(stepData);
-                    stepCount++;
-                }
-            }
-
             try {
+                for (Event event : eventSet) {
+                    if (event instanceof VMDeathEvent || event instanceof VMDisconnectEvent) {
+                        isRunning = false;
+                        break;
+                    } else if (event instanceof ClassPrepareEvent) {
+                        ClassPrepareEvent cpe = (ClassPrepareEvent) event;
+                        ThreadReference thread = cpe.thread();
+
+                        // Create step request on thread
+                        activeStepReq = erm.createStepRequest(thread, StepRequest.STEP_LINE, StepRequest.STEP_INTO);
+                        activeStepReq.addClassFilter(mainClass);
+                        activeStepReq.enable();
+                    } else if (event instanceof StepEvent) {
+                        StepEvent se = (StepEvent) event;
+                        Location loc = se.location();
+                        int line = loc.lineNumber();
+                        String method = loc.method().name();
+
+                        ThreadReference thread = se.thread();
+                        List<Map<String, Object>> stack = new ArrayList<>();
+                        Map<String, Object> variables = new LinkedHashMap<>();
+                        Map<String, String> variableTypes = new LinkedHashMap<>();
+
+                        try {
+                            List<StackFrame> frames = thread.frames();
+                            int depth = 0;
+                            for (StackFrame f : frames) {
+                                if (f.location().declaringType().name().equals(mainClass)) {
+                                    Map<String, Object> fmap = new LinkedHashMap<>();
+                                    fmap.put("name", f.location().method().name());
+                                    fmap.put("line", f.location().lineNumber());
+                                    fmap.put("depth", depth++);
+                                    stack.add(fmap);
+                                }
+                            }
+
+                            if (!frames.isEmpty()) {
+                                StackFrame top = frames.get(0);
+                                for (LocalVariable var : top.visibleVariables()) {
+                                    Value val = top.getValue(var);
+                                    variables.put(var.name(), serializeValToObject(val));
+                                    variableTypes.put(var.name(), var.typeName());
+                                }
+                            }
+                        } catch (Exception ignored) {}
+
+                        Map<String, Object> stepData = new LinkedHashMap<>();
+                        stepData.put("step", stepCount + 1);
+                        stepData.put("line", line);
+                        stepData.put("function", method);
+                        stepData.put("eventType", "step");
+                        stepData.put("isBreakpoint", breakpoints.contains(line));
+                        stepData.put("description", "Executing line " + line + " in " + method + "()");
+                        stepData.put("callStack", stack);
+                        stepData.put("variables", variables);
+                        stepData.put("variableTypes", variableTypes);
+                        stepData.put("output", "");
+
+                        steps.add(stepData);
+                        stepCount++;
+                    }
+                }
+
                 eventSet.resume();
+            } catch (VMDisconnectedException e) {
+                isRunning = false;
+                break;
             } catch (Exception e) {
                 break;
             }
