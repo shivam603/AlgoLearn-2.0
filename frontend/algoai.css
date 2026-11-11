@@ -82,30 +82,31 @@
 [data-theme="cyberpunk"],
 body.theme-neon {
     --algoai-bg: #060c1c;
-    --algoai-bg-glass: rgba(6, 12, 28, 0.95);
+    --algoai-bg-glass: rgba(6, 12, 28, 0.96);
     --algoai-header-bg: rgba(11, 20, 44, 0.98);
     --algoai-border: rgba(0, 240, 255, 0.35);
     --algoai-border-hover: #00f0ff;
     --algoai-border-glow: rgba(0, 240, 255, 0.28);
     --algoai-primary: #00f0ff;
     --algoai-primary-hover: #00ffaa;
-    --algoai-accent-soft: rgba(0, 240, 255, 0.1);
+    --algoai-accent-soft: rgba(0, 240, 255, 0.12);
     --algoai-accent-pill: rgba(0, 240, 255, 0.2);
     --algoai-cyan: #00f0ff;
     --algoai-magenta: #ff007f;
     --algoai-violet: #8b5cf6;
     --algoai-green: #00ffaa;
     --algoai-text-primary: #f8fafc;
-    --algoai-text-secondary: #94a3b8;
-    --algoai-text-muted: #64748b;
+    --algoai-text-secondary: #cbd5e1;
+    --algoai-text-muted: #94a3b8;
+    --algoai-text-light: #94a3b8;
     --algoai-user-bubble: linear-gradient(135deg, rgba(0, 240, 255, 0.25) 0%, rgba(139, 92, 246, 0.25) 50%, rgba(255, 0, 127, 0.25) 100%);
     --algoai-user-text: #ffffff;
-    --algoai-bot-bubble: rgba(14, 25, 52, 0.92);
-    --algoai-bot-border: rgba(0, 240, 255, 0.25);
+    --algoai-bot-bubble: rgba(14, 25, 52, 0.94);
+    --algoai-bot-border: rgba(0, 240, 255, 0.28);
     --algoai-code-bg: #030712;
     --algoai-code-header: rgba(15, 23, 42, 0.95);
-    --algoai-input-bg: rgba(11, 20, 44, 0.94);
-    --algoai-input-border: rgba(0, 240, 255, 0.4);
+    --algoai-input-bg: #0b142c;
+    --algoai-input-border: rgba(0, 240, 255, 0.45);
     --algoai-shadow-panel: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 240, 255, 0.25);
     --algoai-shadow-launcher: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 28px rgba(0, 240, 255, 0.45);
 }
@@ -479,6 +480,11 @@ body.algoai-open .floating-panel-toggle {
     border-color: #1a253c;
 }
 
+[data-theme="cyberpunk"] .algoai-header-online-dot,
+body.theme-neon .algoai-header-online-dot {
+    border-color: #0b142c;
+}
+
 .algoai-header-title-wrap {
     display: flex;
     flex-direction: column;
@@ -573,6 +579,13 @@ body.algoai-open .floating-panel-toggle {
     border-color: #273553;
 }
 
+[data-theme="cyberpunk"] .algoai-ctrl-btn,
+body.theme-neon .algoai-ctrl-btn {
+    background: #0b142c;
+    border-color: rgba(0, 240, 255, 0.35);
+    color: #cbd5e1;
+}
+
 .algoai-ctrl-btn:hover {
     background: var(--algoai-accent-soft);
     border-color: var(--algoai-border-hover);
@@ -604,6 +617,12 @@ body.algoai-open .floating-panel-toggle {
 
 [data-theme="dark"] .algoai-context-strip {
     background: rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="cyberpunk"] .algoai-context-strip,
+body.theme-neon .algoai-context-strip {
+    background: rgba(8, 15, 36, 0.96);
+    border-bottom-color: rgba(0, 240, 255, 0.25);
 }
 
 .algoai-context-pill {
@@ -648,6 +667,13 @@ body.algoai-open .floating-panel-toggle {
     border-color: #273553;
 }
 
+[data-theme="cyberpunk"] .algoai-action-chip,
+body.theme-neon .algoai-action-chip {
+    background: #0b142c;
+    border-color: rgba(0, 240, 255, 0.35);
+    color: #e2e8f0;
+}
+
 .algoai-action-chip:hover {
     background: var(--algoai-accent-soft);
     border-color: var(--algoai-border-hover);
@@ -658,6 +684,14 @@ body.algoai-open .floating-panel-toggle {
     background: #fef3c7;
     border-color: #fde68a;
     color: #b45309;
+}
+
+[data-theme="dark"] .algoai-action-chip.active,
+[data-theme="cyberpunk"] .algoai-action-chip.active,
+body.theme-neon .algoai-action-chip.active {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: rgba(251, 191, 36, 0.55);
+    color: #fcd34d;
 }
 
 /* Quick Topic Starters Bar */
@@ -680,6 +714,12 @@ body.algoai-open .floating-panel-toggle {
 
 [data-theme="dark"] .algoai-quick-bar {
     background: #131d31;
+}
+
+[data-theme="cyberpunk"] .algoai-quick-bar,
+body.theme-neon .algoai-quick-bar {
+    background: #060c1c;
+    border-bottom-color: rgba(0, 240, 255, 0.22);
 }
 
 .algoai-quick-chip {
@@ -706,6 +746,11 @@ body.algoai-open .floating-panel-toggle {
     box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
 }
 
+[data-theme="cyberpunk"] .algoai-quick-chip:hover,
+body.theme-neon .algoai-quick-chip:hover {
+    color: #030712;
+}
+
 /* =========================================================================
    6. Messages Area & Elegant Bubble Design
    ========================================================================= */
@@ -725,6 +770,11 @@ body.algoai-open .floating-panel-toggle {
 
 [data-theme="dark"] .algoai-messages {
     background: #0f172a;
+}
+
+[data-theme="cyberpunk"] .algoai-messages,
+body.theme-neon .algoai-messages {
+    background: #040814;
 }
 
 /* Custom Scrollbar */
@@ -755,6 +805,12 @@ body.algoai-open .floating-panel-toggle {
 [data-theme="dark"] .algoai-welcome-card {
     background: #1a253c;
     border-color: #273553;
+}
+
+[data-theme="cyberpunk"] .algoai-welcome-card,
+body.theme-neon .algoai-welcome-card {
+    background: #0b142c;
+    border-color: rgba(0, 240, 255, 0.32);
 }
 
 @keyframes algoaiFadeIn {
@@ -876,6 +932,20 @@ body.algoai-open .floating-panel-toggle {
     background: #1a253c;
     border-color: #38bdf8;
     color: #38bdf8;
+}
+
+[data-theme="cyberpunk"] .algoai-suggestion-chip,
+body.theme-neon .algoai-suggestion-chip {
+    background: rgba(11, 20, 44, 0.92);
+    border-color: rgba(0, 240, 255, 0.28);
+    color: #f1f5f9;
+}
+
+[data-theme="cyberpunk"] .algoai-suggestion-chip:hover,
+body.theme-neon .algoai-suggestion-chip:hover {
+    background: rgba(0, 240, 255, 0.14);
+    border-color: #00f0ff;
+    color: #00f0ff;
 }
 
 /* Message Bubble Rows */
@@ -1070,6 +1140,13 @@ body.algoai-open .floating-panel-toggle {
     color: #38bdf8;
 }
 
+[data-theme="cyberpunk"] .algoai-math-inline,
+body.theme-neon .algoai-math-inline {
+    background: rgba(0, 240, 255, 0.12);
+    border-color: rgba(0, 240, 255, 0.32);
+    color: #00f0ff;
+}
+
 .algoai-math-block {
     margin: 0.65rem 0;
     padding: 0.65rem 0.95rem;
@@ -1081,6 +1158,13 @@ body.algoai-open .floating-panel-toggle {
     font-size: 0.95rem;
     color: var(--algoai-primary);
     font-weight: 600;
+}
+
+[data-theme="dark"] .algoai-math-block,
+[data-theme="cyberpunk"] .algoai-math-block,
+body.theme-neon .algoai-math-block {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(56, 189, 248, 0.3);
 }
 
 /* Inline Code */
@@ -1100,6 +1184,13 @@ body.algoai-open .floating-panel-toggle {
     border-color: rgba(56, 189, 248, 0.25);
 }
 
+[data-theme="cyberpunk"] .algoai-bubble code:not(pre code),
+body.theme-neon .algoai-bubble code:not(pre code) {
+    background: rgba(0, 240, 255, 0.12);
+    color: #00f0ff;
+    border-color: rgba(0, 240, 255, 0.32);
+}
+
 /* Markdown Tables */
 .algoai-table-wrap {
     margin: 0.75rem 0;
@@ -1117,6 +1208,11 @@ body.algoai-open .floating-panel-toggle {
 
 [data-theme="dark"] .algoai-table {
     background: #131d31;
+}
+
+[data-theme="cyberpunk"] .algoai-table,
+body.theme-neon .algoai-table {
+    background: #0b142c;
 }
 
 .algoai-table th {
@@ -1226,15 +1322,22 @@ body.algoai-open .floating-panel-toggle {
     border-color: #273553;
 }
 
+[data-theme="cyberpunk"] .algoai-footer,
+body.theme-neon .algoai-footer {
+    background: #080f22;
+    border-color: rgba(0, 240, 255, 0.28);
+}
+
 .algoai-input-row {
     display: flex;
     align-items: flex-end;
     gap: 0.5rem;
-    background: #ffffff;
+    background: var(--algoai-input-bg, #ffffff);
     border: 1.5px solid var(--algoai-input-border);
     border-radius: 16px;
     padding: 0.4rem 0.65rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    cursor: text;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1243,18 +1346,37 @@ body.algoai-open .floating-panel-toggle {
     border-color: #273553;
 }
 
+[data-theme="cyberpunk"] .algoai-input-row,
+body.theme-neon .algoai-input-row {
+    background: #0b142c;
+    border-color: rgba(0, 240, 255, 0.45);
+}
+
 .algoai-input-row:focus-within {
     border-color: var(--algoai-primary);
     box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.14);
 }
 
+[data-theme="cyberpunk"] .algoai-input-row:focus-within,
+body.theme-neon .algoai-input-row:focus-within {
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.2);
+}
+
 .algoai-textarea {
     flex: 1;
+    min-width: 0;
+    width: 100%;
     background: transparent !important;
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
-    color: var(--algoai-text-primary);
+    color: var(--algoai-text-primary) !important;
+    caret-color: var(--algoai-primary) !important;
+    -webkit-text-fill-color: var(--algoai-text-primary);
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
     font-family: inherit;
     font-size: 0.88rem;
     line-height: 1.45;
@@ -1276,6 +1398,8 @@ body.algoai-open .floating-panel-toggle {
 
 .algoai-textarea::placeholder {
     color: var(--algoai-text-muted);
+    -webkit-text-fill-color: var(--algoai-text-muted);
+    opacity: 1;
 }
 
 .algoai-send-btn {
@@ -1293,6 +1417,11 @@ body.algoai-open .floating-panel-toggle {
     flex-shrink: 0;
     box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
     transition: all 0.18s ease;
+}
+
+[data-theme="cyberpunk"] .algoai-send-btn,
+body.theme-neon .algoai-send-btn {
+    color: #030712;
 }
 
 .algoai-send-btn:hover:not(:disabled) {
@@ -1365,6 +1494,13 @@ body.algoai-open .floating-panel-toggle {
     color: #c4b5fd;
 }
 
+[data-theme="cyberpunk"] .algoai-action-chip.interview-active,
+body.theme-neon .algoai-action-chip.interview-active {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(167, 139, 250, 0.55);
+    color: #ddd6fe;
+}
+
 /* Multi-Session Threads Drawer */
 .algoai-threads-drawer {
     flex-shrink: 0;
@@ -1380,6 +1516,12 @@ body.algoai-open .floating-panel-toggle {
 
 [data-theme="dark"] .algoai-threads-drawer {
     background: #131d31;
+}
+
+[data-theme="cyberpunk"] .algoai-threads-drawer,
+body.theme-neon .algoai-threads-drawer {
+    background: #080f22;
+    border-bottom-color: rgba(0, 240, 255, 0.25);
 }
 
 .algoai-threads-drawer.d-none {
@@ -1423,6 +1565,12 @@ body.algoai-open .floating-panel-toggle {
 
 [data-theme="dark"] .algoai-thread-item {
     background: #1a253c;
+}
+
+[data-theme="cyberpunk"] .algoai-thread-item,
+body.theme-neon .algoai-thread-item {
+    background: #0b142c;
+    border-color: rgba(0, 240, 255, 0.28);
 }
 
 .algoai-thread-item:hover {
@@ -1503,6 +1651,11 @@ body.algoai-open .floating-panel-toggle {
     box-shadow: 0 6px 16px rgba(2, 132, 199, 0.38);
 }
 
+[data-theme="cyberpunk"] .algoai-agent-action-btn,
+body.theme-neon .algoai-agent-action-btn {
+    color: #030712;
+}
+
 /* Assistant Message Read-Aloud Toolbar */
 .algoai-msg-actions {
     margin-top: 0.55rem;
@@ -1534,6 +1687,13 @@ body.algoai-open .floating-panel-toggle {
     background: var(--algoai-primary);
     border-color: var(--algoai-primary);
     color: #ffffff;
+}
+
+[data-theme="cyberpunk"] .algoai-msg-speak-btn:hover,
+[data-theme="cyberpunk"] .algoai-msg-speak-btn.speaking,
+body.theme-neon .algoai-msg-speak-btn:hover,
+body.theme-neon .algoai-msg-speak-btn.speaking {
+    color: #030712;
 }
 
 /* Voice Mic Button in Input Dock */

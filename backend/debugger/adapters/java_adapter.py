@@ -69,9 +69,9 @@ def compile_and_trace(source_path, breakpoints=None):
 
     main_class = extract_class_name(code)
 
-    # Compile with -g
-    javac_cmd = ["javac", "-g", source_path]
-    comp_proc = subprocess.run(javac_cmd, capture_output=True, text=True)
+    # Compile with -g (lightweight JVM flags for constrained cloud containers)
+    javac_cmd = ["javac", "-J-XX:TieredStopAtLevel=1", "-J-Xms16m", "-J-Xmx192m", "-g", source_path]
+    comp_proc = subprocess.run(javac_cmd, capture_output=True, text=True, timeout=25)
 
     if comp_proc.returncode != 0:
         err_info = parse_javac_errors(comp_proc.stderr, filename)
@@ -94,6 +94,9 @@ def compile_and_trace(source_path, breakpoints=None):
     bp_str = ",".join(str(b) for b in (breakpoints or []))
     java_cmd = [
         "java",
+        "-Xms16m",
+        "-Xmx96m",
+        "-XX:TieredStopAtLevel=1",
         "-classpath",
         classpath,
         tracer_class,
@@ -104,7 +107,7 @@ def compile_and_trace(source_path, breakpoints=None):
     ]
 
     try:
-        run_proc = subprocess.run(java_cmd, capture_output=True, text=True, timeout=12)
+        run_proc = subprocess.run(java_cmd, capture_output=True, text=True, timeout=25)
         output = run_proc.stdout + run_proc.stderr
 
         if "___DEBUG_JSON_START___" in output:

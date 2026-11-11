@@ -19,7 +19,7 @@ class DebuggerRunner {
     constructor() {
         this.adaptersDir = path.join(__dirname, 'adapters');
         this.dockerImage = 'algolearn-debugger:latest';
-        this.timeoutMs = 15000;
+        this.timeoutMs = 30000;
     }
 
     extractJavaClassName(code) {

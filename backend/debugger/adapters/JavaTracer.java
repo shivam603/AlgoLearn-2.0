@@ -28,50 +28,78 @@ public class JavaTracer {
         }
 
         VirtualMachineManager vmm = Bootstrap.virtualMachineManager();
-        LaunchingConnector connector = vmm.defaultConnector();
-        Map<String, Connector.Argument> connArgs = connector.defaultArguments();
-
-        Connector.Argument mainArg = connArgs.get("main");
-        Connector.Argument optionsArg = connArgs.get("options");
-
-        if (mainArg != null) {
-            mainArg.setValue(mainClass);
+        ListeningConnector lc = null;
+        for (ListeningConnector c : vmm.listeningConnectors()) {
+            if ("com.sun.jdi.SocketListen".equals(c.name()) || "dt_socket".equals(c.transport().name())) {
+                lc = c;
+                break;
+            }
         }
-        if (optionsArg != null) {
-            optionsArg.setValue("-classpath \"" + classPath + "\"");
-        }
-
-        VirtualMachine vm = null;
-        try {
-            vm = connector.launch(connArgs);
-        } catch (Exception e) {
-            System.out.println("___DEBUG_JSON_START___{\"success\":false,\"error\":{\"type\":\"LaunchError\",\"message\":\"" + escapeJson(e.getMessage()) + "\"}}___DEBUG_JSON_END___");
+        if (lc == null) {
+            System.out.println("___DEBUG_JSON_START___{\"success\":false,\"error\":{\"type\":\"LaunchError\",\"message\":\"No SocketListen JDI connector available\"}}___DEBUG_JSON_END___");
             return;
         }
 
-        // Start reading process output in background
+        Map<String, Connector.Argument> connArgs = lc.defaultArguments();
+        if (connArgs.get("localAddress") != null) {
+            connArgs.get("localAddress").setValue("127.0.0.1");
+        }
+        if (connArgs.get("timeout") != null) {
+            connArgs.get("timeout").setValue("20000");
+        }
+
         StringBuilder stdoutBuf = new StringBuilder();
         StringBuilder stderrBuf = new StringBuilder();
-        Process proc = vm.process();
+        Process proc = null;
+        Thread outReader = null;
+        Thread errReader = null;
+        VirtualMachine vm = null;
 
-        Thread outReader = new Thread(() -> {
-            try (BufferedReader r = new BufferedReader(new InputStreamReader(proc.getInputStream(), StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = r.readLine()) != null) {
-                    stdoutBuf.append(line).append("\n");
-                }
-            } catch (IOException ignored) {}
-        });
-        Thread errReader = new Thread(() -> {
-            try (BufferedReader r = new BufferedReader(new InputStreamReader(proc.getErrorStream(), StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = r.readLine()) != null) {
-                    stderrBuf.append(line).append("\n");
-                }
-            } catch (IOException ignored) {}
-        });
-        outReader.start();
-        errReader.start();
+        try {
+            String listenAddr = lc.startListening(connArgs);
+            ProcessBuilder pb = new ProcessBuilder(
+                "java",
+                "-Xms16m",
+                "-Xmx96m",
+                "-XX:TieredStopAtLevel=1",
+                "-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=" + listenAddr,
+                "-classpath",
+                classPath,
+                mainClass
+            );
+            proc = pb.start();
+            final Process targetProc = proc;
+            outReader = new Thread(() -> {
+                try (BufferedReader r = new BufferedReader(new InputStreamReader(targetProc.getInputStream(), StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        stdoutBuf.append(line).append("\n");
+                    }
+                } catch (IOException ignored) {}
+            });
+            errReader = new Thread(() -> {
+                try (BufferedReader r = new BufferedReader(new InputStreamReader(targetProc.getErrorStream(), StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = r.readLine()) != null) {
+                        stderrBuf.append(line).append("\n");
+                    }
+                } catch (IOException ignored) {}
+            });
+            outReader.start();
+            errReader.start();
+
+            vm = lc.accept(connArgs);
+            try { lc.stopListening(connArgs); } catch (Exception ignored) {}
+        } catch (Exception e) {
+            try { lc.stopListening(connArgs); } catch (Exception ignored) {}
+            if (proc != null) {
+                try { proc.destroyForcibly(); } catch (Exception ignored) {}
+            }
+            String extra = stderrBuf.toString().trim();
+            String msg = e.getMessage() + (extra.isEmpty() ? "" : (" (" + extra + ")"));
+            System.out.println("___DEBUG_JSON_START___{\"success\":false,\"error\":{\"type\":\"LaunchError\",\"message\":\"" + escapeJson(msg) + "\"}}___DEBUG_JSON_END___");
+            return;
+        }
 
         EventRequestManager erm = vm.eventRequestManager();
         ClassPrepareRequest cpr = erm.createClassPrepareRequest();

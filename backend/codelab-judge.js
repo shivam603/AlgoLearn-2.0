@@ -81,7 +81,61 @@ function normalizeLanguage(lang) {
     return 'python';
 }
 
-function execPromise(cmd, cwd, timeoutMs = 6000) {
+function normalizePastedOperators(src) {
+    const s = String(src || '');
+    // Replace non-breaking spaces and smart quotes anywhere only outside literals,
+    // plus Unicode comparison/minus glyphs commonly pasted from web/AI snippets.
+    let out = '';
+    let inSingle = false;
+    let inDouble = false;
+    let inBacktick = false;
+    let escaped = false;
+
+    for (let i = 0; i < s.length; i++) {
+        const ch = s[i];
+        if (escaped) {
+            out += ch;
+            escaped = false;
+            continue;
+        }
+        if ((inSingle || inDouble || inBacktick) && ch === '\\') {
+            out += ch;
+            escaped = true;
+            continue;
+        }
+        if (!inDouble && !inBacktick && ch === '\'') {
+            inSingle = !inSingle;
+            out += ch;
+            continue;
+        }
+        if (!inSingle && !inBacktick && ch === '"') {
+            inDouble = !inDouble;
+            out += ch;
+            continue;
+        }
+        if (!inSingle && !inDouble && ch === '`') {
+            inBacktick = !inBacktick;
+            out += ch;
+            continue;
+        }
+        if (inSingle || inDouble || inBacktick) {
+            out += ch;
+            continue;
+        }
+
+        if (ch === '\u00A0') out += ' ';
+        else if (ch === '\u2260') out += '!=';
+        else if (ch === '\u2264') out += '<=';
+        else if (ch === '\u2265') out += '>=';
+        else if (ch === '\u2212') out += '-';
+        else if (ch === '\u201C' || ch === '\u201D') out += '"';
+        else if (ch === '\u2018' || ch === '\u2019') out += '\'';
+        else out += ch;
+    }
+    return out;
+}
+
+function execPromise(cmd, cwd, timeoutMs = 12000) {
     return new Promise((resolve) => {
         exec(cmd, { cwd, timeout: timeoutMs, maxBuffer: 4 * 1024 * 1024 }, (err, stdout, stderr) => {
             resolve({ err, stdout: stdout || '', stderr: stderr || '' });
@@ -98,6 +152,7 @@ async function judgeCode({ problemId, language, code }) {
     if (!code || !String(code).trim()) {
         return { success: false, verdict: 'Compilation Error', error: 'Source code cannot be empty.' };
     }
+    const cleanCode = normalizePastedOperators(code);
 
     const tmpDir = path.join(os.tmpdir(), `algolearn_judge_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`);
     fs.mkdirSync(tmpDir, { recursive: true });
@@ -106,14 +161,14 @@ async function judgeCode({ problemId, language, code }) {
     try {
         let runRes;
         if (lang === 'python') {
-            fs.writeFileSync(path.join(tmpDir, 'judge_main.py'), buildPythonHarness(problem, code, problem.tests), 'utf8');
-            runRes = await execPromise(`${PYTHON_BIN} judge_main.py`, tmpDir, 6000);
+            fs.writeFileSync(path.join(tmpDir, 'judge_main.py'), buildPythonHarness(problem, cleanCode, problem.tests), 'utf8');
+            runRes = await execPromise(`${PYTHON_BIN} judge_main.py`, tmpDir, 12000);
         } else if (lang === 'javascript') {
-            fs.writeFileSync(path.join(tmpDir, 'judge_main.js'), buildJavaScriptHarness(problem, code, problem.tests), 'utf8');
-            runRes = await execPromise('node judge_main.js', tmpDir, 6000);
+            fs.writeFileSync(path.join(tmpDir, 'judge_main.js'), buildJavaScriptHarness(problem, cleanCode, problem.tests), 'utf8');
+            runRes = await execPromise('node judge_main.js', tmpDir, 12000);
         } else if (lang === 'java') {
-            fs.writeFileSync(path.join(tmpDir, 'JudgeRunner.java'), buildJavaHarness(problem, code, problem.tests), 'utf8');
-            const comp = await execPromise('javac JudgeRunner.java', tmpDir, 9000);
+            fs.writeFileSync(path.join(tmpDir, 'JudgeRunner.java'), buildJavaHarness(problem, cleanCode, problem.tests), 'utf8');
+            const comp = await execPromise('javac -J-XX:TieredStopAtLevel=1 -J-Xms16m -J-Xmx192m JudgeRunner.java', tmpDir, 30000);
             if (comp.err) {
                 return {
                     success: true,
@@ -127,11 +182,11 @@ async function judgeCode({ problemId, language, code }) {
                     results: []
                 };
             }
-            runRes = await execPromise('java JudgeRunner', tmpDir, 6000);
+            runRes = await execPromise('java -XX:TieredStopAtLevel=1 -Xms16m -Xmx192m JudgeRunner', tmpDir, 15000);
         } else if (lang === 'cpp') {
-            fs.writeFileSync(path.join(tmpDir, 'judge_main.cpp'), buildCppHarness(problem, code, problem.tests), 'utf8');
+            fs.writeFileSync(path.join(tmpDir, 'judge_main.cpp'), buildCppHarness(problem, cleanCode, problem.tests), 'utf8');
             const exeName = process.platform === 'win32' ? 'judge_main.exe' : './judge_main';
-            const comp = await execPromise('g++ -O2 judge_main.cpp -o judge_main', tmpDir, 12000);
+            const comp = await execPromise('g++ -O2 judge_main.cpp -o judge_main', tmpDir, 25000);
             if (comp.err) {
                 return {
                     success: true,
@@ -145,11 +200,11 @@ async function judgeCode({ problemId, language, code }) {
                     results: []
                 };
             }
-            runRes = await execPromise(exeName, tmpDir, 6000);
+            runRes = await execPromise(exeName, tmpDir, 12000);
         } else if (lang === 'c') {
-            fs.writeFileSync(path.join(tmpDir, 'judge_main.c'), buildCHarness(problem, code, problem.tests), 'utf8');
+            fs.writeFileSync(path.join(tmpDir, 'judge_main.c'), buildCHarness(problem, cleanCode, problem.tests), 'utf8');
             const exeName = process.platform === 'win32' ? 'judge_main.exe' : './judge_main';
-            const comp = await execPromise('gcc -O2 judge_main.c -o judge_main', tmpDir, 10000);
+            const comp = await execPromise('gcc -O2 judge_main.c -o judge_main', tmpDir, 20000);
             if (comp.err) {
                 return {
                     success: true,
@@ -163,7 +218,7 @@ async function judgeCode({ problemId, language, code }) {
                     results: []
                 };
             }
-            runRes = await execPromise(exeName, tmpDir, 6000);
+            runRes = await execPromise(exeName, tmpDir, 12000);
         }
 
         const resultPath = path.join(tmpDir, 'result.json');

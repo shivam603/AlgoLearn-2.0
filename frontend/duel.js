@@ -540,9 +540,26 @@ const LiveDuelClient = {
     arenaVisInstance: null,
     currentRoom: null,
     currentLang: 'python',
+    playerId: '',
     drafts: {},
     timerInterval: null,
     lastProgressSentAt: 0,
+
+    getPlayerId() {
+        if (this.playerId) return this.playerId;
+        try {
+            let pid = sessionStorage.getItem('algolearn_duel_pid');
+            if (!pid) {
+                pid = 'p_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+                sessionStorage.setItem('algolearn_duel_pid', pid);
+            }
+            this.playerId = pid;
+            return pid;
+        } catch (e) {
+            this.playerId = 'p_' + Math.random().toString(36).slice(2, 10);
+            return this.playerId;
+        }
+    },
 
     SKELETONS: {
         two_sum: {
@@ -734,6 +751,17 @@ const LiveDuelClient = {
         this.socket = io();
         this.socket.on('connect', () => {
             if (statusEl) statusEl.innerHTML = '<span class="badge bg-success"><i class="bi bi-broadcast me-1"></i>Arena Online (Socket.IO)</span>';
+            if (this.currentRoom && this.currentRoom.code) {
+                this.socket.emit('duel:rejoin', {
+                    roomCode: this.currentRoom.code,
+                    playerId: this.getPlayerId()
+                }, (ack) => {
+                    if (ack && ack.success && ack.room) {
+                        this.currentRoom = ack.room;
+                        this.renderRoomState(ack.room);
+                    }
+                });
+            }
         });
         this.socket.on('disconnect', () => {
             if (statusEl) statusEl.innerHTML = '<span class="badge bg-warning text-dark">Reconnecting...</span>';
@@ -813,8 +841,9 @@ const LiveDuelClient = {
             const difficulty = this.difficultyFilter || 'All';
             const playerName = document.getElementById('live-player-name')?.value.trim() || 'Player 1';
             const token = localStorage.getItem('algolearn_token') || '';
+            const playerId = this.getPlayerId();
 
-            this.socket.emit('duel:create', { problemId, difficulty, playerName, token, vsBot }, (ack) => {
+            this.socket.emit('duel:create', { problemId, difficulty, playerName, playerId, token, vsBot }, (ack) => {
                 if (!ack || !ack.success) {
                     showLobbyError((ack && ack.error) || 'Failed to create room.');
                     return;
@@ -886,7 +915,8 @@ const LiveDuelClient = {
             }
             const playerName = document.getElementById('live-player-name')?.value.trim() || 'Challenger';
             const token = localStorage.getItem('algolearn_token') || '';
-            this.socket.emit('duel:join', { roomCode, playerName, token }, (ack) => {
+            const playerId = this.getPlayerId();
+            this.socket.emit('duel:join', { roomCode, playerName, playerId, token }, (ack) => {
                 if (!ack || !ack.success) {
                     showLobbyError((ack && ack.error) || 'Could not join room.');
                 }
@@ -907,16 +937,15 @@ const LiveDuelClient = {
 
         const resetToLobby = () => {
             this.stopMatchClock();
+            if (this.socket && this.socket.connected) {
+                this.socket.emit('duel:leave');
+            }
             this.currentRoom = null;
             this.drafts = {};
             document.getElementById('live-waiting-banner')?.classList.add('d-none');
             document.getElementById('live-countdown-banner')?.classList.add('d-none');
             document.getElementById('live-duel-arena')?.classList.add('d-none');
             document.getElementById('live-duel-lobby')?.classList.remove('d-none');
-            if (this.socket && this.socket.connected) {
-                this.socket.disconnect();
-                this.socket.connect();
-            }
         };
         document.getElementById('btn-leave-duel-room')?.addEventListener('click', resetToLobby);
         document.getElementById('btn-live-new-match')?.addEventListener('click', resetToLobby);
@@ -932,6 +961,8 @@ const LiveDuelClient = {
                     ? this.drafts[this.currentLang]
                     : this.getStarterForCurrentRoom(this.currentLang);
                 this.updateCharCount();
+                const langEl = document.getElementById('duel-p1-lang');
+                if (langEl) langEl.textContent = this.currentLang.toUpperCase();
                 this.emitProgress('Switched to ' + this.currentLang.toUpperCase());
             });
         }
@@ -966,20 +997,121 @@ const LiveDuelClient = {
         });
 
         document.getElementById('btn-live-submit')?.addEventListener('click', () => {
-            if (!this.socket || !this.currentRoom) return;
-            const btn = document.getElementById('btn-live-submit');
-            const code = editor ? editor.value : '';
-            if (!code.trim()) return;
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Judging...';
-            }
-            this.socket.emit('duel:submit', { language: this.currentLang, code }, () => {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-check2-all me-1"></i> Submit Solution to Judge';
-                }
+            this.submitCurrentSolution();
+        });
+    },
+
+    async submitViaHttpJudge(problemId, language, code) {
+        const token = localStorage.getItem('algolearn_token') || '';
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        const res = await fetch('/api/codelab/judge', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ problemId, language, code })
+        });
+        return await res.json();
+    },
+
+    async submitCurrentSolution() {
+        const editor = document.getElementById('live-code-editor');
+        const btn = document.getElementById('btn-live-submit');
+        const code = editor ? editor.value : '';
+        if (!code.trim()) {
+            this.renderJudgeFeedback({
+                verdict: 'Compilation Error',
+                passedCount: 0,
+                totalCount: this.currentRoom?.problem?.totalTests || 0,
+                runtimeMs: 0,
+                error: 'Editor cannot be empty.',
+                results: []
             });
+            return;
+        }
+        if (!this.currentRoom) return;
+
+        const restoreBtn = () => {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-check2-all me-1"></i> Submit Solution to Judge';
+            }
+        };
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Judging...';
+        }
+        const statusEl = document.getElementById('live-editor-status');
+        if (statusEl) statusEl.textContent = 'Running testcases on Judge...';
+
+        const runFallback = async (reasonMsg = '') => {
+            try {
+                const pid = this.currentRoom?.problemId || this.currentRoom?.problem?.id || 'two_sum';
+                const result = await this.submitViaHttpJudge(pid, this.currentLang, code);
+                if (reasonMsg && result && !result.matchNotice) {
+                    result.matchNotice = reasonMsg;
+                }
+                this.renderJudgeFeedback(result);
+                const passed = result.passedCount || 0;
+                const total = result.totalCount || 0;
+                const pct = total > 0 ? Math.round((passed / total) * 100) : 0;
+                const barEl = document.getElementById('duel-p1-bar');
+                const testsEl = document.getElementById('duel-p1-tests');
+                const stEl = document.getElementById('duel-p1-status');
+                const langEl = document.getElementById('duel-p1-lang');
+                if (barEl) barEl.style.width = `${pct}%`;
+                if (testsEl) testsEl.textContent = `${passed} / ${total} tests passed`;
+                if (langEl) langEl.textContent = this.currentLang.toUpperCase();
+                if (stEl) {
+                    stEl.textContent = result.verdict === 'Accepted' ? 'Accepted! 🏆' : `${result.verdict} (${passed}/${total})`;
+                    stEl.className = `badge ${result.verdict === 'Accepted' ? 'bg-success' : 'bg-danger'}`;
+                }
+            } catch (err) {
+                this.renderJudgeFeedback({
+                    verdict: 'Submission Error',
+                    passedCount: 0,
+                    totalCount: this.currentRoom?.problem?.totalTests || 0,
+                    runtimeMs: 0,
+                    error: 'Could not reach Judge server: ' + (err.message || 'Network error'),
+                    results: []
+                });
+            } finally {
+                restoreBtn();
+            }
+        };
+
+        if (!this.socket || !this.socket.connected) {
+            await runFallback('Arena WebSocket disconnected — graded directly via CodeLab Judge.');
+            return;
+        }
+
+        let settled = false;
+        const guardTimer = setTimeout(() => {
+            if (!settled) {
+                settled = true;
+                runFallback('Live room timed out — graded directly via CodeLab Judge.');
+            }
+        }, 25000);
+
+        this.socket.emit('duel:submit', {
+            roomCode: this.currentRoom.code,
+            playerId: this.getPlayerId(),
+            language: this.currentLang,
+            code
+        }, async (ack) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(guardTimer);
+            if (!ack || !ack.success || !ack.result) {
+                await runFallback(ack && ack.error ? ack.error : '');
+                return;
+            }
+            const res = ack.result;
+            if (ack.matchAlreadyFinished) {
+                res.matchNotice = 'Match had already ended, but your solution was still graded against all testcases.';
+            }
+            this.renderJudgeFeedback(res);
+            restoreBtn();
         });
     },
 
@@ -1052,9 +1184,11 @@ const LiveDuelClient = {
     },
 
     emitProgress(statusText) {
-        if (!this.socket || !this.currentRoom || this.currentRoom.status !== 'active') return;
+        if (!this.socket || !this.currentRoom) return;
         const editor = document.getElementById('live-code-editor');
         this.socket.emit('duel:progress', {
+            roomCode: this.currentRoom.code,
+            playerId: this.getPlayerId(),
             language: this.currentLang,
             chars: editor ? editor.value.length : 0,
             statusText
@@ -1094,16 +1228,30 @@ const LiveDuelClient = {
 
     renderJudgeFeedback(result) {
         const el = document.getElementById('live-judge-feedback');
+        const statusEl = document.getElementById('live-editor-status');
         if (!el) return;
         const ok = result.verdict === 'Accepted';
+        const passed = result.passedCount || 0;
+        const total = result.totalCount || 0;
         const firstFail = (result.results || []).find(r => !r.passed);
+        if (statusEl) {
+            statusEl.textContent = `${result.verdict || 'Judged'} — ${passed}/${total} tests passed`;
+        }
+        const pillsHtml = Array.isArray(result.results) && result.results.length
+            ? `<div class="d-flex flex-wrap gap-1 mt-1">${result.results.map((r, idx) => `<span class="badge ${r.passed ? 'bg-success' : 'bg-danger'}" style="font-size:0.68rem;">${r.passed ? '✓' : '✕'} ${this.esc(r.name || 'Test ' + (idx + 1))}</span>`).join('')}</div>`
+            : '';
         el.innerHTML = `
             <div class="alert ${ok ? 'alert-success' : 'alert-danger'} py-2 px-3 small mb-0">
-                <div class="fw-bold">${this.esc(result.verdict)} — ${result.passedCount || 0}/${result.totalCount || 0} Tests (${result.runtimeMs || 0}ms)</div>
+                <div class="fw-bold">${this.esc(result.verdict)} — ${passed}/${total} Tests (${result.runtimeMs || 0}ms)</div>
+                ${result.matchNotice ? `<div class="small mt-1 opacity-75">${this.esc(result.matchNotice)}</div>` : ''}
+                ${pillsHtml}
                 ${result.error ? `<pre class="mb-0 mt-1 small text-danger" style="white-space:pre-wrap; max-height:110px; overflow:auto;">${this.esc(result.error)}</pre>` : ''}
                 ${firstFail && !firstFail.hidden ? `<div class="mt-1 font-monospace" style="font-size:0.72rem;">Failed ${this.esc(firstFail.name)}: expected ${this.esc(firstFail.expectedDisplay)}, got ${this.esc(firstFail.actualDisplay)}</div>` : ''}
             </div>
         `;
+        try {
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (e) {}
     },
 
     startMatchClock(startedAt) {

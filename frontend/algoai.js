@@ -699,20 +699,45 @@
             // Voice Input (Mic Dictation)
             this.initVoiceInput();
 
+            // Click anywhere inside input pill to focus textarea reliably
+            const inputRowEl = this.panelEl.querySelector('.algoai-input-row');
+            if (inputRowEl) {
+                inputRowEl.addEventListener('click', (e) => {
+                    if (!e.target.closest('button')) {
+                        this.textareaEl.focus();
+                    }
+                });
+            }
+
             // Auto-expanding textarea
-            this.textareaEl.addEventListener('input', () => {
+            this.textareaEl.addEventListener('input', (e) => {
+                e.stopPropagation();
                 this.textareaEl.style.height = 'auto';
                 const newHeight = Math.min(this.textareaEl.scrollHeight, 120);
                 this.textareaEl.style.height = `${newHeight}px`;
                 this.textareaEl.style.overflowY = this.textareaEl.scrollHeight > 120 ? 'auto' : 'hidden';
             });
 
-            // Enter sends, Shift+Enter newline
+            // Enter sends, Shift+Enter newline; isolate typing from page-level keyboard shortcuts
             this.textareaEl.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                    return;
+                }
+                if (e.key === 'Escape') {
+                    return;
+                }
+                e.stopPropagation();
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     this.handleSendMessage();
                 }
+            });
+            ['keyup', 'keypress'].forEach((evt) => {
+                this.textareaEl.addEventListener(evt, (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === '/') return;
+                    if (e.key === 'Escape') return;
+                    e.stopPropagation();
+                });
             });
 
             this.sendBtnEl.addEventListener('click', () => {

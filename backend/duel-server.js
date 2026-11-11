@@ -19,10 +19,27 @@ function generateRoomCode() {
 
 function attachDuelServer(httpServer, { getSession }) {
     const io = new Server(httpServer, {
-        cors: { origin: '*', methods: ['GET', 'POST'] }
+        cors: { origin: '*', methods: ['GET', 'POST'] },
+        pingTimeout: 60000,
+        pingInterval: 25000
     });
 
     const rooms = new Map();
+
+    function findPlayerInRoom(room, socketId, playerId) {
+        if (!room || !Array.isArray(room.players)) return null;
+        return room.players.find(p =>
+            p.socketId === socketId ||
+            (playerId && !p.isBot && p.playerId === playerId)
+        ) || null;
+    }
+
+    function clearRoomDisconnectCleanup(room) {
+        if (room && room.disconnectTimer) {
+            clearTimeout(room.disconnectTimer);
+            room.disconnectTimer = null;
+        }
+    }
 
     // Cleanup rooms older than 45 minutes periodically
     const cleanupTimer = setInterval(() => {
@@ -30,6 +47,7 @@ function attachDuelServer(httpServer, { getSession }) {
         for (const [code, room] of rooms.entries()) {
             if (room.createdAt < cutoff) {
                 if (room.botTimer) clearInterval(room.botTimer);
+                clearRoomDisconnectCleanup(room);
                 rooms.delete(code);
             }
         }
@@ -174,7 +192,7 @@ function attachDuelServer(httpServer, { getSession }) {
     io.on('connection', (socket) => {
         socket.on('duel:create', async (payload = {}, ack) => {
             try {
-                const { problemId = 'two_sum', difficulty = 'All', playerName = 'Coder', token = '', vsBot = false } = payload;
+                const { problemId = 'two_sum', difficulty = 'All', playerName = 'Coder', playerId = '', token = '', vsBot = false } = payload;
                 let problem = null;
                 if (problemId === 'random') {
                     const pool = (difficulty && difficulty !== 'All')
@@ -192,10 +210,12 @@ function attachDuelServer(httpServer, { getSession }) {
 
                 const hostPlayer = {
                     socketId: socket.id,
+                    playerId: playerId ? String(playerId) : socket.id,
                     name: session ? (session.fullName || session.username) : String(playerName || 'Player 1').slice(0, 28),
                     avatarUrl: session ? session.avatarUrl : '',
                     session,
                     isBot: false,
+                    disconnected: false,
                     language: 'python',
                     passedTests: 0,
                     totalTests: problem.tests.length,
@@ -212,16 +232,19 @@ function attachDuelServer(httpServer, { getSession }) {
                     winner: null,
                     createdAt: Date.now(),
                     startedAt: null,
-                    botTimer: null
+                    botTimer: null,
+                    disconnectTimer: null
                 };
 
                 if (vsBot) {
                     room.players.push({
                         socketId: 'algobot_' + roomCode,
+                        playerId: 'algobot_' + roomCode,
                         name: 'AlgoBot (Sparring AI)',
                         avatarUrl: 'algolearn-icon.png',
                         session: null,
                         isBot: true,
+                        disconnected: false,
                         language: 'python',
                         passedTests: 0,
                         totalTests: problem.tests.length,
@@ -254,6 +277,20 @@ function attachDuelServer(httpServer, { getSession }) {
                     if (typeof ack === 'function') ack({ success: false, error: 'Duel room not found. Check your 6-character code.' });
                     return;
                 }
+
+                const existingPlayer = payload.playerId ? findPlayerInRoom(room, socket.id, String(payload.playerId)) : null;
+                if (existingPlayer) {
+                    existingPlayer.socketId = socket.id;
+                    existingPlayer.disconnected = false;
+                    clearRoomDisconnectCleanup(room);
+                    socket.join(roomCode);
+                    socket.data.duelRoom = roomCode;
+                    const serialized = serializeRoom(room);
+                    if (typeof ack === 'function') ack({ success: true, room: serialized });
+                    io.to(roomCode).emit('duel:room_state', serialized);
+                    return;
+                }
+
                 if (room.players.length >= 2) {
                     if (typeof ack === 'function') ack({ success: false, error: 'This duel room already has 2 players.' });
                     return;
@@ -264,10 +301,12 @@ function attachDuelServer(httpServer, { getSession }) {
 
                 const challenger = {
                     socketId: socket.id,
+                    playerId: payload.playerId ? String(payload.playerId) : socket.id,
                     name: session ? (session.fullName || session.username) : String(payload.playerName || 'Challenger').slice(0, 28),
                     avatarUrl: session ? session.avatarUrl : '',
                     session,
                     isBot: false,
+                    disconnected: false,
                     language: 'python',
                     passedTests: 0,
                     totalTests: problem ? problem.tests.length : 5,
@@ -276,6 +315,7 @@ function attachDuelServer(httpServer, { getSession }) {
                 };
 
                 room.players.push(challenger);
+                clearRoomDisconnectCleanup(room);
                 socket.join(roomCode);
                 socket.data.duelRoom = roomCode;
 
@@ -289,13 +329,43 @@ function attachDuelServer(httpServer, { getSession }) {
             }
         });
 
+        socket.on('duel:rejoin', (payload = {}, ack) => {
+            const roomCode = String(payload.roomCode || '').trim().toUpperCase();
+            const room = roomCode ? rooms.get(roomCode) : null;
+            if (!room) {
+                if (typeof ack === 'function') ack({ success: false, error: 'Room expired or no longer exists.' });
+                return;
+            }
+            const player = findPlayerInRoom(room, socket.id, payload.playerId ? String(payload.playerId) : '');
+            if (!player) {
+                if (typeof ack === 'function') ack({ success: false, error: 'Player session not found in room.' });
+                return;
+            }
+            player.socketId = socket.id;
+            player.disconnected = false;
+            clearRoomDisconnectCleanup(room);
+            socket.join(roomCode);
+            socket.data.duelRoom = roomCode;
+            const serialized = serializeRoom(room);
+            if (typeof ack === 'function') ack({ success: true, room: serialized });
+            io.to(roomCode).emit('duel:room_state', serialized);
+        });
+
         socket.on('duel:progress', (payload = {}) => {
-            const roomCode = socket.data.duelRoom;
+            const roomCode = socket.data.duelRoom || (payload.roomCode ? String(payload.roomCode).trim().toUpperCase() : '');
             const room = roomCode ? rooms.get(roomCode) : null;
             if (!room || room.status !== 'active') return;
 
-            const player = room.players.find(p => p.socketId === socket.id);
+            const player = findPlayerInRoom(room, socket.id, payload.playerId ? String(payload.playerId) : '');
             if (!player) return;
+
+            if (player.socketId !== socket.id) {
+                player.socketId = socket.id;
+                player.disconnected = false;
+                clearRoomDisconnectCleanup(room);
+                socket.join(roomCode);
+                socket.data.duelRoom = roomCode;
+            }
 
             if (payload.language) player.language = String(payload.language);
             if (typeof payload.chars === 'number') player.chars = payload.chars;
@@ -305,20 +375,29 @@ function attachDuelServer(httpServer, { getSession }) {
         });
 
         socket.on('duel:submit', async (payload = {}, ack) => {
-            const roomCode = socket.data.duelRoom;
+            const roomCode = socket.data.duelRoom || (payload.roomCode ? String(payload.roomCode).trim().toUpperCase() : '');
             const room = roomCode ? rooms.get(roomCode) : null;
             if (!room) {
-                if (typeof ack === 'function') ack({ success: false, error: 'Room not found.' });
-                return;
-            }
-            if (room.status === 'finished') {
-                if (typeof ack === 'function') ack({ success: false, error: 'Match already finished.' });
+                if (typeof ack === 'function') ack({ success: false, error: 'Duel room expired or server restarted. You can still verify your code via Judge below or start a new match.' });
                 return;
             }
 
-            const player = room.players.find(p => p.socketId === socket.id);
-            if (!player) return;
+            const player = findPlayerInRoom(room, socket.id, payload.playerId ? String(payload.playerId) : '');
+            if (!player) {
+                if (typeof ack === 'function') ack({ success: false, error: 'Player session disconnected from room.' });
+                return;
+            }
 
+            if (player.socketId !== socket.id) {
+                player.socketId = socket.id;
+                player.disconnected = false;
+                clearRoomDisconnectCleanup(room);
+                socket.join(roomCode);
+                socket.data.duelRoom = roomCode;
+            }
+
+            const wasAlreadyFinished = room.status === 'finished';
+            if (payload.language) player.language = String(payload.language);
             player.statusText = 'Running Judge...';
             io.to(roomCode).emit('duel:room_state', serializeRoom(room));
 
@@ -334,13 +413,30 @@ function attachDuelServer(httpServer, { getSession }) {
                 ? 'Accepted! 🏆'
                 : `${result.verdict} (${player.passedTests}/${player.totalTests})`;
 
-            if (typeof ack === 'function') ack({ success: true, result });
+            if (typeof ack === 'function') ack({ success: true, result, matchAlreadyFinished: wasAlreadyFinished });
             socket.emit('duel:judge_result', result);
             io.to(roomCode).emit('duel:room_state', serializeRoom(room));
 
-            if (result.verdict === 'Accepted') {
+            if (!wasAlreadyFinished && result.verdict === 'Accepted') {
                 const elapsedSec = room.startedAt ? Math.max(1, Math.round((Date.now() - room.startedAt) / 1000)) : 1;
                 await finishMatch(room, player, elapsedSec);
+            }
+        });
+
+        socket.on('duel:leave', () => {
+            const roomCode = socket.data.duelRoom;
+            const room = roomCode ? rooms.get(roomCode) : null;
+            if (!room) return;
+            socket.leave(roomCode);
+            socket.data.duelRoom = null;
+            room.players = room.players.filter(p => p.socketId !== socket.id);
+            const hasHumanLeft = room.players.some(p => !p.isBot);
+            if (!hasHumanLeft) {
+                if (room.botTimer) clearInterval(room.botTimer);
+                clearRoomDisconnectCleanup(room);
+                rooms.delete(roomCode);
+            } else {
+                io.to(roomCode).emit('duel:room_state', serializeRoom(room));
             }
         });
 
@@ -349,11 +445,22 @@ function attachDuelServer(httpServer, { getSession }) {
             const room = roomCode ? rooms.get(roomCode) : null;
             if (!room) return;
 
-            room.players = room.players.filter(p => p.socketId !== socket.id);
-            const hasHumanLeft = room.players.some(p => !p.isBot);
-            if (!hasHumanLeft) {
-                if (room.botTimer) clearInterval(room.botTimer);
-                rooms.delete(roomCode);
+            const player = room.players.find(p => p.socketId === socket.id);
+            if (player) player.disconnected = true;
+
+            const anyHumanConnected = room.players.some(p => !p.isBot && !p.disconnected);
+            if (!anyHumanConnected) {
+                clearRoomDisconnectCleanup(room);
+                room.disconnectTimer = setTimeout(() => {
+                    const current = rooms.get(roomCode);
+                    if (!current) return;
+                    const stillDisconnected = !current.players.some(p => !p.isBot && !p.disconnected);
+                    if (stillDisconnected) {
+                        if (current.botTimer) clearInterval(current.botTimer);
+                        rooms.delete(roomCode);
+                    }
+                }, 120000);
+                if (room.disconnectTimer.unref) room.disconnectTimer.unref();
             } else {
                 io.to(roomCode).emit('duel:room_state', serializeRoom(room));
             }
