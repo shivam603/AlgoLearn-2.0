@@ -1,11 +1,13 @@
 import com.sun.jdi.*;
-import com.sun.jdi.connect.*;
+import com.sun.jdi.connect.spi.*;
 import com.sun.jdi.event.*;
 import com.sun.jdi.request.*;
 
 import java.io.*;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class JavaTracer {
 
@@ -28,35 +30,24 @@ public class JavaTracer {
         }
 
         VirtualMachineManager vmm = Bootstrap.virtualMachineManager();
-        ListeningConnector lc = null;
-        for (ListeningConnector c : vmm.listeningConnectors()) {
-            if ("com.sun.jdi.SocketListen".equals(c.name()) || "dt_socket".equals(c.transport().name())) {
-                lc = c;
-                break;
-            }
-        }
-        if (lc == null) {
-            System.out.println("___DEBUG_JSON_START___{\"success\":false,\"error\":{\"type\":\"LaunchError\",\"message\":\"No SocketListen JDI connector available\"}}___DEBUG_JSON_END___");
-            return;
-        }
-
-        Map<String, Connector.Argument> connArgs = lc.defaultArguments();
-        if (connArgs.get("localAddress") != null) {
-            connArgs.get("localAddress").setValue("127.0.0.1");
-        }
-        if (connArgs.get("timeout") != null) {
-            connArgs.get("timeout").setValue("20000");
-        }
 
         StringBuilder stdoutBuf = new StringBuilder();
         StringBuilder stderrBuf = new StringBuilder();
         Process proc = null;
         Thread outReader = null;
         Thread errReader = null;
+        ServerSocket serverSocket = null;
+        Connection jdwpConn = null;
         VirtualMachine vm = null;
+        List<String> handshakeDiagnostics = new ArrayList<>();
 
         try {
-            String listenAddr = lc.startListening(connArgs);
+            InetAddress loopback = InetAddress.getByAddress("127.0.0.1", new byte[]{127, 0, 0, 1});
+            serverSocket = new ServerSocket();
+            serverSocket.setReuseAddress(true);
+            serverSocket.bind(new InetSocketAddress(loopback, 0), 50);
+            String listenAddr = "127.0.0.1:" + serverSocket.getLocalPort();
+
             ProcessBuilder pb = new ProcessBuilder(
                 "java",
                 "-Xms4m",
@@ -64,6 +55,7 @@ public class JavaTracer {
                 "-Xint",
                 "-XX:+UseSerialGC",
                 "-Xss256k",
+                "-Djava.net.preferIPv4Stack=true",
                 "-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=" + listenAddr,
                 "-classpath",
                 classPath,
@@ -90,15 +82,30 @@ public class JavaTracer {
             outReader.start();
             errReader.start();
 
-            vm = lc.accept(connArgs);
-            try { lc.stopListening(connArgs); } catch (Exception ignored) {}
+            jdwpConn = acceptJdwpConnection(serverSocket, proc, 20000L, handshakeDiagnostics);
+            try { serverSocket.close(); } catch (IOException ignored) {}
+            serverSocket = null;
+
+            vm = vmm.createVirtualMachine(jdwpConn);
         } catch (Exception e) {
-            try { lc.stopListening(connArgs); } catch (Exception ignored) {}
+            if (serverSocket != null) {
+                try { serverSocket.close(); } catch (IOException ignored) {}
+            }
+            if (jdwpConn != null) {
+                try { jdwpConn.close(); } catch (IOException ignored) {}
+            }
             if (proc != null) {
                 try { proc.destroyForcibly(); } catch (Exception ignored) {}
             }
+            if (outReader != null) {
+                try { outReader.join(300); } catch (Exception ignored) {}
+            }
+            if (errReader != null) {
+                try { errReader.join(300); } catch (Exception ignored) {}
+            }
             String extra = stderrBuf.toString().trim();
-            String msg = e.getMessage() + (extra.isEmpty() ? "" : (" (" + extra + ")"));
+            String diagStr = handshakeDiagnostics.isEmpty() ? "" : (" [diag: " + String.join("; ", handshakeDiagnostics) + "]");
+            String msg = e.getMessage() + (extra.isEmpty() ? "" : (" (" + extra + ")")) + diagStr;
             System.out.println("___DEBUG_JSON_START___{\"success\":false,\"error\":{\"type\":\"LaunchError\",\"message\":\"" + escapeJson(msg) + "\"}}___DEBUG_JSON_END___");
             return;
         }
@@ -115,7 +122,8 @@ public class JavaTracer {
         StepRequest activeStepReq = null;
 
         EventQueue queue = vm.eventQueue();
-        vm.resume();
+        // Target VM launches with suspend=y and emits VMStartEvent (SUSPEND_ALL);
+        // let eventSet.resume() handle VMStartEvent cleanly instead of pre-resuming vm.resume()
 
         while (isRunning && stepCount < maxSteps) {
             EventSet eventSet = null;
@@ -193,7 +201,9 @@ public class JavaTracer {
                     }
                 }
 
-                eventSet.resume();
+                if (isRunning) {
+                    eventSet.resume();
+                }
             } catch (VMDisconnectedException e) {
                 isRunning = false;
                 break;
@@ -203,9 +213,18 @@ public class JavaTracer {
         }
 
         try {
-            outReader.join(1000);
-            errReader.join(1000);
+            if (proc != null) {
+                proc.waitFor(2, TimeUnit.SECONDS);
+            }
+            if (outReader != null) outReader.join(1000);
+            if (errReader != null) errReader.join(1000);
         } catch (Exception ignored) {}
+        if (proc != null && proc.isAlive()) {
+            try { proc.destroyForcibly(); } catch (Exception ignored) {}
+        }
+        if (jdwpConn != null) {
+            try { jdwpConn.close(); } catch (IOException ignored) {}
+        }
 
         // Build output JSON
         StringBuilder sb = new StringBuilder();
@@ -219,6 +238,215 @@ public class JavaTracer {
           .append("\",\"stderr\":\"").append(escapeJson(stderrBuf.toString())).append("\"}");
 
         System.out.println("___DEBUG_JSON_START___" + sb.toString() + "___DEBUG_JSON_END___");
+    }
+
+    private static Connection acceptJdwpConnection(ServerSocket ss, Process proc, long timeoutMs, List<String> diagnostics) throws IOException {
+        final byte[] expected = "JDWP-Handshake".getBytes(StandardCharsets.US_ASCII);
+        long deadline = System.currentTimeMillis() + timeoutMs;
+
+        while (true) {
+            long remaining = deadline - System.currentTimeMillis();
+            if (remaining <= 0) {
+                throw new IOException("Timed out waiting for JDWP handshake from target VM");
+            }
+
+            ss.setSoTimeout(proc.isAlive() ? (int) Math.min(remaining, 400L) : 50);
+
+            Socket sock;
+            try {
+                sock = ss.accept();
+            } catch (SocketTimeoutException ste) {
+                if (!proc.isAlive()) {
+                    throw new IOException("Target VM exited before JDWP handshake (exitCode=" + proc.exitValue() + ")");
+                }
+                continue;
+            }
+
+            boolean accepted = false;
+            try {
+                sock.setTcpNoDelay(true);
+                int readTimeout = (int) Math.max(500L, Math.min(remaining, 3000L));
+                sock.setSoTimeout(readTimeout);
+                OutputStream out = sock.getOutputStream();
+                InputStream in = sock.getInputStream();
+
+                // JDWP server=n target waits for debugger to initiate JDWP-Handshake
+                out.write(expected);
+                out.flush();
+
+                byte[] reply = new byte[expected.length];
+                int total = 0;
+                boolean eof = false;
+                while (total < reply.length) {
+                    int n = in.read(reply, total, reply.length - total);
+                    if (n < 0) {
+                        eof = true;
+                        break;
+                    }
+                    total += n;
+                }
+
+                if (total == expected.length && Arrays.equals(reply, expected)) {
+                    sock.setSoTimeout(0);
+                    accepted = true;
+                    return new JdwpSocketConnection(sock);
+                }
+
+                diagnostics.add(
+                    "Rejected " + sock.getRemoteSocketAddress()
+                    + (eof ? " EOF" : "")
+                    + " len=" + total
+                    + " data=" + formatPreview(reply, total)
+                );
+            } catch (IOException ioe) {
+                diagnostics.add(
+                    "Rejected " + sock.getRemoteSocketAddress()
+                    + " err=" + ioe.getClass().getSimpleName() + ":" + ioe.getMessage()
+                );
+            } finally {
+                if (!accepted) {
+                    try { sock.close(); } catch (IOException ignored) {}
+                }
+            }
+
+            if (diagnostics.size() > 12) {
+                diagnostics.remove(0);
+            }
+        }
+    }
+
+    private static String formatPreview(byte[] data, int len) {
+        if (len <= 0) return "<empty>";
+        StringBuilder hex = new StringBuilder();
+        StringBuilder ascii = new StringBuilder();
+        int cap = Math.min(len, 14);
+        for (int i = 0; i < cap; i++) {
+            int b = data[i] & 0xff;
+            if (i > 0) hex.append(' ');
+            hex.append(String.format("%02x", b));
+            ascii.append((b >= 32 && b < 127) ? (char) b : '.');
+        }
+        return hex + " ('" + ascii + "')";
+    }
+
+    private static final class JdwpSocketConnection extends Connection {
+        private final Socket socket;
+        private final InputStream in;
+        private final OutputStream out;
+        private final Object receiveLock = new Object();
+        private final Object sendLock = new Object();
+        private final Object closeLock = new Object();
+        private boolean closed = false;
+
+        JdwpSocketConnection(Socket socket) throws IOException {
+            this.socket = socket;
+            this.socket.setTcpNoDelay(true);
+            this.in = socket.getInputStream();
+            this.out = socket.getOutputStream();
+        }
+
+        @Override
+        public void close() throws IOException {
+            synchronized (closeLock) {
+                if (closed) return;
+                closed = true;
+                try { out.close(); } catch (IOException ignored) {}
+                try { in.close(); } catch (IOException ignored) {}
+                socket.close();
+            }
+        }
+
+        @Override
+        public boolean isOpen() {
+            synchronized (closeLock) {
+                return !closed;
+            }
+        }
+
+        @Override
+        public byte[] readPacket() throws IOException {
+            if (!isOpen()) {
+                throw new ClosedConnectionException("connection is closed");
+            }
+            synchronized (receiveLock) {
+                int b1, b2, b3, b4;
+                try {
+                    b1 = in.read();
+                    if (b1 < 0) {
+                        return new byte[0];
+                    }
+                    b2 = in.read();
+                    b3 = in.read();
+                    b4 = in.read();
+                } catch (IOException e) {
+                    if (!isOpen()) {
+                        throw new ClosedConnectionException("connection is closed");
+                    }
+                    throw e;
+                }
+
+                if (b2 < 0 || b3 < 0 || b4 < 0) {
+                    throw new IOException("protocol error - premature EOF");
+                }
+
+                int len = ((b1 & 0xff) << 24) | ((b2 & 0xff) << 16) | ((b3 & 0xff) << 8) | (b4 & 0xff);
+                if (len < 11) {
+                    throw new IOException("protocol error - invalid length: " + len);
+                }
+
+                byte[] pkt = new byte[len];
+                pkt[0] = (byte) b1;
+                pkt[1] = (byte) b2;
+                pkt[2] = (byte) b3;
+                pkt[3] = (byte) b4;
+
+                int off = 4;
+                while (off < len) {
+                    int n;
+                    try {
+                        n = in.read(pkt, off, len - off);
+                    } catch (IOException e) {
+                        if (!isOpen()) {
+                            throw new ClosedConnectionException("connection is closed");
+                        }
+                        throw e;
+                    }
+                    if (n < 0) {
+                        throw new IOException("protocol error - premature EOF");
+                    }
+                    off += n;
+                }
+                return pkt;
+            }
+        }
+
+        @Override
+        public void writePacket(byte[] pkt) throws IOException {
+            if (!isOpen()) {
+                throw new ClosedConnectionException("connection is closed");
+            }
+            if (pkt == null || pkt.length < 11) {
+                throw new IllegalArgumentException("packet is insufficient size");
+            }
+            int len = ((pkt[0] & 0xff) << 24) | ((pkt[1] & 0xff) << 16) | ((pkt[2] & 0xff) << 8) | (pkt[3] & 0xff);
+            if (len < 11) {
+                throw new IllegalArgumentException("packet is insufficient size");
+            }
+            if (len > pkt.length) {
+                throw new IllegalArgumentException("length mis-match");
+            }
+            synchronized (sendLock) {
+                try {
+                    out.write(pkt, 0, len);
+                    out.flush();
+                } catch (IOException e) {
+                    if (!isOpen()) {
+                        throw new ClosedConnectionException("connection is closed");
+                    }
+                    throw e;
+                }
+            }
+        }
     }
 
     private static Object serializeValToObject(Value val) {

@@ -85,11 +85,35 @@ def compile_and_trace(source_path, breakpoints=None):
             "stderr": comp_proc.stderr
         }
 
-    # Run JavaTracer
+    # Run JavaTracer (ensure precompiled tracer classes are available if running host-fallback without Docker build)
     adapters_dir = os.path.dirname(os.path.abspath(__file__))
     tracer_class = "JavaTracer"
+    tracer_java = os.path.join(adapters_dir, "JavaTracer.java")
+    tracer_main_cls = os.path.join(adapters_dir, "JavaTracer.class")
+    tracer_conn_cls = os.path.join(adapters_dir, "JavaTracer$JdwpSocketConnection.class")
+    tracer_cp_dir = adapters_dir
+    needs_tracer_compile = (
+        not os.path.exists(tracer_main_cls)
+        or not os.path.exists(tracer_conn_cls)
+        or (os.path.exists(tracer_java) and os.path.getmtime(tracer_java) > os.path.getmtime(tracer_main_cls))
+    )
+    if needs_tracer_compile and os.path.exists(tracer_java):
+        target_dir = adapters_dir if os.access(adapters_dir, os.W_OK) else source_dir
+        res_cp = subprocess.run(
+            ["javac", "-J-XX:+UseSerialGC", "-J-XX:TieredStopAtLevel=1", "-J-Xms8m", "-J-Xmx64m", "-J-Xss256k", "-g", "-d", target_dir, tracer_java],
+            capture_output=True, text=True, timeout=25
+        )
+        if res_cp.returncode == 0:
+            tracer_cp_dir = target_dir
+        elif target_dir != source_dir:
+            subprocess.run(
+                ["javac", "-J-XX:+UseSerialGC", "-J-XX:TieredStopAtLevel=1", "-J-Xms8m", "-J-Xmx64m", "-J-Xss256k", "-g", "-d", source_dir, tracer_java],
+                capture_output=True, text=True, timeout=25
+            )
+            tracer_cp_dir = source_dir
+
     cp_sep = ";" if sys.platform == "win32" else ":"
-    classpath = f"{adapters_dir}{cp_sep}{source_dir}"
+    classpath = f"{tracer_cp_dir}{cp_sep}{source_dir}"
 
     bp_str = ",".join(str(b) for b in (breakpoints or []))
     java_cmd = [
@@ -100,6 +124,7 @@ def compile_and_trace(source_path, breakpoints=None):
         "-XX:TieredStopAtLevel=1",
         "-XX:ReservedCodeCacheSize=16m",
         "-Xss256k",
+        "-Djava.net.preferIPv4Stack=true",
         "-classpath",
         classpath,
         tracer_class,
